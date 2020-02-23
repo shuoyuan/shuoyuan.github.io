@@ -3,72 +3,72 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://iyuanshuo.com/about/</loc>
+    <loc>https://iyuanshuo.com/about/</loc>
     <lastmod>2020-02-23T23:47:20+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="http://iyuanshuo.com/en-us/about/"
+                href="https://iyuanshuo.com/en-us/about/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="http://iyuanshuo.com/about/"
+                href="https://iyuanshuo.com/about/"
                 />
   </url>
   
   <url>
-    <loc>http://iyuanshuo.com/</loc>
+    <loc>https://iyuanshuo.com/</loc>
     <lastmod>2020-02-24T00:06:06+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="http://iyuanshuo.com/en-us/"
+                href="https://iyuanshuo.com/en-us/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="http://iyuanshuo.com/"
+                href="https://iyuanshuo.com/"
                 />
   </url>
   
   <url>
-    <loc>http://iyuanshuo.com/tags/</loc>
+    <loc>https://iyuanshuo.com/tags/</loc>
     <lastmod>2020-02-24T00:06:06+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iyuanshuo.com/tech/</loc>
+    <loc>https://iyuanshuo.com/tech/</loc>
     <lastmod>2020-02-24T00:06:06+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iyuanshuo.com/tags/zotero/</loc>
+    <loc>https://iyuanshuo.com/tags/zotero/</loc>
     <lastmod>2020-02-23T23:47:20+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iyuanshuo.com/tech/zotero-usage-2017062813/</loc>
+    <loc>https://iyuanshuo.com/tech/zotero-usage-2017062813/</loc>
     <lastmod>2020-02-23T23:47:20+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iyuanshuo.com/tags/git/</loc>
+    <loc>https://iyuanshuo.com/tags/git/</loc>
     <lastmod>2020-02-24T00:06:06+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iyuanshuo.com/tech/git-usage-2017010520/</loc>
+    <loc>https://iyuanshuo.com/tech/git-usage-2017010520/</loc>
     <lastmod>2020-02-24T00:06:06+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iyuanshuo.com/readme/</loc>
+    <loc>https://iyuanshuo.com/readme/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://iyuanshuo.com/archives/</loc>
+    <loc>https://iyuanshuo.com/archives/</loc>
     <lastmod>2020-02-23T23:47:20+08:00</lastmod>
   </url>
   

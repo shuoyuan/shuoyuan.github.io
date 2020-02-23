@@ -8,7 +8,7 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Shuo Yuan&#39;s Home Page</title>
-        <link>http://iyuanshuo.com/</link>
+        <link>https://iyuanshuo.com/</link>
         <description>这是 shuoyuan 的生活与技术博客！</description>
         <generator>Hugo 0.65.2 https://gohugo.io/</generator>
         
@@ -23,15 +23,15 @@
         
             <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
         
-        <lastBuildDate>Mon, 24 Feb 2020 01:05:57 +0800</lastBuildDate>
+        <lastBuildDate>Mon, 24 Feb 2020 01:15:34 +0800</lastBuildDate>
         
-            <atom:link rel="self" type="application/rss+xml" href="http://iyuanshuo.com/rss.xml" />
+            <atom:link rel="self" type="application/rss+xml" href="https://iyuanshuo.com/rss.xml" />
         
         
             <item>
                 <title>Zotero 文献管理与多设备同步</title>
-                <link>http://iyuanshuo.com/tech/zotero-usage-2017062813/</link>
-                <guid isPermaLink="true">http://iyuanshuo.com/tech/zotero-usage-2017062813/</guid>
+                <link>https://iyuanshuo.com/tech/zotero-usage-2017062813/</link>
+                <guid isPermaLink="true">https://iyuanshuo.com/tech/zotero-usage-2017062813/</guid>
                 <pubDate>Wed, 28 Jun 2017 13:00:00 +0000</pubDate>
                 
                     <author>isaulyuan@gmail.com (Shuo Yuan)</author>
@@ -85,7 +85,7 @@
                         
                         
                             
-                                <category domain="http://iyuanshuo.com/tech/">tech</category>
+                                <category domain="https://iyuanshuo.com/tech/">tech</category>
                             
                         
                     
@@ -98,7 +98,7 @@
                                 
                                 
                                 
-                                    <category domain="http://iyuanshuo.com/tags/zotero/">Zotero</category>
+                                    <category domain="https://iyuanshuo.com/tags/zotero/">Zotero</category>
                                 
                             
                         
@@ -108,8 +108,8 @@
         
             <item>
                 <title>Git 基本使用</title>
-                <link>http://iyuanshuo.com/tech/git-usage-2017010520/</link>
-                <guid isPermaLink="true">http://iyuanshuo.com/tech/git-usage-2017010520/</guid>
+                <link>https://iyuanshuo.com/tech/git-usage-2017010520/</link>
+                <guid isPermaLink="true">https://iyuanshuo.com/tech/git-usage-2017010520/</guid>
                 <pubDate>Thu, 05 Jan 2017 20:00:00 +0000</pubDate>
                 
                     <author>isaulyuan@gmail.com (Shuo Yuan)</author>
@@ -359,7 +359,7 @@ git merge origin/master
                         
                         
                             
-                                <category domain="http://iyuanshuo.com/tech/">tech</category>
+                                <category domain="https://iyuanshuo.com/tech/">tech</category>
                             
                         
                     
@@ -372,7 +372,7 @@ git merge origin/master
                                 
                                 
                                 
-                                    <category domain="http://iyuanshuo.com/tags/git/">Git</category>
+                                    <category domain="https://iyuanshuo.com/tags/git/">Git</category>
                                 
                             
                         
