@@ -50,7 +50,7 @@
 
     <title>Tags: Zotero | Shuo Yuan&#39;s Home Page</title>
 
-    <link rel="stylesheet" href="/css/meme.min.256ddd9040513b5559554a63e5badcca0812a9667f493045734380743bd061e0.css" integrity="sha256-JW3dkEBRO1VZVUpj5brcyggSqWZ/STBFc0OAdDvQYeA=" data-instant-track />
+    <link rel="stylesheet" href="/css/meme.min.4a906cbabc6eeb8d956adef99799b9cabf6f757036617ff42df017220e988912.css" integrity="sha256-SpBsurxu642Vat75l5m5yr9vdXA2YX/0LfAXIg6YiRI=" data-instant-track />
 
     <link href="https://fonts.googleapis.com/css?family=EB+Garamond:400,400i,700,700i|Noto+Serif+SC:400,700|Source+Code+Pro:400,400i,700,700i|Cinzel+Decorative:700&display=swap&subset=chinese-simplified" rel="stylesheet" />
 
@@ -133,13 +133,13 @@
 
 
     
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-100434861-1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q09QFXNCE9"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', 'UA-100434861-1');
+        gtag('config', 'G-Q09QFXNCE9');
     </script>
 
 
@@ -293,7 +293,7 @@
     </script>
 <script data-no-instant>
             InstantClick.on('change', function () {
-                gtag('config', 'UA-100434861-1', {
+                gtag('config', 'G-Q09QFXNCE9', {
                     'page_path': location.pathname + location.search
                 });
             });
@@ -311,6 +311,31 @@
 
 
 
+
+    <script>
+    if (typeof MathJax === 'undefined') {
+        window.MathJax = {
+            loader: {
+                load: ['[tex]/mhchem']
+            },
+            
+            tex: {
+                inlineMath: {'[+]': [['$', '$']]},
+                tags: 'ams',
+                packages: {'[+]': ['mhchem']}
+            }
+        };
+        (function () {
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js';
+            script.defer = true;
+            document.head.appendChild(script);
+        })();
+    } else {
+        MathJax.texReset();
+        MathJax.typeset();
+    }
+</script>
 
 
 
