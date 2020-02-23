@@ -23,7 +23,7 @@
         
             <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
         
-        <lastBuildDate>Sun, 23 Feb 2020 23:53:41 +0800</lastBuildDate>
+        <lastBuildDate>Sun, 23 Feb 2020 23:59:37 +0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss+xml" href="http://iyuanshuo.com/rss.xml" />
         
@@ -294,7 +294,7 @@ chmod <span class="m">600</span> .ssh/authorized_keys
 <pre class="chroma"><code class="language-bash" data-lang="bash">git pull
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="仓库子模块的使用">仓库子模块的使用</h2>
+</div><h2 id="仓库子模块的使用-2">仓库子模块的使用 <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></h2>
 <p>项目中经常使用别人维护的模块，在 git 中使用子模块的功能能够大大提高开发效率。使用子模块后，不必负责子模块的维护，只需要在必要的时候同步更新子模块即可。</p>
 <ul>
 <li>添加子模块</li>
@@ -324,7 +324,7 @@ git submodule update <span class="c1"># 更新</span>
 </div><ul>
 <li>子模块拉取远程更新代码</li>
 </ul>
-<p>如果想要在子模块中查看新工作，可以进入到<strong>子模块</strong>的目录中运行 git fetch 与 git merge，合并上游分支来更新本地代码。</p>
+<p>如果想要在子模块中查看新工作，可以进入到<strong>子模块</strong>的目录中运行 <code>git fetch</code> 与 <code>git merge</code>，合并上游分支来更新本地代码。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -335,12 +335,16 @@ git submodule update <span class="c1"># 更新</span>
 git merge origin/master
 </code></pre></td></tr></table>
 </div>
-</div><hr>
-<pre><code></code></pre><section class="footnotes" role="doc-endnotes">
+</div><p>如果不想在子目录中手动抓取与合并， 在主仓库的根目录运行 <code>git submodule update --remote</code>，Git 将会进入子模块然后抓取并更新。</p>
+<hr>
+<section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
 <p><a href="https://git-scm.com/book/zh/v2/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E6%90%AD%E5%BB%BA-Git"><em>服务器上的 Git</em></a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97">Git 工具 - 子模块</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
