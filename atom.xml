@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">Shuo Yuan&#39;s Home Page</title>
     <subtitle type="html">这是 shuoyuan 的生活与技术博客！</subtitle>
-    <updated>2020-02-23T23:59:37+08:00</updated>
+    <updated>2020-02-24T00:06:07+08:00</updated>
     <id>http://iyuanshuo.com/</id>
     <link rel="alternate" type="text/html" href="http://iyuanshuo.com/" />
     <link rel="self" type="application/atom+xml" href="http://iyuanshuo.com/atom.xml" />
@@ -103,7 +103,7 @@
             <title type="text">Git 基本使用</title>
             <link rel="alternate" type="text/html" href="http://iyuanshuo.com/tech/git-usage-2017010520/" />
             <id>http://iyuanshuo.com/tech/git-usage-2017010520/</id>
-            <updated>2020-02-23T23:59:36+08:00</updated>
+            <updated>2020-02-24T00:06:06+08:00</updated>
             <published>2017-01-05T20:00:00+00:00</published>
             <author>
                     <name>Shuo Yuan</name>
