@@ -85,13 +85,13 @@
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "datePublished": "2017-01-05T20:00:00+00:00",
-        "dateModified": "2020-02-23T23:19:23+08:00",
+        "dateModified": "2020-02-23T23:53:41+08:00",
         "url": "http://iyuanshuo.com/tech/git-usage-2017010520/",
         "headline": "Git 基本使用",
         "description": "私人 Git 仓库搭建1 虽然 GitHub 社区服务已经非常不错，但由于其开源特质不适合托管私人项目，比如……",
         "inLanguage" : "zh-CN",
         "articleSection": "tech",
-        "wordCount":  1357 ,
+        "wordCount":  1428 ,
         "image": "http://iyuanshuo.com/icons/apple-touch-icon.png",
         "author": {
             "@type": "Person",
@@ -142,7 +142,7 @@
         <meta property="og:image" content="http://iyuanshuo.com/icons/apple-touch-icon.png" />
     <meta property="og:type" content="article" />
     <meta property="article:published_time" content="2017-01-05T20:00:00+00:00" />
-    <meta property="article:modified_time" content="2020-02-23T23:19:23+08:00" />
+    <meta property="article:modified_time" content="2020-02-23T23:53:41+08:00" />
     
     <meta property="article:section" content="tech" />
 
@@ -413,7 +413,7 @@ chmod <span class="m">600</span> .ssh/authorized_keys
 </code></pre></td></tr></table>
 </div>
 </div><ul>
-<li>克隆带子仓库的仓库</li>
+<li>克隆带子模块的仓库</li>
 </ul>
 <p>克隆的仓库中，子模块中没有代码，需要初始化及更新；</p>
 <div class="highlight"><div class="chroma">
@@ -426,7 +426,22 @@ chmod <span class="m">600</span> .ssh/authorized_keys
 git submodule update <span class="c1"># 更新</span>
 </code></pre></td></tr></table>
 </div>
-</div><section class="footnotes" role="doc-endnotes">
+</div><ul>
+<li>子模块拉取远程更新代码</li>
+</ul>
+<p>如果想要在子模块中查看新工作，可以进入到<strong>子模块</strong>的目录中运行 git fetch 与 git merge，合并上游分支来更新本地代码。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">git fetch
+git merge origin/master
+</code></pre></td></tr></table>
+</div>
+</div><hr>
+<pre><code></code></pre><section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
