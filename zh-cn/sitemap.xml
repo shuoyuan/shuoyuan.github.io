@@ -3,23 +3,8 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://iyuanshuo.com/about/</loc>
-    <lastmod>2020-02-23T22:24:30+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="http://iyuanshuo.com/en-us/about/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="http://iyuanshuo.com/about/"
-                />
-  </url>
-  
-  <url>
     <loc>http://iyuanshuo.com/</loc>
-    <lastmod>2020-02-23T22:24:30+08:00</lastmod>
+    <lastmod>2020-02-23T23:19:23+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
@@ -34,17 +19,22 @@
   
   <url>
     <loc>http://iyuanshuo.com/tags/</loc>
-    <lastmod>2020-02-23T22:24:30+08:00</lastmod>
+    <lastmod>2020-02-23T23:19:23+08:00</lastmod>
   </url>
   
   <url>
     <loc>http://iyuanshuo.com/tech/</loc>
-    <lastmod>2020-02-23T22:24:30+08:00</lastmod>
+    <lastmod>2020-02-23T23:19:23+08:00</lastmod>
   </url>
   
   <url>
     <loc>http://iyuanshuo.com/tags/zotero/</loc>
-    <lastmod>2020-02-23T22:24:30+08:00</lastmod>
+    <lastmod>2020-02-23T23:19:23+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://iyuanshuo.com/tech/zotero-%D1%8D%D1%8B%D1%80%D1%88%D0%BC/</loc>
+    <lastmod>2020-02-23T23:19:23+08:00</lastmod>
   </url>
   
   <url>
@@ -54,22 +44,42 @@
   
   <url>
     <loc>http://iyuanshuo.com/tags/git/</loc>
-    <lastmod>2020-02-23T22:24:30+08:00</lastmod>
+    <lastmod>2020-02-23T23:19:23+08:00</lastmod>
   </url>
   
   <url>
     <loc>http://iyuanshuo.com/tech/git-usage-2017010520/</loc>
-    <lastmod>2020-02-23T22:24:30+08:00</lastmod>
+    <lastmod>2020-02-23T23:19:23+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://iyuanshuo.com/tech/%D1%8E%D0%B8git%D1%82/</loc>
+    <lastmod>2020-02-23T23:19:23+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://iyuanshuo.com/about/</loc>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://iyuanshuo.com/en-us/about/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="http://iyuanshuo.com/about/"
+                />
+  </url>
+  
+  <url>
+    <loc>http://iyuanshuo.com/archives/</loc>
+    <priority>0</priority>
   </url>
   
   <url>
     <loc>http://iyuanshuo.com/readme/</loc>
     <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://iyuanshuo.com/archives/</loc>
-    <lastmod>2020-02-23T22:24:30+08:00</lastmod>
   </url>
   
 </urlset>

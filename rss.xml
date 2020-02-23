@@ -23,10 +23,89 @@
         
             <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
         
-        <lastBuildDate>Sun, 23 Feb 2020 23:17:30 +0800</lastBuildDate>
+        <lastBuildDate>Sun, 23 Feb 2020 23:25:26 +0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss+xml" href="http://iyuanshuo.com/rss.xml" />
         
+        
+            <item>
+                <title>Zotero 文献管理与多设备同步</title>
+                <link>http://iyuanshuo.com/tech/zotero-%D1%8D%D1%8B%D1%80%D1%88%D0%BC/</link>
+                <guid isPermaLink="true">http://iyuanshuo.com/tech/zotero-%D1%8D%D1%8B%D1%80%D1%88%D0%BC/</guid>
+                <pubDate>Wed, 28 Jun 2017 13:00:00 +0000</pubDate>
+                
+                    <author>isaulyuan@gmail.com (Shuo Yuan)</author>
+                
+                <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
+                
+                    <description><![CDATA[<p>Zotero 是一个比较好用的开源的文献管理软件。Zotero 及其浏览器插件 (chrome, firefox) 的存在使得文献的下载、整理、记录和导出变得非常方便舒心。此外，在相关插件的协助下 Zotero 可以极大的优化论文撰写过程的文献引用流程。然而随着软件的更新迭代，网上的教程有的部分不太准确。此文记录当前使用的软件版本下的软件配置。</p>
+<h3 id="准备元素及系统环境">准备元素及系统环境</h3>
+<ul>
+<li>macOS Mojave (Windows 系统配置类似)</li>
+<li>Zotero (<a href="https://www.zotero.org/download/">下载</a>)</li>
+<li>zotero-better-bibtex (<a href="https://github.com/retorquere/zotero-better-bibtex/releases">下载</a>)</li>
+<li>zotfile (<a href="https://github.com/jlegewie/zotfile/releases">下载</a>)</li>
+<li>Zotero Connector (<a href="https://www.zotero.org/download/">下载</a>)</li>
+<li>Zotero 账户</li>
+</ul>
+<h3 id="安装-zotero-及其插件">安装 Zotero 及其插件</h3>
+<p>从 <a href="https://www.zotero.org/download/">Zotero 官网</a>下载软件，并安装相应的浏览器插件 Zotero Connector (for <a href="https://chrome.google.com/webstore/detail/zotero-connector/ekhagklcjbdpajgpjgmbionohlpdbjgc?hl=en">Chrome</a>)。</p>
+<p>打开 Zotero 软件，点击菜单栏 <code>Tools</code> --&gt; <code>Add-ons</code>，进入 <code>Add-ons Manager</code>；点击右上角的<strong>齿轮</strong>图标，点击 <code>Install Add-on From File</code>，弹出文件浏览器，选中插件安装包 (xpi 文件) 并安装。</p>
+<p><img src="http://images.iyuanshuo.com/zotero_add_on.png" alt="add_ons" style="zoom: 50%;" /></p>
+<p><img src="http://images.iyuanshuo.com/zotero_install_plugin.png" alt="Install_plugin" style="zoom: 30%;" /></p>
+<h3 id="zotero-配置">Zotero 配置</h3>
+<ul>
+<li>进入 <code>Preference</code>，在 <code>General</code> 下取消勾选 <code>Automatically take snapshots when creating items from web pages</code>。此选项用于为每个文献自动抓取网页快照，实际用处不大，反而产生许多琐碎的网页文件。</li>
+</ul>
+<p><img src="http://images.iyuanshuo.com/zotero_general_auto_snapshots.png" alt="zotero_general_auto_snapshots" style="zoom: 30%;" /></p>
+<ul>
+<li><code>Sync</code> 选项登陆，勾选 <code>Data Syncing</code> 下的两个选项。Zotero 官方提供的同步包括<strong>数据同步</strong>和<strong>文件同步</strong>。数据部分同步文献基础信息，空间没有限制。文件部分同步 pdf、笔记等附件，免费额度为300MB。借助插件 zotfile 实现网盘（如Onedrive，Dropbox等）同步附件可以有效的突破存储限制。</li>
+</ul>
+<p><img src="http://images.iyuanshuo.com/zotero_sync.png" alt="zotero_sync" style="zoom:30%;" /></p>
+<ul>
+<li>使用网盘Dropbox同步 pdf 文件；选项 <code>Tools</code> 进入 <code>ZotFile Preferences</code> 配置附件存放位置及整理规则，习惯于按照文献发表年份进行 pdf 文件分类。借助浏览器 Connector 下载的文献附件会被 ZotFile 根据自行设定的重命名规则进行重命名，并存放到网盘特定位置。</li>
+</ul>
+<p><img src="http://images.iyuanshuo.com/zotero_zotfile_dropbox.png" alt="zotero_zotfile_dropbox" style="zoom: 33%;" /></p>
+<ul>
+<li>Zotero 的附件存放设置需要与 ZotFile 相匹配，保证文献条目和附件的关联。</li>
+</ul>
+<p><img src="http://images.iyuanshuo.com/zotero_preference_dropbox.png" alt="zotero_preference_dropbox" style="zoom: 30%;" /></p>
+<ul>
+<li>使用 zotero-better-bibtex 导出 bib 文件，Citation key format 设置为 <code>[auth:lower][year][shorttitle1]</code>。当然也可自行设置 Cite Key 的格式，具体规则请参考<a href="https://retorque.re/zotero-better-bibtex/configuration/">官方文档</a>。该插件自动更新导出的 bib 文件功能为论文写作中的文献引用工作提供极大便利！</li>
+</ul>
+<hr>
+<p> </p>
+]]></description>
+                
+                
+                
+                    
+                    
+                    
+                        
+                        
+                        
+                            
+                                <category domain="http://iyuanshuo.com/tech/">tech</category>
+                            
+                        
+                    
+                
+                
+                
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="http://iyuanshuo.com/tags/zotero/">Zotero</category>
+                                
+                            
+                        
+                    
+                
+            </item>
         
             <item>
                 <title>Zotero 文献管理与多设备同步</title>
@@ -294,6 +373,33 @@ chmod <span class="m">600</span> .ssh/authorized_keys
 <pre class="chroma"><code class="language-bash" data-lang="bash">git pull
 </code></pre></td></tr></table>
 </div>
+</div><h2 id="仓库子模块的使用">仓库子模块的使用</h2>
+<p>项目中经常使用别人维护的模块，在 git 中使用子模块的功能能够大大提高开发效率。使用子模块后，不必负责子模块的维护，只需要在必要的时候同步更新子模块即可。</p>
+<ul>
+<li>添加子模块</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">git submodule add url <span class="c1"># url 既可以是https也可以是ssh</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>克隆带子仓库的仓库</li>
+</ul>
+<p>克隆的仓库中，子模块中没有代码，需要初始化及更新；</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">git submodule init <span class="c1"># 初始化子模块</span>
+git submodule update <span class="c1"># 更新</span>
+</code></pre></td></tr></table>
+</div>
 </div><hr>
 <section class="footnotes" role="doc-endnotes">
 <hr>
@@ -303,6 +409,256 @@ chmod <span class="m">600</span> .ssh/authorized_keys
 </li>
 </ol>
 </section>
+]]></description>
+                
+                
+                
+                    
+                    
+                    
+                        
+                        
+                        
+                            
+                                <category domain="http://iyuanshuo.com/tech/">tech</category>
+                            
+                        
+                    
+                
+                
+                
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="http://iyuanshuo.com/tags/git/">Git</category>
+                                
+                            
+                        
+                    
+                
+            </item>
+        
+            <item>
+                <title>Git 基本使用</title>
+                <link>http://iyuanshuo.com/tech/%D1%8E%D0%B8git%D1%82/</link>
+                <guid isPermaLink="true">http://iyuanshuo.com/tech/%D1%8E%D0%B8git%D1%82/</guid>
+                <pubDate>Thu, 05 Jan 2017 20:00:00 +0000</pubDate>
+                
+                    <author>isaulyuan@gmail.com (Shuo Yuan)</author>
+                
+                <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
+                
+                    <description><![CDATA[<h2 id="私人-git-仓库搭建">私人 Git 仓库搭建</h2>
+<p>虽然 GitHub 社区服务已经非常不错，但由于其开源特质不适合托管私人项目，比如我大磕盐人用 LaTEX 撰写的论文。借助服务器搭建私人 Git 仓库用于 LaTEX 论文撰写和修改全流程管理是不二选择。通过 Git 托管论文可以借助其版本管理功能进行高效的修改对比校验等，比如老师给你修改之后的论文，使用版本对比修改的内容一目了然。</p>
+<h3 id="搭建步骤">搭建步骤</h3>
+<ul>
+<li>安装git</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ubuntu</span>  
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install git
+<span class="c1"># macOS</span>
+brew install  git
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>创建一个 Git 用户用来运行 Git 服务</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo adduser git
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>创建证书登录</li>
+</ul>
+<p>收集需要登录的用户的公钥(在客户机)，公钥一般位于<code>~/.ssh</code>或者<code>C:\Users\sumlo\.ssh</code> 中的 <code>id_rsa.pub</code>文件中，将内容写入服务器的<code>/home/git/.ssh/authorized_keys</code>文件中（若没有则创建）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">cd</span> /home/git
+mkdir .ssh
+chmod <span class="m">700</span> .ssh
+touch .ssh/authorized_keys
+chmod <span class="m">600</span> .ssh/authorized_keys  
+</code></pre></td></tr></table>
+</div>
+</div><p>重要的来了！设置很多免密的问题都在这：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">cd</span> home
+chown -R git:git git <span class="c1">#设置 Git 文件夹归 Git 用户所有</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>修改公钥存放文件， 首先打开配置文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">vim /etc/ssh/sshd_config  
+</code></pre></td></tr></table>
+</div>
+</div><p>修改文件中此处配置为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">AuthorizedKeysFile  /home/git/.ssh/authorized_keys  
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>创建空仓库</li>
+</ul>
+<p>初始化仓库时一定要使用<strong>裸库</strong>不然不可以 push，</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">mkdir test.git
+<span class="nb">cd</span> test.git
+git init --bare  
+</code></pre></td></tr></table>
+</div>
+</div><p>以后每创建一个新的仓库，记得<strong>修改仓库所属用户为 Git</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">cd</span> /home/git
+chown -R git test.git   
+</code></pre></td></tr></table>
+</div>
+</div><p>这样就可以正常 clone 和 push：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">git clone git@yourseverip:/home/git/test.git  
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="自定义-ssh-端口">自定义 SSH 端口</h3>
+<ul>
+<li>正常未修改 SSH 端口：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">git clone git@104.153.102.92:/home/git/test.git
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>修改 SSH 端口配置方式：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">git clone ssh://git@104.153.102.92:10982/home/git/test.git
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="git-放弃本地修改">Git 放弃本地修改</h2>
+<h3 id="尚未使用-git-add-缓存代码">尚未使用 <code>git add</code> 缓存代码</h3>
+<p>可以使用 <code>git checkout -- filepathname</code> (比如：<code>git checkout -- readme.md</code>，不要忘记中间的 <code>--</code> ，不写就成了检出分支了！！)。放弃所有的文件修改可以使用 <code>git checkout .</code> 命令。</p>
+<p>此命令用来放弃掉所有还没有加入到缓存区（就是 <code>git add</code> 命令）的修改：内容修改与整个文件删除。但是此命令不会删除掉刚新建的文件，因为刚新建的文件还没已有加入到 git 的管理系统中，所以对于 git 是未知的，自己手动删除就好了。</p>
+<h3 id="已经使用-git-add-缓存代码">已经使用 <code>git add</code> 缓存代码</h3>
+<p>可以使用 <code>git reset HEAD filepathname</code> （比如：<code>git reset HEAD readme.md</code>）来放弃指定文件的缓存，放弃所以的缓存可以使用 <code>git reset HEAD .</code> 命令。</p>
+<p>此命令用来清除git对于文件修改的缓存，相当于撤销 <code>git add</code> 命令所在的工作。在使用本命令后，本地的修改并不会消失，而是回到了如(未使用git add缓存代码)所示的状态。继续用处理(未使用<code>git add</code>缓存代码)中的操作，就可以放弃本地的修改。</p>
+<h3 id="已经使用-git-commit-提交代码">已经使用 <code>git commit</code> 提交代码</h3>
+<p>可以使用 <code>git reset --hard HEAD^</code> 来回退到上一次commit的状态。此命令可以用来回退到任意版本：<code>git reset --hard commitid</code> 
+你可以使用 <code>git log</code> 命令来查看git的提交历史。</p>
+<ul>
+<li>
+<p>本地新增了一堆文件(并没有<code>git add</code>到暂存区)，想放弃修改。</p>
+<ul>
+<li>单个文件或文件夹：<code>rm filename</code>, <code>rm -rf dir</code></li>
+<li>所有文件/文件夹：<code>git clean -xdf</code></li>
+</ul>
+</li>
+<li>
+<p>本地新增了一堆文件(已经git add到暂存区)，想放弃修改。</p>
+<ul>
+<li>单个文件/文件夹：<code>git reset HEAD filename</code></li>
+<li>所有文件/文件夹：<code>git reset HEAD .</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="git-版本回滚">Git 版本回滚</h2>
+<p>首先查询历史对应不同版本的ID, 用于回退定位：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">git log --pretty<span class="o">=</span>oneline
+</code></pre></td></tr></table>
+</div>
+</div><p>恢复到历史版本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">git reset --hard fae6966548e3ae76cfa7f38a461c438cf75ba965
+</code></pre></td></tr></table>
+</div>
+</div><p>把修改推到远程服务器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">git push -f -u origin master
+</code></pre></td></tr></table>
+</div>
+</div><p>重新更新就可以了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">git pull
+</code></pre></td></tr></table>
+</div>
+</div><hr>
+<p> </p>
 ]]></description>
                 
                 
