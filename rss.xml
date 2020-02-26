@@ -23,7 +23,7 @@
         
             <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
         
-        <lastBuildDate>Wed, 26 Feb 2020 15:51:21 +0800</lastBuildDate>
+        <lastBuildDate>Wed, 26 Feb 2020 15:55:25 +0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss+xml" href="https://iyuanshuo.com/rss.xml" />
         
@@ -122,50 +122,50 @@
 <ul>
 <li>安装 Git</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span><span class="c1"># macOS</span>
-<span class="ln">2</span>brew install  git
-<span class="ln">3</span><span class="c1"># centos</span>
-<span class="ln">4</span>yum install -y git
-<span class="ln">5</span><span class="c1"># ubuntu</span>  
-<span class="ln">6</span>sudo apt-get install git
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># macOS</span>
+brew install  git
+<span class="c1"># centos</span>
+yum install -y git
+<span class="c1"># ubuntu</span>  
+sudo apt-get install git
 </code></pre></div><ul>
 <li>创建一个 Git 用户用来运行 Git 服务；提示没有权限时加上<code>sudo</code></li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>useradd git
-<span class="ln">2</span>passwd git <span class="c1"># 创建Git用户密码，客户机非免密登录时需要</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">useradd git
+passwd git <span class="c1"># 创建Git用户密码，客户机非免密登录时需要</span>
 </code></pre></div><ul>
 <li>创建仓库</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>su - git <span class="c1"># 切换到Git用户</span>
-<span class="ln">2</span><span class="nb">cd</span> /home/git <span class="c1"># 进入Git用户的根目录</span>
-<span class="ln">3</span>mkdir test.git <span class="c1"># 创建test仓库</span>
-<span class="ln">4</span><span class="nb">cd</span> test.git
-<span class="ln">5</span>git --bare init <span class="c1"># 仓库初始化，初始化仓库时一定要使用裸库否则不能 push</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">su - git <span class="c1"># 切换到Git用户</span>
+<span class="nb">cd</span> /home/git <span class="c1"># 进入Git用户的根目录</span>
+mkdir test.git <span class="c1"># 创建test仓库</span>
+<span class="nb">cd</span> test.git
+git --bare init <span class="c1"># 仓库初始化，初始化仓库时一定要使用裸库否则不能 push</span>
 </code></pre></div><h3 id="配置客户机免密登录">配置客户机免密登录</h3>
 <p>收集需要免密登录的客户机公钥，一般位于<code>~/.ssh</code>或者<code>C:\Users\saul\.ssh</code> 中的 <code>id_rsa.pub</code>文件中；将公钥写入服务器的<code>/home/git/.ssh/authorized_keys</code>文件中（若没有则创建）。</p>
 <ul>
 <li>首先客户机生成并获取公钥：</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>ssh-keygen -t rsa -C <span class="s2">&#34;youremail@email.com&#34;</span> <span class="c1"># 有配置GitHub公钥可直接使用</span>
-<span class="ln">2</span>cat ~/.ssh/id_rsa.pub <span class="c1"># 复制打印出的公钥</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">ssh-keygen -t rsa -C <span class="s2">&#34;youremail@email.com&#34;</span> <span class="c1"># 有配置GitHub公钥可直接使用</span>
+cat ~/.ssh/id_rsa.pub <span class="c1"># 复制打印出的公钥</span>
 </code></pre></div><ul>
 <li>服务器配置</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span><span class="nb">cd</span> /home/git
-<span class="ln">2</span>mkdir .ssh
-<span class="ln">3</span>chmod <span class="m">700</span> .ssh
-<span class="ln">4</span>touch .ssh/authorized_keys
-<span class="ln">5</span>vi .ssh/authorized_keys <span class="c1"># 粘贴公钥</span>
-<span class="ln">6</span>chmod <span class="m">600</span> .ssh/authorized_keys  
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /home/git
+mkdir .ssh
+chmod <span class="m">700</span> .ssh
+touch .ssh/authorized_keys
+vi .ssh/authorized_keys <span class="c1"># 粘贴公钥</span>
+chmod <span class="m">600</span> .ssh/authorized_keys  
 </code></pre></div><h3 id="客户机克隆仓库">客户机克隆仓库</h3>
 <ul>
 <li>正常未修改 SSH 端口：</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>git clone git@104.153.102.92:/home/git/test.git
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">git clone git@104.153.102.92:/home/git/test.git
 </code></pre></div><ul>
 <li>修改 SSH 端口配置方式：</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>git clone ssh://git@104.153.102.92:10982/home/git/test.git
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">git clone ssh://git@104.153.102.92:10982/home/git/test.git
 </code></pre></div><h2 id="git-放弃本地修改">Git 放弃本地修改</h2>
 <h3 id="尚未使用-git-add-缓存代码">尚未使用 <code>git add</code> 缓存代码</h3>
 <p>可以使用 <code>git checkout -- filepathname</code> (比如：<code>git checkout -- readme.md</code>，不要忘记中间的 <code>--</code> ，不写就成了检出分支了！！)。放弃所有的文件修改可以使用 <code>git checkout .</code> 命令。</p>
@@ -194,31 +194,31 @@
 </ul>
 <h2 id="git-版本回滚">Git 版本回滚</h2>
 <p>首先查询历史对应不同版本的ID, 用于回退定位：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="ln">1</span>git log --pretty<span class="o">=</span>oneline
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">git log --pretty<span class="o">=</span>oneline
 </code></pre></div><p>恢复到历史版本：</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>git reset --hard fae6966548e3ae76cfa7f38a461c438cf75ba965
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">git reset --hard fae6966548e3ae76cfa7f38a461c438cf75ba965
 </code></pre></div><p>把修改推到远程服务器：</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>git push -f -u origin master
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">git push -f -u origin master
 </code></pre></div><p>重新更新就可以了：</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>git pull
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">git pull
 </code></pre></div><h2 id="仓库子模块的使用-2">仓库子模块的使用 <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></h2>
 <p>项目中经常使用别人维护的模块，在 git 中使用子模块的功能能够大大提高开发效率。使用子模块后，不必负责子模块的维护，只需要在必要的时候同步更新子模块即可。</p>
 <ul>
 <li>添加子模块</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>git submodule add url <span class="c1"># url 既可以是https也可以是ssh</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">git submodule add url <span class="c1"># url 既可以是https也可以是ssh</span>
 </code></pre></div><ul>
 <li>克隆带子模块的仓库</li>
 </ul>
 <p>克隆的仓库中，子模块中没有代码，需要初始化及更新；</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>git submodule init <span class="c1"># 初始化子模块</span>
-<span class="ln">2</span>git submodule update <span class="c1"># 更新</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">git submodule init <span class="c1"># 初始化子模块</span>
+git submodule update <span class="c1"># 更新</span>
 </code></pre></div><ul>
 <li>子模块拉取远程更新代码</li>
 </ul>
 <p>如果想要在子模块中查看新工作，可以进入到<strong>子模块</strong>的目录中运行 <code>git fetch</code> 与 <code>git merge</code>，合并上游分支来更新本地代码。</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>git fetch
-<span class="ln">2</span>git merge origin/master
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">git fetch
+git merge origin/master
 </code></pre></div><p>如果不想在子目录中手动抓取与合并， 在主仓库的根目录运行 <code>git submodule update --remote</code>，Git 将会进入子模块然后抓取并更新。</p>
 <hr>
 <section class="footnotes" role="doc-endnotes">
@@ -287,14 +287,14 @@
 <ul>
 <li>编辑文件 <code>/etc/modprobe.d/disable_ipv6.conf</code>，注释以下相关的命令行：</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span><span class="nb">alias</span> net-pf-10 off
-<span class="ln">2</span><span class="nb">alias</span> ipv6 off
-<span class="ln">3</span>options ipv6 <span class="nv">disable</span><span class="o">=</span>1
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">alias</span> net-pf-10 off
+<span class="nb">alias</span> ipv6 off
+options ipv6 <span class="nv">disable</span><span class="o">=</span>1
 </code></pre></div><ul>
 <li>编辑文件 /etc/sysconfig/network，将其中的 <code>NETWORKING_IPV6=no</code> 改为 <code>NETWORKING_IPV6=yes</code></li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span><span class="c1"># NETWORKING_IPV6=no</span>
-<span class="ln">2</span><span class="nv">NETWORKING_IPV6</span><span class="o">=</span>yes
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># NETWORKING_IPV6=no</span>
+<span class="nv">NETWORKING_IPV6</span><span class="o">=</span>yes
 </code></pre></div><ul>
 <li>
 <p>可以重启系统使其加载或者执行<code>depmod -a</code>和<code>service network restart</code>让其重载配置。</p>
@@ -318,37 +318,37 @@
 </ul>
 <p><em>Tips: Centos 7 可能会提示:</em> <code>-bash: ifconfig: command not found</code>
 <strong>解决方案：</strong></p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>yum search ifconfig    <span class="c1"># 提示只要安装net-tools.x86_64即可</span>
-<span class="ln">2</span>yum install net-tools.x86_64 
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">yum search ifconfig    <span class="c1"># 提示只要安装net-tools.x86_64即可</span>
+yum install net-tools.x86_64 
 </code></pre></div><h3 id="设置ipv6开机自启">设置IPv6开机自启</h3>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>vim /root/ipv6.sh
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">vim /root/ipv6.sh
 </code></pre></div><p>输入如下内容：  <em>即从he网站上复制的<code>Linux-net-tools</code>的代码</em></p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span><span class="cp">#!/bin/bash
-</span><span class="ln">2</span><span class="cp"></span>
-<span class="ln">3</span>ifconfig sit0 up
-<span class="ln">4</span>ifconfig sit0 inet6 tunnel ::66.220.18.42
-<span class="ln">5</span>ifconfig sit1 up
-<span class="ln">6</span>ifconfig sit1 inet6 add 2001:470:c:957::2/64
-<span class="ln">7</span>route -A inet6 add ::/0 dev sit1
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
+</span><span class="cp"></span>
+ifconfig sit0 up
+ifconfig sit0 inet6 tunnel ::66.220.18.42
+ifconfig sit1 up
+ifconfig sit1 inet6 add 2001:470:c:957::2/64
+route -A inet6 add ::/0 dev sit1
 </code></pre></div><p>给文件增加可执行权限：</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>chmod +x /root/ipv6.sh
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">chmod +x /root/ipv6.sh
 </code></pre></div><p>编辑启动管理文件：</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>vim /etc/rc.d/rc.local
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">vim /etc/rc.d/rc.local
 </code></pre></div><p>在最下方加入下面一行代码：</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>sh /root/ipv6.sh
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">sh /root/ipv6.sh
 </code></pre></div><p>保存并退出，这样重启后也有 IPv6。</p>
 <h3 id="测试ipv6隧道可用性">测试ipv6隧道可用性</h3>
 <p>配置好隧道后，可以使用<code>ping6</code>命令进行验证。</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>ping6 ipv6.baidu.com <span class="c1"># 如果你的服务器在国内可使用</span>
-<span class="ln">2</span>ping6 www.google.com <span class="c1"># 如果返回ipv6地址即为成功</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">ping6 ipv6.baidu.com <span class="c1"># 如果你的服务器在国内可使用</span>
+ping6 www.google.com <span class="c1"># 如果返回ipv6地址即为成功</span>
 </code></pre></div><h3 id="解决谷歌访问出现验证码">解决谷歌访问出现验证码</h3>
 <p>阿里云的较多海外机房在访问谷歌时会出现验证提示，可以强制使用IPv6访问谷歌来避免IP认证。</p>
 <p>可将谷歌的网址放入 hosts 文件并指定 IPv6 地址解决。</p>
 <p>编辑文件<code>vim /etc/hosts</code>并加入以下内容：</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>2404:6800:4005:80a::2003 www.google.com.hk
-<span class="ln">2</span>2404:6800:4005:80a::2003 google.com.hk <span class="c1"># 服务器所在地区的后缀</span>
-<span class="ln">3</span>2404:6800:4005:80a::2003 www.google.com
-<span class="ln">4</span>2404:6800:4005:80a::2003 google.com <span class="c1"># ipv6地址可以改为ping6命令返回的地址，延迟会更小</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">2404:6800:4005:80a::2003 www.google.com.hk
+2404:6800:4005:80a::2003 google.com.hk <span class="c1"># 服务器所在地区的后缀</span>
+2404:6800:4005:80a::2003 www.google.com
+2404:6800:4005:80a::2003 google.com <span class="c1"># ipv6地址可以改为ping6命令返回的地址，延迟会更小</span>
 </code></pre></div><p>如果hosts文件没有立刻生效，可以尝试使用<code>hostname xxx</code>刷新，如果依旧无效可尝试重启。</p>
 ]]></description>
                 
