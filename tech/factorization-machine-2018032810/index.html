@@ -85,13 +85,13 @@
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "datePublished": "2018-03-28T10:01:12+00:00",
-        "dateModified": "2020-02-26T16:59:16+08:00",
+        "dateModified": "2020-02-26T17:52:05+08:00",
         "url": "https://iyuanshuo.com/tech/factorization-machine-2018032810/",
         "headline": "Factorization Machines 因式分解机",
         "description": "概述 在使用线性模型，例如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需……",
         "inLanguage" : "zh-CN",
         "articleSection": "tech",
-        "wordCount":  1398 ,
+        "wordCount":  1510 ,
         "image": ["http://images.iyuanshuo.com//blog/article/libFM.PNG"],
         "author": {
             "@type": "Person",
@@ -143,7 +143,7 @@
         <meta property="og:image" content="http://images.iyuanshuo.com//blog/article/libFM.PNG" />
 <meta property="og:type" content="article" />
     <meta property="article:published_time" content="2018-03-28T10:01:12+00:00" />
-    <meta property="article:modified_time" content="2020-02-26T16:59:16+08:00" />
+    <meta property="article:modified_time" content="2020-02-26T17:52:05+08:00" />
     
     <meta property="article:section" content="tech" />
 
@@ -261,58 +261,60 @@
 <h2 id="二维-fm"><a href="#二维-fm" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:二维-fm" class="headings">二维-FM</a></h2>
 <p>先回顾一下线性回归模型，其建模时采用的函数是：</p>
 <div>$$
-\begin{align*}
-\hat y({\rm{x}}) &= {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n}\\&= {\omega _0} + \sum\limits_{i = 1}^n {{\omega _i}{x_i}} 
-\end{align*} \tag{1}
-$$</div>
-<div>$$
-\begin{cases}
-\nabla\times\mathbf{E} &= -\frac{\partial\mathbf B}{\partial t} \\
-\nabla\times\mathbf{B} &= \mu_0\mathbf{J} + \mu_0\epsilon_0\frac{\partial\mathbf E}{\partial t} \\
-\nabla\cdot\mathbf{E} &= \frac{\rho}{\epsilon_0} \\
-\nabla\cdot\mathbf{B} &= 0
-\end{cases}
+\begin{aligned}
+\hat y({\rm{x}}) & = {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n} \\
+&= {\omega _0} + \sum\limits_{i = 1}^n {{\omega _i}{x_i}} 
+\end{aligned} \tag{1}
 $$</div>
 <p>从方程中可以看出各特征分量<span>$x_i$</span>和<span>$x_j\ (i \ne j )$</span>之间是相互孤立的，该模型仅考虑单个的特征分量，没有考虑特征分量之间的相互关系。</p>
 <p>在<span>$(1)$</span>的基础上改写为：</p>
 <div>$$
-\begin{align}
+\begin{aligned}
 \hat y({\rm{x}}) = {\omega _0} + \sum\limits_{i = 1}^n {{\omega _i}{x_i}}  + \sum\limits_{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {{\omega _{ij}}{x_i}} {x_j}} 
-\end{align} \tag{2}
+\end{aligned} \tag{2}
 $$</div>
 <p>这样也将任意两个不同的特征向量之间的关系也考虑进来了。</p>
 <p>但是，有一个问题就是，在稀疏数据中这种直接在<span>${x_i} {x_j}$</span>前面配上一个系数<span>$\omega_{ij}$</span>的方式会有很大的缺陷。因为对于观察样本中未出现过交互的特征分量，不能对相应的参数进行估计<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">[2]</a></sup>。</p>
 <p>一定要注意的是，在高度稀疏数据场景中，由于数据量的不足，样本中出现未交互的特征分量是很普遍的。</p>
 <p>为了克服这个缺陷，我们在(2)中的系数<span>$\omega_{ij}$</span>上做文章，将其换成另外一种形式。针对每个维度的特征分量<span>$x_i$</span>，引入辅助向量：</p>
 <div>$$
+\begin{aligned}
 {{\rm{v}}_i} = {({v_{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},\ \ i = 1,2, \cdots ,n
+\end{aligned}
 $$</div>
-其中<span>$k$</span>为超参数，将(2)中的<span>$\omega_{ij}$</span>改写为：
+<p>其中<span>$k$</span>为超参数，将(2)中的<span>$\omega_{ij}$</span>改写为：</p>
 <div>$$
+\begin{aligned}
 {{\hat \omega }_{ij}} = {{\rm{v}}_i}^T{{\rm{v}}_j}: = \sum\limits_{l = 1}^k {{v_{il}}{x_{jl}}} 
+\end{aligned}
 $$</div>
 <p>如此，我们可以获得FM的二维模型。</p>
 <h3 id="模型"><a href="#模型" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:模型" class="headings">模型</a></h3>
 <p>对于2次特征交叉的FM模型可以表示为<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">[2]</a></sup>：</p>
 <div>$$
-y(x)=w_0+\sum_{i=1} ^n(w_i x_i)+\sum_{i=1}^{n-1} \sum_{j=i+1}^n(<v_i,v_j>x_ix_j)  \tag{3}
+\begin{aligned}
+y(x) = {w_0} + \sum\limits_{i = 1}^n {({w_i}{x_i})}  + \sum\limits_{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {( < {v_i},{v_j} > {x_i}{x_j})} } 
+\end{aligned} \tag{3}
 $$</div>
-其中模型参数有<span>$w_0$</span>为截距，<span>$w_i$</span>为一维特征权重，<span>$v_i$</span>为每一维度特征的分布式表示，也即<span>$w_0$</span>为整体偏置量，<span>$W$</span>对特征向量的每个分量的强度进行建模，<span>$V$</span>对特征向量中任意两个分量之间的关系进行建模。
+<p>其中模型参数有<span>$w_0$</span>为截距，<span>$w_i$</span>为一维特征权重，<span>$v_i$</span>为每一维度特征的分布式表示，也即<span>$w_0$</span>为整体偏置量，<span>$W$</span>对特征向量的每个分量的强度进行建模，<span>$V$</span>对特征向量中任意两个分量之间的关系进行建模。</p>
 <p>其中特征交叉权重计算为:</p>
 <div>$$
-<v_i,v_j>=\sum_{f=1}^k v_{i,f}v_{j,f} \tag{3.1}
+\begin{aligned}
+< {v_i},{v_j} >  = \sum\limits_{f = 1}^k {{v_{i,f}}} {v_{j,f}}
+\end{aligned} \tag{3.1}
 $$</div>
 <h3 id="二维-fm计算复杂度"><a href="#二维-fm计算复杂度" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:二维-fm计算复杂度" class="headings">二维-FM计算复杂度</a></h3>
 <p>如果对式子(1)直接进行计算，那么其复杂度是<span>$O(kn^2)$</span>，但是我们可以通过简单的数学变换将其转化为<span>$O(kn)$</span>，由于前面两项的计算复杂度都是<span>$O(kn)$</span>，所以我们只需要对第三项进行处理<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">[3]</a></sup>：</p>
 <div>$$
-\begin{align}
- \sum_{i=1}^n \sum_{j=i+1}^n(<v_i,v_j>x_ix_j) &= \frac12 \sum_{i=1}^n \sum_{j=1}^n(<v_i,v_j>x_ix_j) - \frac12 \sum_{i=1}^n<v_i,v_i>x_ix_i\\
- & =\frac12(\sum_{i=1}^n \sum_{j=1}^n\sum_{f=1}^k(v_{i,f}v_{j_f}x_ix_j)-\sum_{i=1}^n\sum_{f=1}^k(v_{i,f}v_{i,f}x_ix_i)) \\ 
- & = \frac12\sum_{f=1}^k((\sum_{i=1}^nv_{i,f}x_i)(\sum_{j=1}^nv_{j,f}x_j)-\sum_{i=1}^nv_{i,f}^2x_i^2) \\
- & = \frac12\sum_{f=1}^k((\sum_{i=1}^nv_{i,f}x_i)^2-\sum_{i=1}^nv_{i,f}^2x_i^2) 
-\end{align}  \tag{2}
+\begin{aligned}
+&\sum\limits_{i = 1}^n {\sum\limits_{j = i + 1}^n {\left( { < {v_i},{v_j} > {x_i}{x_j}} \right)} } {\rm{ }} \\
+&= \frac{1}{2}\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\left( { < {v_i},{v_j} > {x_i}{x_j}} \right)} }  - \frac{1}{2}\sum\limits_{i = 1}^n  <  {v_i},{v_i} > {x_i}{x_i} \\ 
+&= \frac{1}{2}\left( {\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{{j_f}}}{x_i}{x_j}} \right)} } }  - \sum\limits_{i = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{i,f}}{x_i}{x_i}} \right)} } } \right) \\
+&= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)\left( {\sum\limits_{j = 1}^n {{v_{j,f}}} {x_j}} \right) - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)} \\
+&= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {{{\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)}^2} - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)}
+\end{aligned} \tag{4}
 $$</div>
-相当于特征分布式表示中每一维度和特征进行求和平方和平方求和相减。
+<p>相当于特征分布式表示中每一维度和特征进行求和平方和平方求和相减。</p>
 <h3 id="二维-fm的梯度计算"><a href="#二维-fm的梯度计算" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:二维-fm的梯度计算" class="headings">二维-FM的梯度计算</a></h3>
 <p>采用SGD进行模型计算 :</p>
 <div>$$
@@ -320,7 +322,7 @@ $$</div>
 {1,}&{{\rm{if }}\ \theta \ {\rm{is}}\ {\omega _0}}\\
 {{x_i},}&{{\rm{if }}\ \theta\  {\rm{is}}\ {\omega _i}}\\
 {{x_i}\sum\limits_{j = 1}^n {{v_{j,f}}} {x_j} - {v_{i,f}}x_i^2,}&{{\rm{if }}\ \theta \ {\rm{is}}\ {\nu _{i,f}}}
-\end{array}} \right.{\rm{ }} \tag{3}
+\end{array}} \right.{\rm{ }} \tag{5}
 $$</div>
 <p>基于随机梯度的方式求解<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">[4]</a></sup>：</p>
 <p><img src="http://images.iyuanshuo.com//blog/article/libFM.PNG" alt="" data-zoomable></p>
@@ -534,6 +536,55 @@ $$</div>
 </script>
 
 
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css" integrity="sha384-BdGj8xC2eZkQaxoQ8nSLefg4AV4/AwB3Fj+8SUSo7pnKP6Eoy18liIKTPn9oBYNG" crossorigin="anonymous" />
+<script>
+    if (typeof renderMathInElement === 'undefined') {
+        var getScript = (options) => {
+            var script = document.createElement('script');
+            script.defer = true;
+            script.crossOrigin = 'anonymous';
+            Object.keys(options).forEach((key) => {
+                script[key] = options[key];
+            });
+            document.body.appendChild(script);
+        };
+        getScript({
+            src: 'https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.js',
+            integrity: 'sha384-JiKN5O8x9Hhs/UE5cT5AAJqieYlOZbGT3CHws/y97o3ty4R7/O5poG9F3JoiOYw1',
+            onload: () => {
+                getScript({
+                    src: 'https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/contrib/mhchem.min.js',
+                    integrity: 'sha384-oa0lfxCGjaU1LdYckhq8LZcP+JTf8cyJXe69O6VE6UrShzWveT6KiCElJrck/stm',
+                    onload: () => {
+                        getScript({
+                            src: 'https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/contrib/auto-render.min.js',
+                            integrity: 'sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI',
+                            onload: () => {
+                                renderKaTex();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    } else {
+        renderKaTex();
+    }
+    function renderKaTex() {
+        renderMathInElement(
+            document.body,
+            {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\(", right: "\\)", display: false}
+                ]
+            }
+        );
+    }
+</script>
 
 
 

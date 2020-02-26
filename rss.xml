@@ -23,7 +23,7 @@
         
             <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
         
-        <lastBuildDate>Wed, 26 Feb 2020 16:59:16 +0800</lastBuildDate>
+        <lastBuildDate>Wed, 26 Feb 2020 17:52:06 +0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss+xml" href="https://iyuanshuo.com/rss.xml" />
         
@@ -53,66 +53,68 @@
 <h2 id="二维-fm">二维-FM</h2>
 <p>先回顾一下线性回归模型，其建模时采用的函数是：</p>
 <p>$$
-\begin{align*}
-\hat y({\rm{x}}) &amp;= {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n}\&amp;= {\omega _0} + \sum\limits_{i = 1}^n {{\omega _i}{x_i}} 
-\end{align*} \tag{1}
-$$</p>
-<p>$$
-\begin{cases}
-\nabla\times\mathbf{E} &amp;= -\frac{\partial\mathbf B}{\partial t} \<br>
-\nabla\times\mathbf{B} &amp;= \mu_0\mathbf{J} + \mu_0\epsilon_0\frac{\partial\mathbf E}{\partial t} \<br>
-\nabla\cdot\mathbf{E} &amp;= \frac{\rho}{\epsilon_0} \<br>
-\nabla\cdot\mathbf{B} &amp;= 0
-\end{cases}
+\begin{aligned}
+\hat y({\rm{x}}) &amp; = {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n} \<br>
+&amp;= {\omega <em>0} + \sum\limits</em>{i = 1}^n {{\omega _i}{x_i}} 
+\end{aligned} \tag{1}
 $$</p>
 <p>从方程中可以看出各特征分量$x_i$和$x_j\ (i \ne j )$之间是相互孤立的，该模型仅考虑单个的特征分量，没有考虑特征分量之间的相互关系。</p>
 <p>在$(1)$的基础上改写为：</p>
 <p>$$
-\begin{align}
+\begin{aligned}
 \hat y({\rm{x}}) = {\omega <em>0} + \sum\limits</em>{i = 1}^n {{\omega <em>i}{x_i}}  + \sum\limits</em>{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {{\omega _{ij}}{x_i}} {x_j}} 
-\end{align} \tag{2}
+\end{aligned} \tag{2}
 $$</p>
 <p>这样也将任意两个不同的特征向量之间的关系也考虑进来了。</p>
 <p>但是，有一个问题就是，在稀疏数据中这种直接在${x_i} {x_j}$前面配上一个系数$\omega_{ij}$的方式会有很大的缺陷。因为对于观察样本中未出现过交互的特征分量，不能对相应的参数进行估计<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
 <p>一定要注意的是，在高度稀疏数据场景中，由于数据量的不足，样本中出现未交互的特征分量是很普遍的。</p>
 <p>为了克服这个缺陷，我们在(2)中的系数$\omega_{ij}$上做文章，将其换成另外一种形式。针对每个维度的特征分量$x_i$，引入辅助向量：</p>
 <p>$$
+\begin{aligned}
 {{\rm{v}}<em>i} = {({v</em>{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},\ \ i = 1,2, \cdots ,n
-$$
-其中$k$为超参数，将(2)中的$\omega_{ij}$改写为：
-$$
-{{\hat \omega }_{ij}} = {{\rm{v}}_i}^T{{\rm{v}}_j}: = \sum\limits_{l = 1}^k {{v_{il}}{x_{jl}}} 
+\end{aligned}
+$$</p>
+<p>其中$k$为超参数，将(2)中的$\omega_{ij}$改写为：</p>
+<p>$$
+\begin{aligned}
+{{\hat \omega }<em>{ij}} = {{\rm{v}}<em>i}^T{{\rm{v}}<em>j}: = \sum\limits</em>{l = 1}^k {{v</em>{il}}{x</em>{jl}}} 
+\end{aligned}
 $$</p>
 <p>如此，我们可以获得FM的二维模型。</p>
 <h3 id="模型">模型</h3>
-<p>对于2次特征交叉的FM模型可以表示为<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>：
-$$
-y(x)=w_0+\sum_{i=1} ^n(w_i x_i)+\sum_{i=1}^{n-1} \sum_{j=i+1}^n(&lt;v_i,v_j&gt;x_ix_j)  \tag{3}
-$$
-其中模型参数有$w_0$为截距，$w_i$为一维特征权重，$v_i$为每一维度特征的分布式表示，也即$w_0$为整体偏置量，$W$对特征向量的每个分量的强度进行建模，$V$对特征向量中任意两个分量之间的关系进行建模。</p>
-<p>其中特征交叉权重计算为:
-$$
-&lt;v_i,v_j&gt;=\sum_{f=1}^k v_{i,f}v_{j,f} \tag{3.1}
+<p>对于2次特征交叉的FM模型可以表示为<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>：</p>
+<p>$$
+\begin{aligned}
+y(x) = {w_0} + \sum\limits_{i = 1}^n {({w_i}{x_i})}  + \sum\limits_{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {( &lt; {v_i},{v_j} &gt; {x_i}{x_j})} } 
+\end{aligned} \tag{3}
+$$</p>
+<p>其中模型参数有$w_0$为截距，$w_i$为一维特征权重，$v_i$为每一维度特征的分布式表示，也即$w_0$为整体偏置量，$W$对特征向量的每个分量的强度进行建模，$V$对特征向量中任意两个分量之间的关系进行建模。</p>
+<p>其中特征交叉权重计算为:</p>
+<p>$$
+\begin{aligned}
+&lt; {v_i},{v_j} &gt;  = \sum\limits_{f = 1}^k {{v_{i,f}}} {v_{j,f}}
+\end{aligned} \tag{3.1}
 $$</p>
 <h3 id="二维-fm计算复杂度">二维-FM计算复杂度</h3>
-<p>如果对式子(1)直接进行计算，那么其复杂度是$O(kn^2)$，但是我们可以通过简单的数学变换将其转化为$O(kn)$，由于前面两项的计算复杂度都是$O(kn)$，所以我们只需要对第三项进行处理<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>：
-$$
-\begin{align}
-\sum_{i=1}^n \sum_{j=i+1}^n(&lt;v_i,v_j&gt;x_ix_j) &amp;= \frac12 \sum_{i=1}^n \sum_{j=1}^n(&lt;v_i,v_j&gt;x_ix_j) - \frac12 \sum_{i=1}^n&lt;v_i,v_i&gt;x_ix_i\<br>
-&amp; =\frac12(\sum_{i=1}^n \sum_{j=1}^n\sum_{f=1}^k(v_{i,f}v_{j_f}x_ix_j)-\sum_{i=1}^n\sum_{f=1}^k(v_{i,f}v_{i,f}x_ix_i)) \ 
-&amp; = \frac12\sum_{f=1}^k((\sum_{i=1}^nv_{i,f}x_i)(\sum_{j=1}^nv_{j,f}x_j)-\sum_{i=1}^nv_{i,f}^2x_i^2) \<br>
-&amp; = \frac12\sum_{f=1}^k((\sum_{i=1}^nv_{i,f}x_i)^2-\sum_{i=1}^nv_{i,f}^2x_i^2) 
-\end{align}  \tag{2}
-$$
-相当于特征分布式表示中每一维度和特征进行求和平方和平方求和相减。</p>
+<p>如果对式子(1)直接进行计算，那么其复杂度是$O(kn^2)$，但是我们可以通过简单的数学变换将其转化为$O(kn)$，由于前面两项的计算复杂度都是$O(kn)$，所以我们只需要对第三项进行处理<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>：</p>
+<p>$$
+\begin{aligned}
+&amp;\sum\limits_{i = 1}^n {\sum\limits_{j = i + 1}^n {\left( { &lt; {v_i},{v_j} &gt; {x_i}{x_j}} \right)} } {\rm{ }} \<br>
+&amp;= \frac{1}{2}\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\left( { &lt; {v_i},{v_j} &gt; {x_i}{x_j}} \right)} }  - \frac{1}{2}\sum\limits_{i = 1}^n  &lt;  {v_i},{v_i} &gt; {x_i}{x_i} \ 
+&amp;= \frac{1}{2}\left( {\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{{j_f}}}{x_i}{x_j}} \right)} } }  - \sum\limits_{i = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{i,f}}{x_i}{x_i}} \right)} } } \right) \<br>
+&amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)\left( {\sum\limits_{j = 1}^n {{v_{j,f}}} {x_j}} \right) - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)} \<br>
+&amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {{{\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)}^2} - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)}
+\end{aligned} \tag{4}
+$$</p>
+<p>相当于特征分布式表示中每一维度和特征进行求和平方和平方求和相减。</p>
 <h3 id="二维-fm的梯度计算">二维-FM的梯度计算</h3>
-<p>采用SGD进行模型计算 :
-$$
+<p>采用SGD进行模型计算 :</p>
+<p>$$
 \frac{\partial }{{\partial \theta }}y(x) = \left{ {\begin{array}{*{20}{l}}
 {1,}&amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\omega <em>0}}\<br>
 {{x_i},}&amp;{{\rm{if }}\ \theta\  {\rm{is}}\ {\omega <em>i}}\<br>
 {{x_i}\sum\limits</em>{j = 1}^n {{v</em>{j,f}}} {x_j} - {v_{i,f}}x_i^2,}&amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\nu _{i,f}}}
-\end{array}} \right.{\rm{ }} \tag{3}
+\end{array}} \right.{\rm{ }} \tag{5}
 $$</p>
 <p>基于随机梯度的方式求解<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>：</p>
 <p><img src="http://images.iyuanshuo.com//blog/article/libFM.PNG" alt=""></p>
