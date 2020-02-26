@@ -57,7 +57,7 @@
     <meta name="author" content="Shuo Yuan" />
     
     
-    <meta name="description" content="使用 Hurricane Electric Free IPv6 Tunnel Broker 来让vps支持 IPv6。 注册并创建 IPv6 通道 注册 https://www.tunnelbroker.net/ （需要邮箱验证） 点击 Create……" />
+    <meta name="description" content="鉴于有的 VPS 商家并没有原生的 IPv6 服务，可以使用 Hurricane Electric Free IPv6 Tunnel Broker 创建 IPv6 隧道为 VPS 提供 IPv6 支持。 注册……" />
 
     <link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
     <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#2a6df4" />
@@ -85,13 +85,13 @@
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "datePublished": "2016-11-15T21:00:00+00:00",
-        "dateModified": "2020-02-26T15:29:03+08:00",
+        "dateModified": "2020-02-26T15:35:53+08:00",
         "url": "https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/",
         "headline": "VPS 构建 IPv6 隧道",
-        "description": "使用 Hurricane Electric Free IPv6 Tunnel Broker 来让vps支持 IPv6。 注册并创建 IPv6 通道 注册 https://www.tunnelbroker.net/ （需要邮箱验证） 点击 Create……",
+        "description": "鉴于有的 VPS 商家并没有原生的 IPv6 服务，可以使用 Hurricane Electric Free IPv6 Tunnel Broker 创建 IPv6 隧道为 VPS 提供 IPv6 支持。 注册……",
         "inLanguage" : "zh-CN",
         "articleSection": "tech",
-        "wordCount":  1053 ,
+        "wordCount":  1073 ,
         "image": "https://iyuanshuo.com/icons/apple-touch-icon.png",
         "author": {
             "@type": "Person",
@@ -134,7 +134,7 @@
 
 
 <meta property="og:title" content="VPS 构建 IPv6 隧道" />
-<meta property="og:description" content="使用 Hurricane Electric Free IPv6 Tunnel Broker 来让vps支持 IPv6。 注册并创建 IPv6 通道 注册 https://www.tunnelbroker.net/ （需要邮箱验证） 点击 Create……" />
+<meta property="og:description" content="鉴于有的 VPS 商家并没有原生的 IPv6 服务，可以使用 Hurricane Electric Free IPv6 Tunnel Broker 创建 IPv6 隧道为 VPS 提供 IPv6 支持。 注册……" />
 <meta property="og:url" content="https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/" />
 <meta property="og:site_name" content="Shuo Yuan&#39;s Home Page" />
 <meta property="og:locale" content="zh-CN" />
@@ -142,7 +142,7 @@
         <meta property="og:image" content="https://iyuanshuo.com/icons/apple-touch-icon.png" />
     <meta property="og:type" content="article" />
     <meta property="article:published_time" content="2016-11-15T21:00:00+00:00" />
-    <meta property="article:modified_time" content="2020-02-26T15:29:03+08:00" />
+    <meta property="article:modified_time" content="2020-02-26T15:35:53+08:00" />
     
     <meta property="article:section" content="tech" />
 
@@ -231,7 +231,7 @@
 
             
 
-            <div class="post-body"><p style="text-indent:0"><span class="drop-cap">使</span>用 Hurricane Electric Free IPv6 Tunnel Broker 来让vps支持 IPv6。</p>
+            <div class="post-body"><p>鉴于有的 VPS 商家并没有原生的 IPv6 服务，可以使用 Hurricane Electric Free IPv6 Tunnel Broker 创建 IPv6 隧道为 VPS 提供 IPv6 支持。</p>
 <h3 id="注册并创建-ipv6-通道"><a href="#注册并创建-ipv6-通道" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a>注册并创建 IPv6 通道</h3>
 <ul>
 <li>注册 <a href="https://www.tunnelbroker.net/" target="_blank" rel="noopener">https://www.tunnelbroker.net/</a> （需要邮箱验证）</li>
@@ -433,7 +433,7 @@ ping6 www.google.com <span class="c1"># 如果返回ipv6地址即为成功</span
                 
                 <div class="share-item linkedin">
                     
-                    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/&amp;title=VPS%20%e6%9e%84%e5%bb%ba%20IPv6%20%e9%9a%a7%e9%81%93&amp;summary=%e4%bd%bf%e7%94%a8%20Hurricane%20Electric%20Free%20IPv6%20Tunnel%20Broker%20%e6%9d%a5%e8%ae%a9vps%e6%94%af%e6%8c%81%20IPv6%e3%80%82%20%e6%b3%a8%e5%86%8c%e5%b9%b6%e5%88%9b%e5%bb%ba%20IPv6%20%e9%80%9a%e9%81%93%20%e6%b3%a8%e5%86%8c%20https://www.tunnelbroker.net/%20%ef%bc%88%e9%9c%80%e8%a6%81%e9%82%ae%e7%ae%b1%e9%aa%8c%e8%af%81%ef%bc%89%20%e7%82%b9%e5%87%bb%20Create%e2%80%a6%e2%80%a6&amp;source=Shuo%20Yuan%27s%20Home%20Page" title="分享到「LinkedIn」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon linkedin-icon"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg></a>
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/&amp;title=VPS%20%e6%9e%84%e5%bb%ba%20IPv6%20%e9%9a%a7%e9%81%93&amp;summary=%e9%89%b4%e4%ba%8e%e6%9c%89%e7%9a%84%20VPS%20%e5%95%86%e5%ae%b6%e5%b9%b6%e6%b2%a1%e6%9c%89%e5%8e%9f%e7%94%9f%e7%9a%84%20IPv6%20%e6%9c%8d%e5%8a%a1%ef%bc%8c%e5%8f%af%e4%bb%a5%e4%bd%bf%e7%94%a8%20Hurricane%20Electric%20Free%20IPv6%20Tunnel%20Broker%20%e5%88%9b%e5%bb%ba%20IPv6%20%e9%9a%a7%e9%81%93%e4%b8%ba%20VPS%20%e6%8f%90%e4%be%9b%20IPv6%20%e6%94%af%e6%8c%81%e3%80%82%20%e6%b3%a8%e5%86%8c%e2%80%a6%e2%80%a6&amp;source=Shuo%20Yuan%27s%20Home%20Page" title="分享到「LinkedIn」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon linkedin-icon"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg></a>
                 </div>
             
 
@@ -457,7 +457,7 @@ ping6 www.google.com <span class="c1"># 如果返回ipv6地址即为成功</span
                 
                 <div class="share-item douban">
                     
-                    <a href="https://www.douban.com/share/service?href=https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/&amp;name=VPS%20%e6%9e%84%e5%bb%ba%20IPv6%20%e9%9a%a7%e9%81%93&amp;text=%e4%bd%bf%e7%94%a8%20Hurricane%20Electric%20Free%20IPv6%20Tunnel%20Broker%20%e6%9d%a5%e8%ae%a9vps%e6%94%af%e6%8c%81%20IPv6%e3%80%82%20%e6%b3%a8%e5%86%8c%e5%b9%b6%e5%88%9b%e5%bb%ba%20IPv6%20%e9%80%9a%e9%81%93%20%e6%b3%a8%e5%86%8c%20https://www.tunnelbroker.net/%20%ef%bc%88%e9%9c%80%e8%a6%81%e9%82%ae%e7%ae%b1%e9%aa%8c%e8%af%81%ef%bc%89%20%e7%82%b9%e5%87%bb%20Create%e2%80%a6%e2%80%a6" title="分享到「豆瓣」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon douban-icon"><path d="M.643.92v2.412h22.714V.92H.643zm1.974 4.926v9.42h18.764v-9.42H2.617zm2.72 2.408H18.69v4.605H5.338V8.254zm1.657 7.412l-2.512.938c1.037 1.461 1.87 2.825 2.512 4.091H0v2.385h24v-2.385h-6.678c.818-1.176 1.589-2.543 2.303-4.091l-2.73-.938a29.952 29.952 0 01-2.479 5.03h-4.75c-.786-1.962-1.677-3.641-2.672-5.03Z"/></svg></a>
+                    <a href="https://www.douban.com/share/service?href=https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/&amp;name=VPS%20%e6%9e%84%e5%bb%ba%20IPv6%20%e9%9a%a7%e9%81%93&amp;text=%e9%89%b4%e4%ba%8e%e6%9c%89%e7%9a%84%20VPS%20%e5%95%86%e5%ae%b6%e5%b9%b6%e6%b2%a1%e6%9c%89%e5%8e%9f%e7%94%9f%e7%9a%84%20IPv6%20%e6%9c%8d%e5%8a%a1%ef%bc%8c%e5%8f%af%e4%bb%a5%e4%bd%bf%e7%94%a8%20Hurricane%20Electric%20Free%20IPv6%20Tunnel%20Broker%20%e5%88%9b%e5%bb%ba%20IPv6%20%e9%9a%a7%e9%81%93%e4%b8%ba%20VPS%20%e6%8f%90%e4%be%9b%20IPv6%20%e6%94%af%e6%8c%81%e3%80%82%20%e6%b3%a8%e5%86%8c%e2%80%a6%e2%80%a6" title="分享到「豆瓣」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon douban-icon"><path d="M.643.92v2.412h22.714V.92H.643zm1.974 4.926v9.42h18.764v-9.42H2.617zm2.72 2.408H18.69v4.605H5.338V8.254zm1.657 7.412l-2.512.938c1.037 1.461 1.87 2.825 2.512 4.091H0v2.385h24v-2.385h-6.678c.818-1.176 1.589-2.543 2.303-4.091l-2.73-.938a29.952 29.952 0 01-2.479 5.03h-4.75c-.786-1.962-1.677-3.641-2.672-5.03Z"/></svg></a>
                 </div>
             
 
@@ -465,7 +465,7 @@ ping6 www.google.com <span class="c1"># 如果返回ipv6地址即为成功</span
                 
                 <div class="share-item qq">
                     
-                    <a href="https://connect.qq.com/widget/shareqq/index.html?url=https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/&amp;title=VPS%20%e6%9e%84%e5%bb%ba%20IPv6%20%e9%9a%a7%e9%81%93&amp;summary=%e4%bd%bf%e7%94%a8%20Hurricane%20Electric%20Free%20IPv6%20Tunnel%20Broker%20%e6%9d%a5%e8%ae%a9vps%e6%94%af%e6%8c%81%20IPv6%e3%80%82%20%e6%b3%a8%e5%86%8c%e5%b9%b6%e5%88%9b%e5%bb%ba%20IPv6%20%e9%80%9a%e9%81%93%20%e6%b3%a8%e5%86%8c%20https://www.tunnelbroker.net/%20%ef%bc%88%e9%9c%80%e8%a6%81%e9%82%ae%e7%ae%b1%e9%aa%8c%e8%af%81%ef%bc%89%20%e7%82%b9%e5%87%bb%20Create%e2%80%a6%e2%80%a6&amp;pics=https://iyuanshuo.com/icons/apple-touch-icon.png&amp;site=Shuo%20Yuan%27s%20Home%20Page" title="分享到「QQ」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon qq-icon"><path d="M433.754 420.445c-11.526 1.393-44.86-52.741-44.86-52.741 0 31.345-16.136 72.247-51.051 101.786 16.842 5.192 54.843 19.167 45.803 34.421-7.316 12.343-125.51 7.881-159.632 4.037-34.122 3.844-152.316 8.306-159.632-4.037-9.045-15.25 28.918-29.214 45.783-34.415-34.92-29.539-51.059-70.445-51.059-101.792 0 0-33.334 54.134-44.859 52.741-5.37-.65-12.424-29.644 9.347-99.704 10.261-33.024 21.995-60.478 40.144-105.779C60.683 98.063 108.982.006 224 0c113.737.006 163.156 96.133 160.264 214.963 18.118 45.223 29.912 72.85 40.144 105.778 21.768 70.06 14.716 99.053 9.346 99.704z"/></svg></a>
+                    <a href="https://connect.qq.com/widget/shareqq/index.html?url=https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/&amp;title=VPS%20%e6%9e%84%e5%bb%ba%20IPv6%20%e9%9a%a7%e9%81%93&amp;summary=%e9%89%b4%e4%ba%8e%e6%9c%89%e7%9a%84%20VPS%20%e5%95%86%e5%ae%b6%e5%b9%b6%e6%b2%a1%e6%9c%89%e5%8e%9f%e7%94%9f%e7%9a%84%20IPv6%20%e6%9c%8d%e5%8a%a1%ef%bc%8c%e5%8f%af%e4%bb%a5%e4%bd%bf%e7%94%a8%20Hurricane%20Electric%20Free%20IPv6%20Tunnel%20Broker%20%e5%88%9b%e5%bb%ba%20IPv6%20%e9%9a%a7%e9%81%93%e4%b8%ba%20VPS%20%e6%8f%90%e4%be%9b%20IPv6%20%e6%94%af%e6%8c%81%e3%80%82%20%e6%b3%a8%e5%86%8c%e2%80%a6%e2%80%a6&amp;pics=https://iyuanshuo.com/icons/apple-touch-icon.png&amp;site=Shuo%20Yuan%27s%20Home%20Page" title="分享到「QQ」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon qq-icon"><path d="M433.754 420.445c-11.526 1.393-44.86-52.741-44.86-52.741 0 31.345-16.136 72.247-51.051 101.786 16.842 5.192 54.843 19.167 45.803 34.421-7.316 12.343-125.51 7.881-159.632 4.037-34.122 3.844-152.316 8.306-159.632-4.037-9.045-15.25 28.918-29.214 45.783-34.415-34.92-29.539-51.059-70.445-51.059-101.792 0 0-33.334 54.134-44.859 52.741-5.37-.65-12.424-29.644 9.347-99.704 10.261-33.024 21.995-60.478 40.144-105.779C60.683 98.063 108.982.006 224 0c113.737.006 163.156 96.133 160.264 214.963 18.118 45.223 29.912 72.85 40.144 105.778 21.768 70.06 14.716 99.053 9.346 99.704z"/></svg></a>
                 </div>
             
 

@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">Shuo Yuan&#39;s Home Page</title>
     <subtitle type="html">这是 shuoyuan 的生活与技术博客！</subtitle>
-    <updated>2020-02-26T15:29:04+08:00</updated>
+    <updated>2020-02-26T15:35:53+08:00</updated>
     <id>https://iyuanshuo.com/</id>
     <link rel="alternate" type="text/html" href="https://iyuanshuo.com/" />
     <link rel="self" type="application/atom+xml" href="https://iyuanshuo.com/atom.xml" />
@@ -382,7 +382,7 @@ git merge origin/master
             <title type="text">VPS 构建 IPv6 隧道</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/" />
             <id>https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/</id>
-            <updated>2020-02-26T15:29:03+08:00</updated>
+            <updated>2020-02-26T15:35:53+08:00</updated>
             <published>2016-11-15T21:00:00+00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -391,9 +391,9 @@ git merge origin/master
                     </author>
             <rights>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</rights>
     
-    <summary type="html"><![CDATA[使用 Hurricane Electric Free IPv6 Tunnel Broker 来让vps支持 IPv6。 注册并创建 IPv6 通道 注册 <a href="https://www.tunnelbroker.net/" target="_blank" rel="noopener">https://www.tunnelbroker.net/</a> （需要邮箱验证） 点击 Create……]]></summary>
+    <summary type="html"><![CDATA[鉴于有的 VPS 商家并没有原生的 IPv6 服务，可以使用 Hurricane Electric Free IPv6 Tunnel Broker 创建 IPv6 隧道为 VPS 提供 IPv6 支持。 注册……]]></summary>
             
-                <content type="html"><![CDATA[<p>使用 Hurricane Electric Free IPv6 Tunnel Broker 来让vps支持 IPv6。</p>
+                <content type="html"><![CDATA[<p>鉴于有的 VPS 商家并没有原生的 IPv6 服务，可以使用 Hurricane Electric Free IPv6 Tunnel Broker 创建 IPv6 隧道为 VPS 提供 IPv6 支持。</p>
 <h3 id="注册并创建-ipv6-通道">注册并创建 IPv6 通道</h3>
 <ul>
 <li>注册 <a href="https://www.tunnelbroker.net/">https://www.tunnelbroker.net/</a> （需要邮箱验证）</li>
