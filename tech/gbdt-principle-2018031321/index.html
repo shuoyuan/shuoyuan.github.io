@@ -85,13 +85,13 @@
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "datePublished": "2018-03-13T21:26:42+00:00",
-        "dateModified": "2020-02-26T23:04:55+08:00",
+        "dateModified": "2020-02-26T23:15:44+08:00",
         "url": "https://iyuanshuo.com/tech/gbdt-principle-2018031321/",
         "headline": "GBDT (Gradient Boosting Decision Tree) 梯度提升树的基本原理",
         "description": "[TOC] 什么是GBDT? GBDT是一种基于boosting集成学习（ensemble met……",
         "inLanguage" : "zh-CN",
         "articleSection": "tech",
-        "wordCount":  2372 ,
+        "wordCount":  2375 ,
         "image": ["http://images.iyuanshuo.com//blog/article/GBDT.png","http://images.iyuanshuo.com//blog/article/GBDT%20algorithm.png"],
         "author": {
             "@type": "Person",
@@ -143,7 +143,7 @@
         <meta property="og:image" content="http://images.iyuanshuo.com//blog/article/GBDT.png" />
 <meta property="og:type" content="article" />
     <meta property="article:published_time" content="2018-03-13T21:26:42+00:00" />
-    <meta property="article:modified_time" content="2020-02-26T23:04:55+08:00" />
+    <meta property="article:modified_time" content="2020-02-26T23:15:44+08:00" />
     
     <meta property="article:section" content="tech" />
 
@@ -271,7 +271,7 @@ $$</div>
 <div>$$
 r_{mi} = -\bigg[\frac{\partial L(y_i, f(x_i)))}{\partial f(x_i)}\bigg]_{f(x) = f_{m-1}\;\; (x)}
 $$</div>
-<p>利用<span>$(x_i,r_{mi});; (i=1,2,..n)$</span>，我们可以拟合第<span>$m$</span>棵CART回归树，其对应的叶节点区域<span>$R_{mj}, j =1,2,..., J$</span>，其中<span>$J$</span>为叶子节点的个数。</p>
+<p>利用<span>$(x_i,r_{mi})\quad(i=1,2,..n)$</span>，我们可以拟合第<span>$m$</span>棵CART回归树，其对应的叶节点区域<span>$R_{mj}, j =1,2,..., J$</span>，其中<span>$J$</span>为叶子节点的个数。</p>
 <p>针对每个叶子节点里的样本，我们求出损失函数最小，也就是拟合叶子节点最好的的输出值<span>$c_{mj}$</span>如下：</p>
 <div>$$
 c_{mj} = \underbrace{arg\; min}_{c}\sum\limits_{x_i \in R_{mj}} L(y_i,f_{m-1}(x_i) +c)
