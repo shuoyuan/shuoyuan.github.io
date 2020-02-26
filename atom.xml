@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">Shuo Yuan&#39;s Home Page</title>
     <subtitle type="html">这是 shuoyuan 的生活与技术博客！</subtitle>
-    <updated>2020-02-26T16:19:58+08:00</updated>
+    <updated>2020-02-26T16:31:26+08:00</updated>
     <id>https://iyuanshuo.com/</id>
     <link rel="alternate" type="text/html" href="https://iyuanshuo.com/" />
     <link rel="self" type="application/atom+xml" href="https://iyuanshuo.com/atom.xml" />
@@ -16,6 +16,150 @@
             </author>
     <rights>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</rights>
     <generator uri="https://gohugo.io/" version="0.65.2">Hugo</generator>
+        <entry>
+            <title type="text">Factorization Machines 因式分解机</title>
+            <link rel="alternate" type="text/html" href="https://iyuanshuo.com/tech/factorization-machine-2018032810/" />
+            <id>https://iyuanshuo.com/tech/factorization-machine-2018032810/</id>
+            <updated>2020-02-26T16:31:25+08:00</updated>
+            <published>2018-03-28T10:01:12+00:00</published>
+            <author>
+                    <name>Shuo Yuan</name>
+                    <uri>https://iyuanshuo.com/</uri>
+                    <email>isaulyuan@gmail.com</email>
+                    </author>
+            <rights>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</rights>
+    
+    <summary type="html"><![CDATA[概述 在使用线性模型，例如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需……]]></summary>
+            
+                <content type="html"><![CDATA[<h3 id="概述">概述</h3>
+<p>在使用线性模型，例如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需要人工进行一些特征的二维或者三维交叉。FM（Factorization machines）提供了一种思路可以自动进行特征交叉，同时能够处理非常稀疏数据，具有线性的时间复杂度，计算简单。</p>
+<p>由于FM实现简单效果非常好，而且应用范围非常广，FM是近期非常火的技术，在比赛或者大公司都比较常见。</p>
+<h3 id="fm优势">FM优势</h3>
+<p>FM能够解决的问题及优点<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
+<ul>
+<li>FM能够解决分类和回归问题</li>
+<li>FM能够代替SVD、SVD++等进行矩阵分解</li>
+<li>FM可以处理非常稀疏数据，此时SVM等模型会失效</li>
+<li>FM线性时间复杂度，计算简单</li>
+<li>FM可表示性较强，FM将模型参数表示为K维向量，向量之间可以交叉运算，即使两个交叉特征没有对应训练数据，也能表示出权重。</li>
+</ul>
+<h3 id="二维-fm">二维-FM</h3>
+<p>先回顾一下线性回归模型，其建模时采用的函数是：</p>
+<p>$$
+\begin{align*}
+\hat y({\rm{x}}) &amp;= {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n}\&amp;= {\omega _0} + \sum\limits_{i = 1}^n {{\omega _i}{x_i}} 
+\end{align*} \tag{1}
+$$</p>
+<p>从方程中可以看出各特征分量$x_i$和$x_j\ (i \ne j )$之间是相互孤立的，该模型仅考虑单个的特征分量，没有考虑特征分量之间的相互关系。</p>
+<p>在$(1)$的基础上改写为：</p>
+<p>$$
+\begin{align}
+\hat y({\rm{x}}) = {\omega <em>0} + \sum\limits</em>{i = 1}^n {{\omega <em>i}{x_i}}  + \sum\limits</em>{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {{\omega _{ij}}{x_i}} {x_j}} 
+\end{align} \tag{2}
+$$</p>
+<p>这样也将任意两个不同的特征向量之间的关系也考虑进来了。</p>
+<p>但是，有一个问题就是，在稀疏数据中这种直接在${x_i} {x_j}$前面配上一个系数$\omega_{ij}$的方式会有很大的缺陷。因为对于观察样本中未出现过交互的特征分量，不能对相应的参数进行估计<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
+<p>一定要注意的是，在高度稀疏数据场景中，由于数据量的不足，样本中出现未交互的特征分量是很普遍的。</p>
+<p>为了克服这个缺陷，我们在(2)中的系数$\omega_{ij}$上做文章，将其换成另外一种形式。针对每个维度的特征分量$x_i$，引入辅助向量：
+$$
+{{\rm{v}}_i} = {({v_{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},\ \ i = 1,2, \cdots ,n
+$$
+其中$k$为超参数，将(2)中的$\omega_{ij}$改写为：
+$$
+{{\hat \omega }_{ij}} = {{\rm{v}}_i}^T{{\rm{v}}_j}: = \sum\limits_{l = 1}^k {{v_{il}}{x_{jl}}} 
+$$
+如此，我们可以获得FM的二维模型。</p>
+<h4 id="模型">模型</h4>
+<p>对于2次特征交叉的FM模型可以表示为<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>：
+$$
+y(x)=w_0+\sum_{i=1} ^n(w_i x_i)+\sum_{i=1}^{n-1} \sum_{j=i+1}^n(&lt;v_i,v_j&gt;x_ix_j)  \tag{3}
+$$
+其中模型参数有$w_0$为截距，$w_i$为一维特征权重，$v_i$为每一维度特征的分布式表示，也即$w_0$为整体偏置量，$W$对特征向量的每个分量的强度进行建模，$V$对特征向量中任意两个分量之间的关系进行建模。</p>
+<p>其中特征交叉权重计算为:
+$$
+&lt;v_i,v_j&gt;=\sum_{f=1}^k v_{i,f}v_{j,f} \tag{3.1}
+$$</p>
+<h4 id="二维-fm计算复杂度">二维-FM计算复杂度</h4>
+<p>如果对式子(1)直接进行计算，那么其复杂度是$O(kn^2)$，但是我们可以通过简单的数学变换将其转化为$O(kn)$，由于前面两项的计算复杂度都是$O(kn)$，所以我们只需要对第三项进行处理<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>：
+$$
+\begin{align}
+\sum_{i=1}^n \sum_{j=i+1}^n(&lt;v_i,v_j&gt;x_ix_j) &amp;= \frac12 \sum_{i=1}^n \sum_{j=1}^n(&lt;v_i,v_j&gt;x_ix_j) - \frac12 \sum_{i=1}^n&lt;v_i,v_i&gt;x_ix_i\<br>
+&amp; =\frac12(\sum_{i=1}^n \sum_{j=1}^n\sum_{f=1}^k(v_{i,f}v_{j_f}x_ix_j)-\sum_{i=1}^n\sum_{f=1}^k(v_{i,f}v_{i,f}x_ix_i)) \ 
+&amp; = \frac12\sum_{f=1}^k((\sum_{i=1}^nv_{i,f}x_i)(\sum_{j=1}^nv_{j,f}x_j)-\sum_{i=1}^nv_{i,f}^2x_i^2) \<br>
+&amp; = \frac12\sum_{f=1}^k((\sum_{i=1}^nv_{i,f}x_i)^2-\sum_{i=1}^nv_{i,f}^2x_i^2) 
+\end{align}  \tag{2}
+$$
+相当于特征分布式表示中每一维度和特征进行求和平方和平方求和相减。</p>
+<h4 id="二维-fm的梯度计算">二维-FM的梯度计算</h4>
+<p>采用SGD进行模型计算 :
+$$
+\frac{\partial }{{\partial \theta }}y(x) = \left{ {\begin{array}{*{20}{l}}
+{1,}&amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\omega <em>0}}\<br>
+{{x_i},}&amp;{{\rm{if }}\ \theta\  {\rm{is}}\ {\omega <em>i}}\<br>
+{{x_i}\sum\limits</em>{j = 1}^n {{v</em>{j,f}}} {x_j} - {v_{i,f}}x_i^2,}&amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\nu _{i,f}}}
+\end{array}} \right.{\rm{ }} \tag{3}
+$$</p>
+<p>基于随机梯度的方式求解<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>：</p>
+<p><img src="http://images.iyuanshuo.com//blog/article/libFM.PNG" alt=""></p>
+<h3 id="fm应用">FM应用</h3>
+<p>在很多应用中，FM可以取代常用模型并且能够取得不错效果，例如</p>
+<ul>
+<li>FM - SVM，能够处理稀疏特征</li>
+<li>FM - MF</li>
+<li>FM - SVD++</li>
+<li>FM - PITF</li>
+<li>FM - FPMC</li>
+</ul>
+<p>具体可以参考相关引用的论文。</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://blog.csdn.net/fangqingan_java/article/details/50677340">【每周一文】Factorization Machines</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="http://www.cnblogs.com/pinard/p/6370127.html">分解机(Factorization Machines)推荐算法原理</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a href="https://blog.csdn.net/beyondjv610/article/details/79301683">Factorization Machines（因子分解机）</a> <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4" role="doc-endnote">
+<p><a href="https://dl.acm.org/citation.cfm?id=2168771">Factorization Machines with libFM. S Rendle</a> <a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+            
+            
+            
+                
+                
+                
+                    
+                    
+                    
+                        
+                            <category scheme="https://iyuanshuo.com/tech/" term="tech" label="tech" />
+                        
+                    
+                
+            
+            
+            
+                
+                    
+                        
+                            
+                            
+                            
+                                <category scheme="https://iyuanshuo.com/tags/machinelearning/" term="machineLearning" label="machineLearning" />
+                            
+                        
+                    
+                
+            
+        </entry>
+    
         <entry>
             <title type="text">Zotero 文献管理与多设备同步</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/tech/zotero-usage-2017062813/" />
@@ -382,7 +526,7 @@ git merge origin/master
             <title type="text">VPS 构建 IPv6 隧道</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/" />
             <id>https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/</id>
-            <updated>2020-02-26T15:35:53+08:00</updated>
+            <updated>2020-02-26T16:31:25+08:00</updated>
             <published>2016-11-15T21:00:00+00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -452,8 +596,8 @@ options ipv6 <span class="nv">disable</span><span class="o">=</span>1
 <p>回到ssh，粘贴复制的内容并执行即可（Note：系统重启会失效，请自行写入脚本并设置开机启动）。</p>
 </li>
 </ul>
-<p><em>Tips: Centos 7 可能会提示:</em> <code>-bash: ifconfig: command not found</code>
-<strong>解决方案：</strong></p>
+<p><em>Tips: Centos 7 可能会提示:</em>  <code>-bash: ifconfig: command not found</code></p>
+<p><strong>解决方案：</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
