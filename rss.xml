@@ -23,7 +23,7 @@
         
             <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
         
-        <lastBuildDate>Wed, 26 Feb 2020 16:37:02 +0800</lastBuildDate>
+        <lastBuildDate>Wed, 26 Feb 2020 16:59:16 +0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss+xml" href="https://iyuanshuo.com/rss.xml" />
         
@@ -57,6 +57,14 @@
 \hat y({\rm{x}}) &amp;= {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n}\&amp;= {\omega _0} + \sum\limits_{i = 1}^n {{\omega _i}{x_i}} 
 \end{align*} \tag{1}
 $$</p>
+<p>$$
+\begin{cases}
+\nabla\times\mathbf{E} &amp;= -\frac{\partial\mathbf B}{\partial t} \<br>
+\nabla\times\mathbf{B} &amp;= \mu_0\mathbf{J} + \mu_0\epsilon_0\frac{\partial\mathbf E}{\partial t} \<br>
+\nabla\cdot\mathbf{E} &amp;= \frac{\rho}{\epsilon_0} \<br>
+\nabla\cdot\mathbf{B} &amp;= 0
+\end{cases}
+$$</p>
 <p>从方程中可以看出各特征分量$x_i$和$x_j\ (i \ne j )$之间是相互孤立的，该模型仅考虑单个的特征分量，没有考虑特征分量之间的相互关系。</p>
 <p>在$(1)$的基础上改写为：</p>
 <p>$$
@@ -67,15 +75,15 @@ $$</p>
 <p>这样也将任意两个不同的特征向量之间的关系也考虑进来了。</p>
 <p>但是，有一个问题就是，在稀疏数据中这种直接在${x_i} {x_j}$前面配上一个系数$\omega_{ij}$的方式会有很大的缺陷。因为对于观察样本中未出现过交互的特征分量，不能对相应的参数进行估计<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
 <p>一定要注意的是，在高度稀疏数据场景中，由于数据量的不足，样本中出现未交互的特征分量是很普遍的。</p>
-<p>为了克服这个缺陷，我们在(2)中的系数$\omega_{ij}$上做文章，将其换成另外一种形式。针对每个维度的特征分量$x_i$，引入辅助向量：
-$$
-{{\rm{v}}_i} = {({v_{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},\ \ i = 1,2, \cdots ,n
+<p>为了克服这个缺陷，我们在(2)中的系数$\omega_{ij}$上做文章，将其换成另外一种形式。针对每个维度的特征分量$x_i$，引入辅助向量：</p>
+<p>$$
+{{\rm{v}}<em>i} = {({v</em>{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},\ \ i = 1,2, \cdots ,n
 $$
 其中$k$为超参数，将(2)中的$\omega_{ij}$改写为：
 $$
 {{\hat \omega }_{ij}} = {{\rm{v}}_i}^T{{\rm{v}}_j}: = \sum\limits_{l = 1}^k {{v_{il}}{x_{jl}}} 
-$$
-如此，我们可以获得FM的二维模型。</p>
+$$</p>
+<p>如此，我们可以获得FM的二维模型。</p>
 <h3 id="模型">模型</h3>
 <p>对于2次特征交叉的FM模型可以表示为<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>：
 $$
