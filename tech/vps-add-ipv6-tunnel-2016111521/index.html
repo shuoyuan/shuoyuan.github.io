@@ -91,7 +91,7 @@
         "description": "鉴于有的 VPS 商家并没有原生的 IPv6 服务，可以使用 Hurricane Electric Free IPv6 Tunnel Broker 创建 IPv6 隧道为 VPS 提供 IPv6 支持。 注册……",
         "inLanguage" : "zh-CN",
         "articleSection": "tech",
-        "wordCount":  1073 ,
+        "wordCount":  1050 ,
         "image": "https://iyuanshuo.com/icons/apple-touch-icon.png",
         "author": {
             "@type": "Person",
@@ -244,32 +244,15 @@
 <ul>
 <li>编辑文件 <code>/etc/modprobe.d/disable_ipv6.conf</code>，注释以下相关的命令行：</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">alias</span> net-pf-10 off
-<span class="nb">alias</span> ipv6 off
-options ipv6 <span class="nv">disable</span><span class="o">=</span>1
-</code></pre></td></tr></table>
-</div>
-</div><ul>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span><span class="nb">alias</span> net-pf-10 off
+<span class="ln">2</span><span class="nb">alias</span> ipv6 off
+<span class="ln">3</span>options ipv6 <span class="nv">disable</span><span class="o">=</span>1
+</code></pre></div><ul>
 <li>编辑文件 /etc/sysconfig/network，将其中的 <code>NETWORKING_IPV6=no</code> 改为 <code>NETWORKING_IPV6=yes</code></li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># NETWORKING_IPV6=no</span>
-<span class="nv">NETWORKING_IPV6</span><span class="o">=</span>yes
-</code></pre></td></tr></table>
-</div>
-</div><ul>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span><span class="c1"># NETWORKING_IPV6=no</span>
+<span class="ln">2</span><span class="nv">NETWORKING_IPV6</span><span class="o">=</span>yes
+</code></pre></div><ul>
 <li>
 <p>可以重启系统使其加载或者执行<code>depmod -a</code>和<code>service network restart</code>让其重载配置。</p>
 </li>
@@ -292,105 +275,38 @@ options ipv6 <span class="nv">disable</span><span class="o">=</span>1
 </ul>
 <p><em>Tips: Centos 7 可能会提示:</em> <code>-bash: ifconfig: command not found</code>
 <strong>解决方案：</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">yum search ifconfig    <span class="c1"># 提示只要安装net-tools.x86_64即可</span>
-yum install net-tools.x86_64 
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="设置ipv6开机自启"><a href="#设置ipv6开机自启" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a>设置IPv6开机自启</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">vim /root/ipv6.sh
-</code></pre></td></tr></table>
-</div>
-</div><p>输入如下内容：  <em>即从he网站上复制的<code>Linux-net-tools</code>的代码</em></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
-</span><span class="cp"></span>
-ifconfig sit0 up
-ifconfig sit0 inet6 tunnel ::66.220.18.42
-ifconfig sit1 up
-ifconfig sit1 inet6 add 2001:470:c:957::2/64
-route -A inet6 add ::/0 dev sit1
-</code></pre></td></tr></table>
-</div>
-</div><p>给文件增加可执行权限：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">chmod +x /root/ipv6.sh
-</code></pre></td></tr></table>
-</div>
-</div><p>编辑启动管理文件：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">vim /etc/rc.d/rc.local
-</code></pre></td></tr></table>
-</div>
-</div><p>在最下方加入下面一行代码：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">sh /root/ipv6.sh
-</code></pre></td></tr></table>
-</div>
-</div><p>保存并退出，这样重启后也有 IPv6。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>yum search ifconfig    <span class="c1"># 提示只要安装net-tools.x86_64即可</span>
+<span class="ln">2</span>yum install net-tools.x86_64 
+</code></pre></div><h3 id="设置ipv6开机自启"><a href="#设置ipv6开机自启" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a>设置IPv6开机自启</h3>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>vim /root/ipv6.sh
+</code></pre></div><p>输入如下内容：  <em>即从he网站上复制的<code>Linux-net-tools</code>的代码</em></p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span><span class="cp">#!/bin/bash
+</span><span class="ln">2</span><span class="cp"></span>
+<span class="ln">3</span>ifconfig sit0 up
+<span class="ln">4</span>ifconfig sit0 inet6 tunnel ::66.220.18.42
+<span class="ln">5</span>ifconfig sit1 up
+<span class="ln">6</span>ifconfig sit1 inet6 add 2001:470:c:957::2/64
+<span class="ln">7</span>route -A inet6 add ::/0 dev sit1
+</code></pre></div><p>给文件增加可执行权限：</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>chmod +x /root/ipv6.sh
+</code></pre></div><p>编辑启动管理文件：</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>vim /etc/rc.d/rc.local
+</code></pre></div><p>在最下方加入下面一行代码：</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>sh /root/ipv6.sh
+</code></pre></div><p>保存并退出，这样重启后也有 IPv6。</p>
 <h3 id="测试ipv6隧道可用性"><a href="#测试ipv6隧道可用性" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a>测试ipv6隧道可用性</h3>
 <p>配置好隧道后，可以使用<code>ping6</code>命令进行验证。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">ping6 ipv6.baidu.com <span class="c1"># 如果你的服务器在国内可使用</span>
-ping6 www.google.com <span class="c1"># 如果返回ipv6地址即为成功</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="解决谷歌访问出现验证码"><a href="#解决谷歌访问出现验证码" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a>解决谷歌访问出现验证码</h3>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>ping6 ipv6.baidu.com <span class="c1"># 如果你的服务器在国内可使用</span>
+<span class="ln">2</span>ping6 www.google.com <span class="c1"># 如果返回ipv6地址即为成功</span>
+</code></pre></div><h3 id="解决谷歌访问出现验证码"><a href="#解决谷歌访问出现验证码" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a>解决谷歌访问出现验证码</h3>
 <p>阿里云的较多海外机房在访问谷歌时会出现验证提示，可以强制使用IPv6访问谷歌来避免IP认证。</p>
 <p>可将谷歌的网址放入 hosts 文件并指定 IPv6 地址解决。</p>
 <p>编辑文件<code>vim /etc/hosts</code>并加入以下内容：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">2404:6800:4005:80a::2003 www.google.com.hk
-2404:6800:4005:80a::2003 google.com.hk <span class="c1"># 服务器所在地区的后缀</span>
-2404:6800:4005:80a::2003 www.google.com
-2404:6800:4005:80a::2003 google.com <span class="c1"># ipv6地址可以改为ping6命令返回的地址，延迟会更小</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>如果hosts文件没有立刻生效，可以尝试使用<code>hostname xxx</code>刷新，如果依旧无效可尝试重启。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="ln">1</span>2404:6800:4005:80a::2003 www.google.com.hk
+<span class="ln">2</span>2404:6800:4005:80a::2003 google.com.hk <span class="c1"># 服务器所在地区的后缀</span>
+<span class="ln">3</span>2404:6800:4005:80a::2003 www.google.com
+<span class="ln">4</span>2404:6800:4005:80a::2003 google.com <span class="c1"># ipv6地址可以改为ping6命令返回的地址，延迟会更小</span>
+</code></pre></div><p>如果hosts文件没有立刻生效，可以尝试使用<code>hostname xxx</code>刷新，如果依旧无效可尝试重启。</p>
 </div>
 
         </article>
