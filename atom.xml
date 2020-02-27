@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">Shuo Yuan&#39;s Home Page</title>
     <subtitle type="html">这是 shuoyuan 的生活与技术博客！</subtitle>
-    <updated>2020-02-27T03:59:56+08:00</updated>
+    <updated>2020-02-27T15:56:09+08:00</updated>
     <id>https://iyuanshuo.com/</id>
     <link rel="alternate" type="text/html" href="https://iyuanshuo.com/" />
     <link rel="self" type="application/atom+xml" href="https://iyuanshuo.com/atom.xml" />
@@ -171,10 +171,10 @@ $$</p>
         </entry>
     
         <entry>
-            <title type="text">GBDT (Gradient Boosting Decision Tree) 梯度提升树的基本原理</title>
+            <title type="text">GBDT 梯度提升树的基本原理</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/tech/gbdt-principle-2018031321/" />
             <id>https://iyuanshuo.com/tech/gbdt-principle-2018031321/</id>
-            <updated>2020-02-26T23:57:32+08:00</updated>
+            <updated>2020-02-27T15:56:08+08:00</updated>
             <published>2018-03-13T21:26:42+00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -183,10 +183,10 @@ $$</p>
                     </author>
             <rights>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</rights>
     
-    <summary type="html"><![CDATA[什么是GBDT? GBDT是一种基于boosting集成学习（ensemble meth……]]></summary>
+    <summary type="html"><![CDATA[什么是GBDT? GBDT (Gradient Boosting Decision Tree) 是一种基于boosting集成学习（ensemble met……]]></summary>
             
                 <content type="html"><![CDATA[<h2 id="什么是gbdt">什么是GBDT?</h2>
-<p>GBDT是一种基于boosting集成学习（ensemble method）的算法，但和传统的Adaboost有很大不同。在Adaboost，我们是利用前一轮迭代弱学习器的误差率来更新训练集的权重，这样一轮轮的迭代下去。GBDT也是迭代，使用了前向分布算法，但是弱学习器限定了只能使用CART回归树模型，同时迭代思路和Adaboost也有所不同。GBDT选用的弱分类器一般是低方差高偏差，因为Boosting主要关注降低偏差，因此Boosting能基于泛化性能相当弱的学习器构建出很强的集成。GBDT的训练过程如下<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
+<p>GBDT (Gradient Boosting Decision Tree) 是一种基于boosting集成学习（ensemble method）的算法，但和传统的Adaboost有很大不同。在Adaboost，我们是利用前一轮迭代弱学习器的误差率来更新训练集的权重，这样一轮轮的迭代下去。GBDT也是迭代，使用了前向分布算法，但是弱学习器限定了只能使用CART回归树模型，同时迭代思路和Adaboost也有所不同。GBDT选用的弱分类器一般是低方差高偏差，因为Boosting主要关注降低偏差，因此Boosting能基于泛化性能相当弱的学习器构建出很强的集成。GBDT的训练过程如下<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
 <p><img src="http://images.iyuanshuo.com//blog/article/GBDT.png" alt="Fig 1. GBDT 的训练过程"></p>
 <h3 id="boost">Boost</h3>
 <p>Boost是一个加法模型，它是由若干个基函数及其权值乘积之和的累加。</p>
