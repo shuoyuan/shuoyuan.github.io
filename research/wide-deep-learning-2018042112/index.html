@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+    <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+    <meta charset="UTF-8" />
+
+    <meta name="generator" content="Hugo 0.65.2" /><meta name="theme-color" content="#fff" />
+        <script>
+            const userPrefers = localStorage.getItem('theme');
+            const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            const lightModeMediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+            if (userPrefers === 'dark') {
+                changeModeMeta('dark');
+            } else if (userPrefers === 'light') {
+                changeModeMeta('light');
+            } else if (darkModeMediaQuery.matches) {
+                changeModeMeta('dark');
+            } else if (lightModeMediaQuery.matches) {
+                changeModeMeta('light');
+            }
+            function changeModeMeta(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                if (theme === 'dark') {
+                    changeThemeColor('#1c1c21');
+                } else {
+                    changeThemeColor('#fff');
+                }
+            }
+            function changeThemeColor(themeColor) {
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', themeColor);
+            }
+        </script>
+
+    
+        
+        
+        <script>
+            if (window.location.host == "iyuanshuo.com" && window.location.protocol != "https:") {
+                window.location.protocol = "https";
+            }
+        </script>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
+    
+    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+    
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <title>Wide &amp; Deep Learning 模型介绍 | Shuo Yuan&#39;s Home Page</title>
+
+    <link rel="stylesheet" href="/css/meme.min.4a906cbabc6eeb8d956adef99799b9cabf6f757036617ff42df017220e988912.css" integrity="sha256-SpBsurxu642Vat75l5m5yr9vdXA2YX/0LfAXIg6YiRI=" data-instant-track />
+
+    <link href="https://fonts.googleapis.com/css?family=EB+Garamond:400,400i,700,700i|Noto+Serif+SC:400,700|Source+Code+Pro:400,400i,700,700i|Cinzel+Decorative:700&display=swap&subset=chinese-simplified" rel="stylesheet" />
+
+    <meta name="author" content="Shuo Yuan" />
+    
+    
+    <meta name="description" content="Wide &amp;amp; Deep Learning 是由 Google Inc 发表的 paper：Wide &amp;amp; Deep Learning for Recommender Systems 中提出的一种使用非线性特征的线……" />
+
+    <link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#2a6df4" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Shuo Yuan&#39;s Home Page" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Shuo Yuan&#39;s Home Page" />
+    <meta name="msapplication-starturl" content="../../" />
+    <meta name="msapplication-TileColor" content="#fff" />
+    <meta name="msapplication-TileImage" content="../../icons/mstile-150x150.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    
+    
+
+    
+    <link rel="canonical" href="https://iyuanshuo.com/research/wide-deep-learning-2018042112/" />
+
+
+
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "datePublished": "2018-04-21T12:30:00+00:00",
+        "dateModified": "2020-03-27T11:39:21+08:00",
+        "url": "https://iyuanshuo.com/research/wide-deep-learning-2018042112/",
+        "headline": "Wide \u0026 Deep Learning 模型介绍",
+        "description": "Wide \u0026amp; Deep Learning 是由 Google Inc 发表的 paper：Wide \u0026amp; Deep Learning for Recommender Systems 中提出的一种使用非线性特征的线……",
+        "inLanguage" : "zh-CN",
+        "articleSection": "research",
+        "wordCount":  2981 ,
+        "image": ["https://imgconvert.csdnimg.cn/aHR0cDovL2ltYWdlcy5peXVhbnNodW8uY29tLzIwMTgvMDQvMjEvd2lkZV9kZWVwX21vZGVscy5wbmc?x-oss-process=image/format,png"],
+        "author": {
+            "@type": "Person",
+            "description": "Stay Hungry Stay Foolish",
+            "email": "isaulyuan@gmail.com",
+            "image": "https://iyuanshuo.com/icons/apple-touch-icon.png",
+            "url": "https://iyuanshuo.com/",
+            "name": "Shuo Yuan"
+        },
+        "license": "在保留本文作者及本文链接的前提下，非商业用途随意转载分享。",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Shuo Yuan's Home Page",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://iyuanshuo.com/icons/apple-touch-icon.png"
+            },
+            "url": "https://iyuanshuo.com/"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebSite",
+            "@id": "https://iyuanshuo.com/"
+        }
+    }
+</script>
+
+    
+
+
+
+<meta name="twitter:card" content="summary_large_image" />
+
+
+<meta name="twitter:site" content="@saulyuan" />
+<meta name="twitter:creator" content="@saulyuan" />
+
+    
+
+
+
+
+
+<meta property="og:title" content="Wide &amp; Deep Learning 模型介绍" />
+<meta property="og:description" content="Wide &amp;amp; Deep Learning 是由 Google Inc 发表的 paper：Wide &amp;amp; Deep Learning for Recommender Systems 中提出的一种使用非线性特征的线……" />
+<meta property="og:url" content="https://iyuanshuo.com/research/wide-deep-learning-2018042112/" />
+<meta property="og:site_name" content="Shuo Yuan&#39;s Home Page" />
+<meta property="og:locale" content="zh-CN" />
+            <meta property="og:locale:alternate" content="en-US" />
+        <meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2ltYWdlcy5peXVhbnNodW8uY29tLzIwMTgvMDQvMjEvd2lkZV9kZWVwX21vZGVscy5wbmc?x-oss-process=image/format,png" />
+<meta property="og:type" content="article" />
+    <meta property="article:published_time" content="2018-04-21T12:30:00+00:00" />
+    <meta property="article:modified_time" content="2020-03-27T11:39:21+08:00" />
+    
+    <meta property="article:section" content="research" />
+
+
+        
+
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q09QFXNCE9"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-Q09QFXNCE9');
+    </script>
+
+
+
+
+    
+        <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    
+
+    
+</head>
+
+    <body>
+        <div class="container">
+            
+    <header class="header">
+        <div class="site-brand">
+            
+            <a href="/"><svg xmlns="http://www.w3.org/2000/svg" class="brand" width="34" height="10"><text data-name="Shuo Yuan" x="20" y="55" font-family="Palatino Linotype" font-size="45">Shuo Yuan</text><text data-name="Stay Hungry Stay Foolish" x="30" y="81" font-size="18" font-family="Trebuchet MS">Stay Hungry Stay Foolish</text></svg></a>
+            
+        </div>
+    </header>
+
+            
+            <div class="lang-toggle" onmouseover="langSwitcherOver()" onmouseout="langSwitcherOut()">
+        🇨🇳
+        
+            
+                <ul id="langs">
+                    
+                        
+                    
+                        
+                            <li><a rel="alternate" href="/en-us" hreflang="en-us" lang="en-us">🇺🇸</a></li>
+                        
+                    
+                </ul>
+            
+        
+    </div>
+
+            
+    
+        
+            
+        
+        <div id="theme-toggle" onclick="modeSwitcher()">🌞</div>
+    
+
+            
+    <main class="main single" id="main">
+    <div class="main-inner">
+        
+        <div class="links">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="/archives/" class="links-item"><svg t="1582383197269" class="icon archives" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4424" width="200" height="200"><path d="M608 480q0-13-9.5-22.5t-22.5-9.5l-128 0q-13 0-22.5 9.5t-9.5 22.5 9.5 22.5 22.5 9.5l128 0q13 0 22.5-9.5t9.5-22.5zm288-96l0 480q0 13-9.5 22.5t-22.5 9.5l-704 0q-13 0-22.5-9.5t-9.5-22.5l0-480q0-13 9.5-22.5t22.5-9.5l704 0q13 0 22.5 9.5t9.5 22.5zm32-224l0 128q0 13-9.5 22.5t-22.5 9.5l-768 0q-13 0-22.5-9.5t-9.5-22.5l0-128q0-13 9.5-22.5t22.5-9.5l768 0q13 0 22.5 9.5t9.5 22.5z" p-id="4425"></path></svg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            <a href="/" class="links-item"><svg t="1582382816192" class="icon home" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2039" width="200" height="200"><path d="M999.936 509.44l-449.024-389.12c-9.216-11.264-23.552-18.432-38.912-18.432s-29.696 7.168-38.912 18.432l-449.024 389.12C9.728 518.656 0 534.528 0 552.96c0 26.624 19.968 48.128 46.08 50.688v0.512h81.92v317.44c0 28.16 23.04 51.2 51.2 51.2h204.8c28.16 0 51.2-23.04 51.2-51.2v-209.92c0-28.16 23.04-51.2 51.2-51.2h51.2c28.16 0 51.2 23.04 51.2 51.2v209.92c0 28.16 23.04 51.2 51.2 51.2h204.8c28.16 0 51.2-23.04 51.2-51.2v-317.44h76.8c28.16 0 51.2-23.04 51.2-51.2 0-18.432-9.728-34.304-24.064-43.52z" fill="#1296db" p-id="2040"></path></svg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            <a href="/about/" class="links-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="icon about"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"/></svg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            
+        </div>
+        
+        <article class="content post" data-align="justify" data-type="research">
+
+            <h1 class="post-title">Wide &amp; Deep Learning 模型介绍</h1>
+
+            
+
+            
+                
+            
+
+            
+
+            
+                <nav class="contents">
+  <h2 id="contents" class="contents-title">目录</h2><ol class="toc">
+    <li>
+      <ol>
+        <li><a id="contents:introduction2" href="#introduction2">Introduction</a></li>
+        <li><a id="contents:wide--deep-learning3" href="#wide--deep-learning3">Wide & Deep Learning</a>
+          <ol>
+            <li><a id="contents:the-wide-component-wide-组件" href="#the-wide-component-wide-组件">The Wide Component (Wide 组件)</a></li>
+            <li><a id="contents:the-deep-component--deep组件" href="#the-deep-component--deep组件">The Deep Component  (Deep组件)</a></li>
+            <li><a id="contents:wide--deep模型的联合训练" href="#wide--deep模型的联合训练">Wide & Deep模型的联合训练</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav><div class="post-body"><p>Wide &amp; Deep Learning 是由 Google Inc 发表的 paper：Wide &amp; Deep Learning for Recommender Systems 中提出的一种使用非线性特征的线性模型和一个用来 embedding 特征的深度学习并且使用联合训练 (joint training) 的方法<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">[1]</a></sup>。</p>
+<h3 id="introduction2"><a href="#introduction2" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:introduction2" class="headings">Introduction<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">[2]</a></sup></a></h3>
+<p>通过将稀疏数据的非线性转化特征引入到广义线性模型被广泛应用于大规模的回归和分类问题。通过广泛的使用交叉特征转化，使得特征交互的记忆性有效并且具有可解释性。然后，这导致应用过程需要做许多的特征工作。相对来说，通过从稀疏数据中学习低纬稠密的 embedding 特征，并应用到深度学习中，只需要少量的特征工程就能对潜在的特征组合具有更好的泛化性。但是当用户项目交互是稀疏和高纬数据的时候，利用了 embeddings 的深度学习则表现得过于笼统 (over-generalize)，推荐的都是些相关性很低的 items。在这篇文章中，提出了一个 wide &amp; deep 联合学习模型，去结合推荐系统的 <strong>memorization</strong>和 <strong>generalization</strong>。</p>
+<p>通过结合使用<strong>非线性特征的线性模型</strong>和用来 <strong>embedding 特征的深度学习</strong>，并且使用**联合训练 (joint training) **的方法进行优化。主要思想基于交叉特征的线性模型只能从历史出现过的数据中找到非线性 (<strong>显性的非线性</strong>) ，深度学习可以找到没有出现过的非线性 (<strong>隐性的非线性</strong>) 。Memorization 就是去把历史数据中显性的非线性找出来，而 generalization 通过找出隐性的非线性提高模型的泛化性。</p>
+<p>推荐系统可以被看做是一个搜索排序系统，其中输入的 query 是一系列的用户和文本信息，输出是 items 的排序列表。给定一个 query，推荐的任务就是到数据库中去找出相关的 items，然后对这些 items 根据相关对象，如点击或者购买行为，并进行排序。</p>
+<p>和传统的搜索排序问题一样，在推荐系统中一个挑战就是区域同时达到 memorization 和 generalization。Memorization 可以被大概定义为学习 items 或者 features 之间的相关频率，在历史数据中探索相关性的可行性。Generalizaion 的话则是基于相关性的传递，去探索一些在过去没有出现过的特征组合。基于 memorization 的推荐相对来说具有<strong>局部性</strong>，是在哪些用户和 items 已经有直接相关联的活动上。相较于 memorization，generalization 尝试去提高推荐 items 的<strong>多元化</strong>。</p>
+<p>在工业中，对于大规模的在线推荐和排序系统，像逻辑回归这样的广义线性模型由于实现简单，可扩展性好，可解释性强而被广泛使用。通过喂给它一些 one-hot 编码的稀疏特征，比如二值特征 (user_installed_app=netfix) 表示用户安装了 Netflix。Memorization 则可以通过对稀疏特征做交叉积转换获得，就是求交叉特征。比如AND操作  (user_installed_app= netflix, impression_app=pandora) 这两个特征，当用户安装了Netflix并且之后展示在Pandora上，那么得到特征的值为1，其余为0。这个交叉特征展示了特征对之间的相关性和目标lable之间的关联。在逻辑回归上实现 generalization 可以通过增加一些粗粒度的特征实现，如AND(user_installed_category=video, impression_category=music )，但是这些都是需要人工做特征工程实现，工作量极大。此外，cross-product transformation 的一个限制就是他们不能生成从未在训练数据中出现过的 query-item 特征对。</p>
+<p>而 Embedding-based 的模型，比如因子分解机 (FM) 或深度神经网络，只需要很少的特征工程，通过为每个 query 和 item 特征对 (pair) 学到一个低维的 dense embedding vector，可以泛化到之前未见过的 query-item 特征对。但是如果潜在的 query-item 矩阵是稀疏，高秩的话，为 query 和 items 学习出一个有效的低纬表示往往很困难，比如基于特殊偏好的 users，或者一些很少出现的小众 items。在这种情况下，大多数的 query-item 没有交互，但是稠密的 embedding 还是会对全部的 query-item 对有非零的输出预测，因此能做出一些过泛化和做出一些不太相关的推荐。另一方面，利用交叉积特征 (cross-product features transformations) 的线性模型能用很少的参数记住那些异常规则 (exception_rules) 。</p>
+<h3 id="wide--deep-learning3"><a href="#wide--deep-learning3" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:wide--deep-learning3" class="headings">Wide &amp; Deep Learning<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">[3]</a></sup></a></h3>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltYWdlcy5peXVhbnNodW8uY29tLzIwMTgvMDQvMjEvd2lkZV9kZWVwX21vZGVscy5wbmc?x-oss-process=image/format,png" alt="model" data-zoomable></p>
+<h4 id="the-wide-component-wide-组件"><a href="#the-wide-component-wide-组件" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:the-wide-component-wide-组件" class="headings">The Wide Component (Wide 组件)</a></h4>
+<p>Wide组件是一个泛化的线性模型，<span>$y=w^Tx+b$</span>，如Fig.1 图左所示。<span>$y$</span>是预测值，<span>$x = [x_1, x_2, …, x_d]$</span>是<span>$d$</span>维特征向量，<span>$w = [w_1, w_2,…, w_d]$</span>是模型参数，<span>$b$</span>是bias。特征集包括原始的输入特征和转换后 (cross-product transformation) 的特征。Cross-product transformation 有如下定义：</p>
+<div>$$\phi_k(x)=\prod_{i=1}^{d}x_{i}^{c_{ki}}, c_{ki} \in \{0, 1\}\tag1$$</div>
+<p>其中<span>$c_{ki}$</span>为一个<code>boolean</code>变量，如果第<span>$i$</span>个特征是第<span>$k$</span>个变换<span>$\phi_k$</span>的一部分，那么为1; 否则为0。对于二值特征，一个cross-product transformation (比如：”AND(gender=female, language=en)”) 只能当组成特征 (“gender=female” 和 “language=en”) 都为1时才会为1, 否则为0。这可以捕获二值特征间的交叉，为通用的线性模型添加非线性 (显性的) 。</p>
+<h4 id="the-deep-component--deep组件"><a href="#the-deep-component--deep组件" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:the-deep-component--deep组件" class="headings">The Deep Component  (Deep组件)</a></h4>
+<p>Deep组件是一个前馈神经网络(feed-forward NN)，如Fig.1图右所示。对于类别型特征，原始的输入是特征字符串 (比如：<code>language=en</code>) 。这些稀疏的，高维的类别型特征会首先被转换成一个低维的、dense的、real-valued的向量，通常叫做<code>embedding vector</code>。embedding的维度通常是<span>$O(10)$</span>到<span>$O(100)$</span>的阶。该embedding vectors被随机初始化，接着最小化最终的loss的方式训练得到该值。这些低维的dense embedding vectors接着通过前向传递被feed给神经网络的隐层。特别地，每个隐层都会执行以下的计算：</p>
+<div>$$a^{l+1} = f(W^{(l)} a^{(l)} + b^{(l)})\tag2$$</div>
+<p>其中，<span>$l$</span>是层数，<span>$f$</span>是激活函数 (通常为ReLUs) ，<span>$a(l)$</span>，<span>$b(l)$</span>和<span>$W(l)$</span>分别是第<span>$l$</span>层的activations，bias，以及weights。</p>
+<h4 id="wide--deep模型的联合训练"><a href="#wide--deep模型的联合训练" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:wide--deep模型的联合训练" class="headings">Wide &amp; Deep模型的联合训练</a></h4>
+<p>Wide组件和Deep组件组合在一起，对它们的输入日志进行一个加权求和来做为预测，它会被feed给一个常见的logistic loss function来进行联合训练。注意，**联合训练 (joint training) <strong>和</strong>集成训练 (ensemble) **有明显的区别。在ensemble中，每个独立的模型会单独训练，相互并不知道，只有在预测时会组合在一起。相反地，联合训练 (joint training) 会同时优化所有参数，通过将wide组件和deep组件在训练时进行加权求和的方式进行。这也暗示了模型的size：对于一个ensemble，由于训练是不联合的 (disjoint) ，每个单独的模型size通常需要更大些 (例如：更多的特征和转换) 来达到合理的精度。相比之下，对于联合训练 (joint training) 来说，wide组件只需要补充deep组件的缺点，使用一小部分的cross-product特征转换即可，而非使用一个full-size的wide模型。</p>
+<p>一个Wide&amp;Deep模型的联合训练，通过对梯度进行后向传播算法、SGD优化来完成。训练中使用FTRL算法和L1正则做为Wide组件的优化器，对Deep组件使用AdaGrad。</p>
+<p>组合模型如Fig.1 图中所示。对于一个logistic regression问题，模型的预测为：</p>
+<div>$$P(Y = 1 | x) = \sigma(w_{wide}^{T} [x, \phi(x)] + w_{deep}^{T} a^{(l_f)} + b)\tag3$$</div>
+<p>其中<span>$Y$</span>是二分类的label，<span>$\sigma(·)$</span>是sigmoid function， <span>$\phi(x)$</span>是对原始特征<span>$x$</span>做cross product transformations，<span>$b$</span>是bias项。<span>$w_{wide}$</span>是所有wide模型权重向量，<span>$w_{deep}$</span>是应用在最终激活函数<span>$a^{(l_f)}$</span>上的权重。</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="http://delivery.acm.org/10.1145/2990000/2988454/p7-cheng.pdf?ip=59.64.129.94&amp;id=2988454&amp;acc=OA&amp;key=BF85BBA5741FDC6E%2E66A15327C2E204FC%2E4D4702B0C3E38B35%2E5945DC2EABF3343C&amp;__acm__=1524286862_5eea25e811738c9a07c334624118b607" target="_blank" rel="noopener">Wide &amp; Deep Learning for Recommender Systems</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="icon footnote-icon"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"/></svg></a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://blog.csdn.net/sxf1061926959/article/details/78440220?readlog" target="_blank" rel="noopener">The Wide and Deep Learning Model (译文+Tensorlfow源码解析) </a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="icon footnote-icon"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"/></svg></a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a href="http://d0evi1.com/widedeep-recsys/" target="_blank" rel="noopener">基于Wide &amp; Deep Learning的推荐系统</a> <a href="#fnref:3" class="footnote-backref" role="doc-backlink"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="icon footnote-icon"><path d="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"/></svg></a></p>
+</li>
+</ol>
+</section>
+</div>
+
+        </article>
+
+        
+
+        
+
+        
+
+        
+
+        
+    
+    
+
+<div class="post-share">
+
+        
+
+        <div class="share-items">
+
+            
+                
+                <div class="share-item twitter">
+                    
+                    <a href="https://twitter.com/share?url=https://iyuanshuo.com/research/wide-deep-learning-2018042112/&amp;text=Wide%20&amp;%20Deep%20Learning%20%e6%a8%a1%e5%9e%8b%e4%bb%8b%e7%bb%8d&amp;via=saulyuan" title="分享到「Twitter」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon twitter-icon"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg></a>
+                </div>
+            
+
+            
+                
+                <div class="share-item facebook">
+                    
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://iyuanshuo.com/research/wide-deep-learning-2018042112/" title="分享到「Facebook」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon facebook-icon"><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg></a>
+                </div>
+            
+
+            
+                
+                <div class="share-item linkedin">
+                    
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://iyuanshuo.com/research/wide-deep-learning-2018042112/&amp;title=Wide%20&amp;%20Deep%20Learning%20%e6%a8%a1%e5%9e%8b%e4%bb%8b%e7%bb%8d&amp;summary=Wide%20&amp;amp;%20Deep%20Learning%20%e6%98%af%e7%94%b1%20Google%20Inc%20%e5%8f%91%e8%a1%a8%e7%9a%84%20paper%ef%bc%9aWide%20&amp;amp;%20Deep%20Learning%20for%20Recommender%20Systems%20%e4%b8%ad%e6%8f%90%e5%87%ba%e7%9a%84%e4%b8%80%e7%a7%8d%e4%bd%bf%e7%94%a8%e9%9d%9e%e7%ba%bf%e6%80%a7%e7%89%b9%e5%be%81%e7%9a%84%e7%ba%bf%e2%80%a6%e2%80%a6&amp;source=Shuo%20Yuan%27s%20Home%20Page" title="分享到「LinkedIn」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon linkedin-icon"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg></a>
+                </div>
+            
+
+            
+                
+                <div class="share-item telegram">
+                    
+                    <a href="https://t.me/share/url?url=https://iyuanshuo.com/research/wide-deep-learning-2018042112/&amp;text=Wide%20&amp;%20Deep%20Learning%20%e6%a8%a1%e5%9e%8b%e4%bb%8b%e7%bb%8d" title="分享到「Telegram」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="icon telegram-icon"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm121.8 169.9l-40.7 191.8c-3 13.6-11.1 16.9-22.4 10.5l-62-45.7-29.9 28.8c-3.3 3.3-6.1 6.1-12.5 6.1l4.4-63.1 114.9-103.8c5-4.4-1.1-6.9-7.7-2.5l-142 89.4-61.2-19.1c-13.3-4.2-13.6-13.3 2.8-19.7l239.1-92.2c11.1-4 20.8 2.7 17.2 19.5z"/></svg></a>
+                </div>
+            
+
+            
+                
+                <div class="share-item weibo">
+                    
+                    <a href="https://service.weibo.com/share/share.php?&amp;url=https://iyuanshuo.com/research/wide-deep-learning-2018042112/&amp;title=Wide%20&amp;%20Deep%20Learning%20%e6%a8%a1%e5%9e%8b%e4%bb%8b%e7%bb%8d&amp;pic=https://imgconvert.csdnimg.cn/aHR0cDovL2ltYWdlcy5peXVhbnNodW8uY29tLzIwMTgvMDQvMjEvd2lkZV9kZWVwX21vZGVscy5wbmc?x-oss-process=image/format,png&amp;searchPic=false" title="分享到「新浪微博」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon weibo-icon"><path d="M407 177.6c7.6-24-13.4-46.8-37.4-41.7-22 4.8-28.8-28.1-7.1-32.8 50.1-10.9 92.3 37.1 76.5 84.8-6.8 21.2-38.8 10.8-32-10.3zM214.8 446.7C108.5 446.7 0 395.3 0 310.4c0-44.3 28-95.4 76.3-143.7C176 67 279.5 65.8 249.9 161c-4 13.1 12.3 5.7 12.3 6 79.5-33.6 140.5-16.8 114 51.4-3.7 9.4 1.1 10.9 8.3 13.1 135.7 42.3 34.8 215.2-169.7 215.2zm143.7-146.3c-5.4-55.7-78.5-94-163.4-85.7-84.8 8.6-148.8 60.3-143.4 116s78.5 94 163.4 85.7c84.8-8.6 148.8-60.3 143.4-116zM347.9 35.1c-25.9 5.6-16.8 43.7 8.3 38.3 72.3-15.2 134.8 52.8 111.7 124-7.4 24.2 29.1 37 37.4 12 31.9-99.8-55.1-195.9-157.4-174.3zm-78.5 311c-17.1 38.8-66.8 60-109.1 46.3-40.8-13.1-58-53.4-40.3-89.7 17.7-35.4 63.1-55.4 103.4-45.1 42 10.8 63.1 50.2 46 88.5zm-86.3-30c-12.9-5.4-30 .3-38 12.9-8.3 12.9-4.3 28 8.6 34 13.1 6 30.8.3 39.1-12.9 8-13.1 3.7-28.3-9.7-34zm32.6-13.4c-5.1-1.7-11.4.6-14.3 5.4-2.9 5.1-1.4 10.6 3.7 12.9 5.1 2 11.7-.3 14.6-5.4 2.8-5.2 1.1-10.9-4-12.9z"/></svg></a>
+                </div>
+            
+
+            
+                
+                <div class="share-item douban">
+                    
+                    <a href="https://www.douban.com/share/service?href=https://iyuanshuo.com/research/wide-deep-learning-2018042112/&amp;name=Wide%20&amp;%20Deep%20Learning%20%e6%a8%a1%e5%9e%8b%e4%bb%8b%e7%bb%8d&amp;text=Wide%20&amp;amp;%20Deep%20Learning%20%e6%98%af%e7%94%b1%20Google%20Inc%20%e5%8f%91%e8%a1%a8%e7%9a%84%20paper%ef%bc%9aWide%20&amp;amp;%20Deep%20Learning%20for%20Recommender%20Systems%20%e4%b8%ad%e6%8f%90%e5%87%ba%e7%9a%84%e4%b8%80%e7%a7%8d%e4%bd%bf%e7%94%a8%e9%9d%9e%e7%ba%bf%e6%80%a7%e7%89%b9%e5%be%81%e7%9a%84%e7%ba%bf%e2%80%a6%e2%80%a6" title="分享到「豆瓣」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon douban-icon"><path d="M.643.92v2.412h22.714V.92H.643zm1.974 4.926v9.42h18.764v-9.42H2.617zm2.72 2.408H18.69v4.605H5.338V8.254zm1.657 7.412l-2.512.938c1.037 1.461 1.87 2.825 2.512 4.091H0v2.385h24v-2.385h-6.678c.818-1.176 1.589-2.543 2.303-4.091l-2.73-.938a29.952 29.952 0 01-2.479 5.03h-4.75c-.786-1.962-1.677-3.641-2.672-5.03Z"/></svg></a>
+                </div>
+            
+
+            
+                
+                <div class="share-item qq">
+                    
+                    <a href="https://connect.qq.com/widget/shareqq/index.html?url=https://iyuanshuo.com/research/wide-deep-learning-2018042112/&amp;title=Wide%20&amp;%20Deep%20Learning%20%e6%a8%a1%e5%9e%8b%e4%bb%8b%e7%bb%8d&amp;summary=Wide%20&amp;amp;%20Deep%20Learning%20%e6%98%af%e7%94%b1%20Google%20Inc%20%e5%8f%91%e8%a1%a8%e7%9a%84%20paper%ef%bc%9aWide%20&amp;amp;%20Deep%20Learning%20for%20Recommender%20Systems%20%e4%b8%ad%e6%8f%90%e5%87%ba%e7%9a%84%e4%b8%80%e7%a7%8d%e4%bd%bf%e7%94%a8%e9%9d%9e%e7%ba%bf%e6%80%a7%e7%89%b9%e5%be%81%e7%9a%84%e7%ba%bf%e2%80%a6%e2%80%a6&amp;pics=https://imgconvert.csdnimg.cn/aHR0cDovL2ltYWdlcy5peXVhbnNodW8uY29tLzIwMTgvMDQvMjEvd2lkZV9kZWVwX21vZGVscy5wbmc?x-oss-process=image/format,png&amp;site=Shuo%20Yuan%27s%20Home%20Page" title="分享到「QQ」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon qq-icon"><path d="M433.754 420.445c-11.526 1.393-44.86-52.741-44.86-52.741 0 31.345-16.136 72.247-51.051 101.786 16.842 5.192 54.843 19.167 45.803 34.421-7.316 12.343-125.51 7.881-159.632 4.037-34.122 3.844-152.316 8.306-159.632-4.037-9.045-15.25 28.918-29.214 45.783-34.415-34.92-29.539-51.059-70.445-51.059-101.792 0 0-33.334 54.134-44.859 52.741-5.37-.65-12.424-29.644 9.347-99.704 10.261-33.024 21.995-60.478 40.144-105.779C60.683 98.063 108.982.006 224 0c113.737.006 163.156 96.133 160.264 214.963 18.118 45.223 29.912 72.85 40.144 105.778 21.768 70.06 14.716 99.053 9.346 99.704z"/></svg></a>
+                </div>
+            
+
+            
+
+            
+                
+                <div class="share-item qrcode">
+                    <div class="qrcode-container" title="通过「二维码」"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon qrcode-icon"><path d="M0 224h192V32H0v192zM64 96h64v64H64V96zm192-64v192h192V32H256zm128 128h-64V96h64v64zM0 480h192V288H0v192zm64-128h64v64H64v-64zm352-64h32v128h-96v-32h-32v96h-64V288h96v32h64v-32zm0 160h32v32h-32v-32zm-64 0h32v32h-32v-32z"/></svg><div id="qrcode-img"></div>
+                    </div>
+                    <script>
+                        var typeNumber = 0;
+                        var errorCorrectionLevel = 'L';
+                        var qr = qrcode(typeNumber, errorCorrectionLevel);
+                        qr.addData('https:\/\/iyuanshuo.com\/research\/wide-deep-learning-2018042112\/');
+                        qr.make();
+                        document.getElementById('qrcode-img').innerHTML = qr.createImgTag();
+                    </script>
+                </div>
+            
+
+        </div>
+
+    </div>
+
+
+
+        
+
+        
+
+        
+    <footer class="minimal-footer">
+        
+            
+            <div class="post-tag"><a href="/tags/machinelearning/" rel="tag" class="post-tag-link">#machinelearning</a></div>
+        
+        
+            <div class="post-category">
+                <a href="/research/" class="post-category-link active">research</a> | <a href="/tech/" class="post-category-link">tech</a>
+            </div>
+        
+        
+    </footer>
+
+
+        
+
+        
+
+        
+
+    </div>
+</main>
+
+            
+    <div id="back-to-top" class="back-to-top">
+        <a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon"><path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"/></svg></a>
+    </div>
+
+            
+        </div>
+        <script src="/js/meme.min.b889c43157b752d7ae7ad4b9eb21e9bb2686995f67471c68e6982bf97fc44560.js" integrity="sha256-uInEMVe3UteuetS56yHpuyaGmV9nRxxo5pgr+X/ERWA=" data-no-instant></script>
+
+
+    <script data-no-instant>InstantClick.init();</script>
+
+
+
+
+    <script data-no-instant>
+        InstantClick.on('change', function () {
+            const userPrefers = localStorage.getItem('theme');
+            const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            const lightModeMediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+            if (userPrefers === 'dark') {
+                changeModeMeta('dark');
+                changeMode('dark');
+            } else if (userPrefers === 'light') {
+                changeModeMeta('light');
+                changeMode('light');
+            } else if (darkModeMediaQuery.matches) {
+                changeModeMeta('dark');
+                changeMode('dark');
+            } else if (lightModeMediaQuery.matches) {
+                changeModeMeta('light');
+                changeMode('light');
+            }
+        });
+    </script>
+<script data-no-instant>
+            InstantClick.on('change', function () {
+                gtag('config', 'G-Q09QFXNCE9', {
+                    'page_path': location.pathname + location.search
+                });
+            });
+        </script>
+    
+    
+    <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+
+<script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+        speedAsDuration: true
+    });
+</script>
+
+
+
+
+
+    <script>
+    if (typeof MathJax === 'undefined') {
+        window.MathJax = {
+            loader: {
+                load: ['[tex]/mhchem']
+            },
+            
+            tex: {
+                inlineMath: {'[+]': [['$', '$']]},
+                tags: 'ams',
+                packages: {'[+]': ['mhchem']}
+            }
+        };
+        (function () {
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js';
+            script.defer = true;
+            document.head.appendChild(script);
+        })();
+    } else {
+        MathJax.texReset();
+        MathJax.typeset();
+    }
+</script>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/medium-zoom@latest/dist/medium-zoom.min.js"></script>
+
+<script>
+    mediumZoom('[data-zoomable]', {
+        background: 'hsla(var(--color-bg-h), var(--color-bg-s), var(--color-bg-l), 0.95)'
+    })
+</script>
+
+
+
+
+    <div class="app-refresh" id="app-refresh">
+        <div class="app-refresh-wrap" onclick="location.reload()">
+            <label>已更新最新版本</label>
+            <span>点击刷新</span>
+        </div>
+    </div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            if (navigator.serviceWorker.controller) {
+                navigator.serviceWorker.addEventListener('controllerchange', function() {
+                    showNotification();
+                });
+            }
+
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('../../sw.js');
+            });
+        }
+
+        function showNotification() {
+            document.querySelector('meta[name=theme-color]').content = '#000';
+            document.getElementById('app-refresh').className += ' app-refresh-show';
+        }
+    </script>
+
+
+
+
+
+
+
+    </body>
+</html>
