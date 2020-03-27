@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">Shuo Yuan&#39;s Home Page</title>
     <subtitle type="html">这是 shuoyuan 的生活与技术博客！</subtitle>
-    <updated>2020-03-27T11:59:19+08:00</updated>
+    <updated>2020-03-27T12:19:40+08:00</updated>
     <id>https://iyuanshuo.com/</id>
     <link rel="alternate" type="text/html" href="https://iyuanshuo.com/" />
     <link rel="self" type="application/atom+xml" href="https://iyuanshuo.com/atom.xml" />
@@ -17,10 +17,120 @@
     <rights>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</rights>
     <generator uri="https://gohugo.io/" version="0.65.2">Hugo</generator>
         <entry>
+            <title type="text">DeepFM 模型介绍及应用</title>
+            <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/deep-fm-2018050111/" />
+            <id>https://iyuanshuo.com/research/deep-fm-2018050111/</id>
+            <updated>2020-03-27T12:19:39+08:00</updated>
+            <published>2018-05-01T11:20:00+00:00</published>
+            <author>
+                    <name>Shuo Yuan</name>
+                    <uri>https://iyuanshuo.com/</uri>
+                    <email>isaulyuan@gmail.com</email>
+                    </author>
+            <rights>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</rights>
+    
+    <summary type="html"><![CDATA[Introduction 对于一个基于 CTR 预估的推荐系统，最重要的是学习到用户点击行为背后隐含的特征组合。在不……]]></summary>
+            
+                <content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>对于一个基于 CTR 预估的推荐系统，最重要的是学习到用户点击行为背后隐含的特征组合。在不同的推荐场景中，低阶组合特征或者高阶组合特征可能都会对最终的 CTR 产生影响。</p>
+<p>Wide &amp; Deep Learning 通过组合使用 cross-product transformation 特征的线性模型和 DNN 模型进行 Joint train 从而实现 memorization 和 generalization 的结合。但是对于 Wide 模型来说还是需要做一些特征交叉来实现 memorization，而因子分解机 (Factorization Machines, FM) 通过对于每一维特征的隐变量内积来提取特征组合，最终的结果也非常好。虽然理论上来讲 FM 可以对高阶特征组合进行建模，但实际上因为计算复杂度的原因一般都只用到了二阶特征组合。</p>
+<p>关于 Wide &amp; Deep Learning 请参考博文：<a href="https://iyuanshuo.com/research/wide-deep-learning-2018042112/">Wide &amp; Deep Learning模型介绍</a></p>
+<p>那么对于高阶的特征组合来说，我们很自然的想法，通过多层的神经网络即 DNN 去解决。</p>
+<p>对于离散特征的处理，我们使用的是将特征转换成为 Onehot 的形式，但是将 Onehot 类型的特征输入到 DNN 中，会导致网络参数太多难以训练<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
+<p><img src="http://images.iyuanshuo.com/2018/04/21/onehot_for_dnn.png" alt="onehot_for_dnn" style="zoom: 67%;" /></p>
+<p>此时可以借鉴 word2vec 的思路，进行 embedding。将 Onehot 编码后的向量经过一个 embedding 层输出 Dense Vector。具体的思路就是，将一个特征 Onehot 编码后会生成多个特征，但是每个特征里面只有一个为 $1$，其他都为 $0$，这些由一个特征生成的多个互斥的特征引用 FFM 的思想的话就属于一个 Field。</p>
+<p><img src="http://images.iyuanshuo.com/2018/04/21/onehot_densevector.png" alt="onehot_densevector" style="zoom:67%;" /></p>
+<p>如果将 embedding 层的输出再加两层的全连接层，让 Dense Vector 进行组合，那么高阶特征的组合就出来了。</p>
+<p><img src="http://images.iyuanshuo.com/2018/04/21/densevector_full.png" alt="densevector_full" style="zoom: 50%;" /></p>
+<p>但是低阶和高阶特征组合隐含地体现在隐藏层中，如果我们希望把低阶特征组合单独建模，然后融合高阶特征组合。</p>
+<p><img src="http://images.iyuanshuo.com/2018/04/21/how_to_get_low_order.png" alt="how_to_get_low_order" style="zoom:50%;" /></p>
+<p>也就是我们需要学习低阶的特征组合，也需要学习高阶的特征组合。即将 DNN 与 FM 进行一个合理的融合：</p>
+<p><img src="http://images.iyuanshuo.com/2018/04/21/consider_dnn_fm.png" alt="consider_dnn_fm" style="zoom: 67%;" /></p>
+<p>二者的融合总的来说有两种形式，一是串行结构，二是并行结构</p>
+<p><img src="http://images.iyuanshuo.com/2018/04/21/parallel_dnn_fm.png" alt="parallel_dnn_fm" style="zoom: 50%;" /></p>
+<p><img src="http://images.iyuanshuo.com/2018/04/21/series_dnn_fm.png" alt="series_dnn_fm" style="zoom: 50%;" /></p>
+<p>而 DeepFM<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>，就是并行结构中的一种典型代表。</p>
+<h2 id="deepfm-模型">DeepFm 模型</h2>
+<h3 id="模型结构">模型结构</h3>
+<p><img src="http://images.iyuanshuo.com/2018/04/21/wide_deep_deep_fm.png" alt="wide_deep_deep_fm" style="zoom: 40%;" /></p>
+<p>DeepFM 包含两部分：神经网络部分与因子分解机部分，分别负责低阶特征的提取和高阶特征的提取。这两部分共享同样的输入。DeepFM 的预测结果可以写为：</p>
+<p>$$\hat y = sigmoid({y_{FM}} + {y_{DNN}})\tag1$$</p>
+<h3 id="fm-component">FM Component</h3>
+<p><img src="http://images.iyuanshuo.com/2018/04/21/fm.png" alt="fm" style="zoom:40%;" /></p>
+<p>FM 部分是一个因子分解机。关于因子分解机可以参阅文章 Factorization machines<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>。因为引入了隐变量的原因，对于几乎不出现或者很少出现的隐变量，FM 也可以很好的学习。</p>
+<p>FM的输出公式为：
+$$
+y(x)=w_0+\sum_{i=1} ^n(w_i x_i)+\sum_{i=1}^{n-1} \sum_{j=i+1}^n(&lt;v_i,v_j&gt;x_ix_j)  \tag{2}
+$$</p>
+<p>$$
+y(x)=w_0+\sum_{i=1} ^n(w_i x_i)+\sum_{i=1}^{n-1} \sum_{j=i+1}^n(&lt;v_i,v_j&gt;x_ix_j)  \tag{3}
+$$</p>
+<h3 id="deep-component">Deep Component</h3>
+<p><img src="http://images.iyuanshuo.com/2018/04/21/deep.png" alt="deep" style="zoom:40%;" /></p>
+<p>深度部分是一个前馈神经网络。与图像或者语音这类输入不同，图像语音的输入一般是连续而且密集的，然而用于 CTR 的输入一般是及其稀疏的。因此需要重新设计网络结构。具体实现中为，在第一层隐含层之前，引入一个嵌入层来完成将输入向量压缩到低维稠密向量。</p>
+<p><img src="http://images.iyuanshuo.com/2018/04/21/embedding_layer.png" alt="embedding_layer" style="zoom:50%;" /></p>
+<p>嵌入层 (embedding layer) 的结构如上图所示。</p>
+<p>对于 Fig.4 这个网络结构有两个很有意思的 point：</p>
+<ol>
+<li>
+<p>虽然输入的 field vector 长度不一，但是它们 embedding 出来的长度是固定的；</p>
+</li>
+<li>
+<p>FM 的 latent vector $V$ 向量作为原始特征到 embedding vector 的权重矩阵，放在网络里学习。</p>
+</li>
+</ol>
+<p>这里的第二点如何理解呢，假设我们的 $k=5$，首先，对于输入的一条记录，同一个 Field 只有一个位置是1，那么在由输入得到 dense vector 的过程中，输入层只有一个神经元起作用，得到的 dense vector 其实就是输入层到 embedding 层该神经元相连的五条线的权重，即 $v_{i1}$，$v_{i2}$，$v_{i3}$，$v_{i4}$，$v_{i5}$。这五个值组合起来就是我们在 FM 中所提到的 $v_i$。在 FM 部分和 DNN 部分，这一块是共享权重的，对同一个特征来说，得到的 $V_i$ 是相同的。</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://ask.hellobi.com/blog/wenwen/11840">推荐系统遇上深度学习(三)--DeepFM模型理论和实践</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://arxiv.org/abs/1703.04247">DeepFM: a factorization-machine based neural network for CTR prediction</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a href="https://ieeexplore.ieee.org/abstract/document/5694074/">Factorization machines</a> <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+            
+            
+            
+                
+                
+                
+                    
+                    
+                    
+                        
+                            <category scheme="https://iyuanshuo.com/research/" term="research" label="research" />
+                        
+                    
+                
+            
+            
+            
+                
+                    
+                        
+                            
+                            
+                            
+                                <category scheme="https://iyuanshuo.com/tags/machinelearning/" term="machineLearning" label="machineLearning" />
+                            
+                        
+                    
+                
+            
+        </entry>
+    
+        <entry>
             <title type="text">Wide & Deep Learning 模型介绍</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/wide-deep-learning-2018042112/" />
             <id>https://iyuanshuo.com/research/wide-deep-learning-2018042112/</id>
-            <updated>2020-03-27T11:59:19+08:00</updated>
+            <updated>2020-03-27T12:19:39+08:00</updated>
             <published>2018-04-21T12:30:00+00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -40,7 +150,7 @@
 <p>在工业中，对于大规模的在线推荐和排序系统，像逻辑回归这样的广义线性模型由于实现简单，可扩展性好，可解释性强而被广泛使用。通过喂给它一些 one-hot 编码的稀疏特征，比如二值特征 (user_installed_app=netfix) 表示用户安装了 Netflix。Memorization 则可以通过对稀疏特征做交叉积转换获得，就是求交叉特征。比如 AND 操作  (user_installed_app= netflix, impression_app=pandora) 这两个特征，当用户安装了Netflix并且之后展示在Pandora上，那么得到特征的值为1，其余为0。这个交叉特征展示了特征对之间的相关性和目标 lable 之间的关联。在逻辑回归上实现 generalization 可以通过增加一些粗粒度的特征实现，如 AND(user_installed_category=video, impression_category=music )，但是这些都是需要人工做特征工程实现，工作量极大。此外，cross-product transformation 的一个限制就是他们不能生成从未在训练数据中出现过的 query-item 特征对。</p>
 <p>而 Embedding-based 的模型，比如因子分解机 (FM) 或深度神经网络，只需要很少的特征工程，通过为每个 query 和 item 特征对 (pair) 学到一个低维的 dense embedding vector，可以泛化到之前未见过的 query-item 特征对。但是如果潜在的 query-item 矩阵是稀疏，高秩的话，为 query 和 items 学习出一个有效的低纬表示往往很困难，比如基于特殊偏好的 users，或者一些很少出现的小众 items。在这种情况下，大多数的 query-item 没有交互，但是稠密的 embedding 还是会对全部的 query-item 对有非零的输出预测，因此能做出一些过泛化和做出一些不太相关的推荐。另一方面，利用交叉积特征 (cross-product features transformations) 的线性模型能用很少的参数记住那些异常规则 (exception_rules) 。</p>
 <h2 id="wide--deep-learning3">Wide &amp; Deep Learning<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></h2>
-<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltYWdlcy5peXVhbnNodW8uY29tLzIwMTgvMDQvMjEvd2lkZV9kZWVwX21vZGVscy5wbmc?x-oss-process=image/format,png" alt="model"></p>
+<p><img src="http://images.iyuanshuo.com/20200327121146.png" alt="model"></p>
 <h3 id="the-wide-component-wide-组件">The Wide Component (Wide 组件)</h3>
 <p>Wide 组件是一个泛化的线性模型，$y=w^Tx+b$，如 Fig.1 图左所示。$y$ 是预测值，$x = [x_1, x_2, …, x_d]$ 是 $d$ 维特征向量，$w = [w_1, w_2,…, w_d]$ 是模型参数，$b$ 是 bias。特征集包括原始的输入特征和转换后 (cross-product transformation) 的特征。Cross-product transformation 有如下定义：</p>
 <p>$$\phi_k(x)=\prod_{i=1}^{d}x_{i}^{c_{ki}}, c_{ki} \in {0, 1}\tag1$$</p>
