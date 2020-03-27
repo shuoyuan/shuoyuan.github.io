@@ -23,7 +23,7 @@
         
             <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
         
-        <lastBuildDate>Fri, 27 Mar 2020 12:31:09 +0800</lastBuildDate>
+        <lastBuildDate>Fri, 27 Mar 2020 12:50:05 +0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss+xml" href="https://iyuanshuo.com/rss.xml" />
         
@@ -61,16 +61,16 @@
 <h3 id="模型结构">模型结构</h3>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/wide_deep_deep_fm.png" alt="wide_deep_deep_fm" style="zoom: 40%;" /></p>
 <p>DeepFM 包含两部分：神经网络部分与因子分解机部分，分别负责低阶特征的提取和高阶特征的提取。这两部分共享同样的输入。DeepFM 的预测结果可以写为：</p>
-<p>$$\hat y = sigmoid({y_{FM}} + {y_{DNN}})\tag1$$</p>
+<p>$$
+\hat y = sigmoid({y_{FM}} + {y_{DNN}})\tag1
+$$</p>
 <h3 id="fm-component">FM Component</h3>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/fm.png" alt="fm" style="zoom:40%;" /></p>
 <p>FM 部分是一个因子分解机。关于因子分解机可以参阅文章 Factorization machines<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>。因为引入了隐变量的原因，对于几乎不出现或者很少出现的隐变量，FM 也可以很好的学习。</p>
 <p>FM的输出公式为：
 $$
-y(x)=w_0+\sum_{i=1} ^n(w_i x_i)+\sum_{i=1}^{n-1}\sum_{j=i+1}^n(&lt;v_i,v_j&gt;x_ix_j)\tag{2}
-$$</p>
-<p>$$
-y(x)=w_0+\sum_{i=1} ^n(w_i x_i)+\sum_{i=1}^{n-1}\sum_{j=i+1}^n(&lt;v_i,v_j&gt;x_ix_j)\tag{3}
+y(x)=w_0+\sum_{i=1} ^n(w_i x_i)+\sum_{i=1}^{n-1}\sum_{j=i+1}^n(\left&lt;v_i,v_j\right&gt;x_ix_j)
+\tag{2}
 $$</p>
 <h3 id="deep-component">Deep Component</h3>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/deep.png" alt="deep" style="zoom:40%;" /></p>
@@ -392,26 +392,26 @@ $$</p>
 <p>GBDT是把所有树的结论累加起来做最终结论的，所以可以想到每棵树的结论并不是年龄本身，而是年龄的一个累加量。GBDT的核心就在于，每一棵树学的是之前所有树结论和的残差，这个残差就是一个加预测值后能得真实值的累加量。比如A的真实年龄是18岁，但第一棵树的预测年龄是12岁，差了6岁，即残差为6岁。那么在第二棵树里我们把A的年龄设为6岁去学习，如果第二棵树真的能把A分到6岁的叶子节点，那累加两棵树的结论就是A的真实年龄；如果第二棵树的结论是5岁，则A仍然存在1岁的残差，第三棵树里A的年龄就变成1岁，继续学。这就是Gradient Boosting在GBDT中的意义<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
 <p>根据上面那个简单的例子，我们知道假设损失函数为平方损失（square loss）时，我们使用残差来进行下一轮的训练，即GBDT算法的每一步在生成决策树时只需要拟合前面的模型的残差，从而使得损失函数最小。那如何使损失函数最小呢？Freidman提出了用损失函数的负梯度来拟合本轮损失的近似值，进而拟合一个CART回归树，这就是GBDT的负梯度拟合。损失函数的负梯度在当前模型的值为：</p>
 <p>$$
--[\frac{\partial L(y,f(x_i))}{\partial f(x_i)}]<em>{f(x)=f</em>{m-1}(x)}
+-[\frac{\partial L(y,f(x_i))}{\partial f(x_i)}]<em>{f(x)=f</em>{m-1}(x)}\tag1
 $$</p>
 <p>Boosting的最大好处在于，每一步的残差计算其实变相地增大了分错样本的权重，而已经分对的样本则都趋向于0。因为对于已经分对的样本，其残差为0，在下一轮中几乎不起作用。</p>
 <h2 id="gbdt算法">GBDT算法</h2>
 <p>知道了怎么解决损失函数拟合的问题，即GBDT的负梯度拟合之后，需要使用这些负梯度进行训练。假设$r_{mi}$表示第$m$轮的第$i$个样本的损失函数的负梯度：</p>
 <p>$$
-r_{mi} = -\bigg[\frac{\partial L(y_i, f(x_i)))}{\partial f(x_i)}\bigg]_{f(x) = f_{m-1};; (x)}
+r_{mi} = -\bigg[\frac{\partial L(y_i, f(x_i)))}{\partial f(x_i)}\bigg]_{f(x) = f_{m-1};; (x)}\tag2
 $$</p>
 <p>利用$(x_i,r_{mi})\quad(i=1,2,..n)$，我们可以拟合第$m$棵CART回归树，其对应的叶节点区域$R_{mj}, j =1,2,..., J$，其中$J$为叶子节点的个数。</p>
 <p>针对每个叶子节点里的样本，我们求出损失函数最小，也就是拟合叶子节点最好的的输出值$c_{mj}$如下：</p>
 <p>$$
-c_{mj} = \underbrace{arg; min}_{c}\sum\limits_{x_i \in R_{mj}} L(y_i,f_{m-1}(x_i) +c)
+c_{mj} = \underbrace{arg; min}_{c}\sum\limits_{x_i \in R_{mj}} L(y_i,f_{m-1}(x_i) +c)\tag3
 $$</p>
 <p>从而可以获得本轮的CART回归树的拟合函数：</p>
 <p>$$
-h_m(x) = \sum\limits_{j=1}^{J}c_{mj}I(x \in R_{mj})
+h_m(x) = \sum\limits_{j=1}^{J}c_{mj}I(x \in R_{mj})\tag4
 $$</p>
 <p>最后获得强学习器的表达式：</p>
 <p>$$
-f_{m}(x) = f_{m-1}(x) + \sum\limits_{j=1}^{J}c_{mj}I(x \in R_{mj})
+f_{m}(x) = f_{m-1}(x) + \sum\limits_{j=1}^{J}c_{mj}I(x \in R_{mj})\tag5
 $$</p>
 <p>请结合上面的例子，理解每一轮更新强学习器都需要加上前面所有轮的输出！</p>
 <h3 id="gbdt回归算法">GBDT回归算法</h3>
@@ -432,42 +432,42 @@ $$</p>
 <h4 id="二元gbdt分类算法">二元GBDT分类算法</h4>
 <p>对于二元GBDT，如果用类似于逻辑回归的对数似然损失函数，则损失函数为：</p>
 <p>$$
-(y, f(x)) = log(1+ exp(-yf(x)))
+(y, f(x)) = log(1+ exp(-yf(x)))\tag6
 $$</p>
 <p>其中$y \in{-1, +1}$。此时的负梯度误差为：</p>
 <p>$$
-r_{mi} = -\bigg[\frac{\partial L(y, f(x_i)))}{\partial f(x_i)}\bigg]_{f(x) = f_{m-1};; (x)} = y_i/(1+exp(y_if(x_i)))
+r_{mi} = -\bigg[\frac{\partial L(y, f(x_i)))}{\partial f(x_i)}\bigg]_{f(x) = f_{m-1};; (x)} = y_i/(1+exp(y_if(x_i)))\tag7
 $$</p>
 <p>对于生成的CART回归树，我们各个叶子节点的最佳残差拟合值为：</p>
 <p>$$
-c_{mj} = \underbrace{arg; min}_{c}\sum\limits_{x_i \in R_{mj}} log(1+exp(-y_i(f_{m-1}(x_i) +c)))
+c_{mj} = \underbrace{arg; min}_{c}\sum\limits_{x_i \in R_{mj}} log(1+exp(-y_i(f_{m-1}(x_i) +c)))\tag8
 $$</p>
 <p>由于上面的式子比较难优化，一般使用近似值代替：</p>
 <p>$$
-c_{mj} = \sum\limits_{x_i \in R_{mj}}r_{mi}\bigg /  \sum\limits_{x_i \in R_{mj}}|r_{mi}|(1-|r_{mi}|)
+c_{mj} = \sum\limits_{x_i \in R_{mj}}r_{mi}\bigg /  \sum\limits_{x_i \in R_{mj}}|r_{mi}|(1-|r_{mi}|)\tag9
 $$</p>
 <p>除了负梯度计算和叶子节点的最佳残差拟合的线性搜索，二元GBDT分类和GBDT回归算法过程相同。</p>
 <h4 id="多元gbdt分类算法">多元GBDT分类算法</h4>
 <p>多元GBDT要比二元GBDT复杂一些，对应的是多元逻辑回归和二元逻辑回归的复杂度差别。假设类别数为K，则此时我们的对数似然损失函数为：</p>
 <p>$$
-L(y, f(x)) = -  \sum\limits_{k=1}^{K}y_klog;p_k(x)
+L(y, f(x)) = -  \sum\limits_{k=1}^{K}y_klog;p_k(x)\tag{10}
 $$</p>
 <p>其中如果样本输出类别为$k$，则$y_{k}=1$。第$k$类的概率$p_{k}(x)$的表达式为：</p>
 <p>$$
-p_k(x) = exp(f_k(x)) \bigg / \sum\limits_{l=1}^{K} exp(f_l(x))
+p_k(x) = exp(f_k(x)) \bigg / \sum\limits_{l=1}^{K} exp(f_l(x))\tag{11}
 $$</p>
 <p>集合上两式，我们可以计算出第$t$轮的第$i$个样本对应类别$l$的负梯度误差为:</p>
 <p>$$
-r_{mil} = -\bigg[\frac{\partial L(y_i, f(x_i)))}{\partial f(x_i)}\bigg]_{f_k(x) = f_{l, m-1};; (x)} = y_{il} - p_{l, m-1}(x_i)
+r_{mil} = -\bigg[\frac{\partial L(y_i, f(x_i)))}{\partial f(x_i)}\bigg]_{f_k(x) = f_{l, m-1};; (x)} = y_{il} - p_{l, m-1}(x_i)\tag{12}
 $$</p>
 <p>观察上式可以看出，其实这里的误差就是样本$i$对应类别$l$的真实概率和$m−1$轮预测概率的差值。</p>
 <p>对于生成的决策树，我们各个叶子节点的最佳残差拟合值为:</p>
 <p>$$
-c_{mjl} = \underbrace{arg; min}_{c_{jl}}\sum\limits_{i=0}^{m}\sum\limits_{k=1}^{K} L(y_k, f_{m-1, l}(x) + \sum\limits_{j=0}^{J}c_{jl} I(x_i \in R_{mj}))
+c_{mjl} = \underbrace{arg; min}_{c_{jl}}\sum\limits_{i=0}^{m}\sum\limits_{k=1}^{K} L(y_k, f_{m-1, l}(x) + \sum\limits_{j=0}^{J}c_{jl} I(x_i \in R_{mj}))\tag{13}
 $$</p>
 <p>由于上式比较难优化，我们一般使用近似值代替:</p>
 <p>$$
-c_{mjl} =  \frac{K-1}{K} ; \frac{\sum\limits_{x_i \in R_{mjl}}r_{mil}}{\sum\limits_{x_i \in R_{mil}}|r_{mil}|(1-|r_{mil}|)}
+c_{mjl} =  \frac{K-1}{K} ; \frac{\sum\limits_{x_i \in R_{mjl}}r_{mil}}{\sum\limits_{x_i \in R_{mil}}|r_{mil}|(1-|r_{mil}|)}\tag{14}
 $$</p>
 <p>除了负梯度计算和叶子节点的最佳残差拟合的线性搜索，多元GBDT分类和二元GBDT分类以及GBDT回归算法过程相同。</p>
 <section class="footnotes" role="doc-endnotes">
