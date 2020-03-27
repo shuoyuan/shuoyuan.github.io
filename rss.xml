@@ -23,7 +23,7 @@
         
             <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
         
-        <lastBuildDate>Fri, 27 Mar 2020 12:19:40 +0800</lastBuildDate>
+        <lastBuildDate>Fri, 27 Mar 2020 12:22:00 +0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss+xml" href="https://iyuanshuo.com/rss.xml" />
         
@@ -56,8 +56,8 @@
 <p>二者的融合总的来说有两种形式，一是串行结构，二是并行结构</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/parallel_dnn_fm.png" alt="parallel_dnn_fm" style="zoom: 50%;" /></p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/series_dnn_fm.png" alt="series_dnn_fm" style="zoom: 50%;" /></p>
-<p>而 DeepFM<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>，就是并行结构中的一种典型代表。</p>
-<h2 id="deepfm-模型">DeepFm 模型</h2>
+<p>而 DeepFM，就是并行结构中的一种典型代表。</p>
+<h2 id="deepfm-模型-2">DeepFm 模型 <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></h2>
 <h3 id="模型结构">模型结构</h3>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/wide_deep_deep_fm.png" alt="wide_deep_deep_fm" style="zoom: 40%;" /></p>
 <p>DeepFM 包含两部分：神经网络部分与因子分解机部分，分别负责低阶特征的提取和高阶特征的提取。这两部分共享同样的输入。DeepFM 的预测结果可以写为：</p>
