@@ -23,7 +23,7 @@
         
             <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
         
-        <lastBuildDate>Fri, 27 Mar 2020 12:55:35 +0800</lastBuildDate>
+        <lastBuildDate>Fri, 27 Mar 2020 14:07:17 +0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss+xml" href="https://iyuanshuo.com/rss.xml" />
         
@@ -533,7 +533,7 @@ $$</p>
 </blockquote>
 <p>本文之前使用的方式是 “<a href="https://iyuanshuo.com/research/zotero-usage-2017062813/">Zotero + Zotfile + 云盘</a>” 实现跨平台同步。这种方式在移动端如手机或Pad上阅读，可以借助 ZotFile 的 Tablet 功能将需要阅读的文献导出到云盘 Tablet 文件夹，然后在移动端使用 PDF Expert 接入该文件夹进行文献阅读批注。最后在 PC 端将这些文献重新拉取，实现移动端同步。</p>
 <p>这种方式的附件与文献条目其实是链接关系，在 Zotero 删除文献条目后其链接的附件并不会删除，难以接受。其次，在移动端阅读时需要先在 PC 端导出，损失了自由度。</p>
-<p>经过一番对比后，重新回归了 “Zotero + WebDAV + PaperShip ” ，目前体验比较舒适。相关的软件和插件安装不再赘述，请查看前文<a href="https://iyuanshuo.com/research/zotero-usage-2017062813/">&lt;Zotero 文献管理与多设备同步&gt;</a>。</p>
+<p>经过一番对比后，重新回归了“Zotero + WebDAV + PaperShip ” ，目前体验比较舒适。相关的软件和插件安装不再赘述，请查看前文<a href="https://iyuanshuo.com/research/zotero-usage-2017062813/">&lt;Zotero 文献管理与多设备同步&gt;</a>。</p>
 <h3 id="zotero--webdav--papership-配置">Zotero + WebDAV + PaperShip 配置</h3>
 <p>首先是支持 WebDAV 的云盘选择，比较可惜的是重度使用的 Onedrive 不支持 WebDAV。国内知名度比较高的有坚果云，国外有 box.com 和 4shared 等，当然自建私有云也是个不错的选择。但是，鉴于坚果云免费用户每月受限的上传和下载流量首先被我 pass，因为有的时候配置新电脑什么的1G或2G的流量并不够用。最后，具有10G免费容量并且没有流量限制的 box.com 比较满足需求，虽然官方说19年底已经不维护 WebDAV 方式接入了，但是目前并不影响正常使用。</p>
 <h4 id="zotero-配置">Zotero 配置</h4>
