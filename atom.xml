@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">Shuo Yuan&#39;s Home Page</title>
     <subtitle type="html">这是 shuoyuan 的生活与技术博客！</subtitle>
-    <updated>2020-03-27T14:23:23+08:00</updated>
+    <updated>2020-03-27T14:29:06+08:00</updated>
     <id>https://iyuanshuo.com/</id>
     <link rel="alternate" type="text/html" href="https://iyuanshuo.com/" />
     <link rel="self" type="application/atom+xml" href="https://iyuanshuo.com/atom.xml" />
@@ -974,7 +974,7 @@ git merge origin/master
             <title type="text">VPS 构建 IPv6 隧道</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/" />
             <id>https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/</id>
-            <updated>2020-02-26T16:31:25+08:00</updated>
+            <updated>2020-03-27T14:29:05+08:00</updated>
             <published>2016-11-15T21:00:00+00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -994,7 +994,7 @@ git merge origin/master
 <li>点击 Create Tunnel 后，通道就创建完成</li>
 </ul>
 <h3 id="配置-centos-使其支持-ipv6--搬瓦工服务器不需要此步骤">配置 Centos 使其支持 IPv6  （搬瓦工服务器不需要此步骤）</h3>
-<p>阿里云默认镜像里面的CentOS 都是默认没有启用IPv6地址的，需要设置一番。</p>
+<p>阿里云默认镜像里面的 CentOS 都是默认没有启用 IPv6 地址的，需要设置一番。</p>
 <ul>
 <li>编辑文件 <code>/etc/modprobe.d/disable_ipv6.conf</code>，注释以下相关的命令行：</li>
 </ul>
@@ -1025,23 +1025,23 @@ options ipv6 <span class="nv">disable</span><span class="o">=</span>1
 </div>
 </div><ul>
 <li>
-<p>可以重启系统使其加载或者执行<code>depmod -a</code>和<code>service network restart</code>让其重载配置。</p>
+<p>可以重启系统使其加载或者执行 <code>depmod -a</code> 和 <code>service network restart</code> 让其重载配置。</p>
 </li>
 <li>
-<p>确认配置都生效后运行 <code>ifconfig</code> 命令，如果可以看到IPv6的地址即为成功。</p>
+<p>确认配置都生效后运行 <code>ifconfig</code> 命令，如果可以看到 IPv6 的地址即为成功。</p>
 </li>
 </ul>
 <h3 id="配置-he-隧道地址">配置 HE 隧道地址</h3>
-<p>在VPS上配置了IPv6环境后，需要配置添加IPv6隧道。在Hurricane Electric Free IPv6 Tunnel Broker默认有提供<strong>Linux-net-tools</strong>命令可以直接使用。</p>
+<p>在 VPS 上配置了 IPv6 环境后，需要配置添加 IPv6 隧道。在 Hurricane Electric Free IPv6 Tunnel Broker 默认有提供<strong>Linux-net-tools</strong>命令可以直接使用。</p>
 <ul>
 <li>
-<p>回到he网页，点击Example Configurations。</p>
+<p>回到 he 网页，点击 Example Configurations。</p>
 </li>
 <li>
-<p>选择<strong>Linux-net-tools</strong>并复制下面文本框的内容。</p>
+<p>选择 <strong>Linux-net-tools</strong> 并复制下面文本框的内容。</p>
 </li>
 <li>
-<p>回到ssh，粘贴复制的内容并执行即可（Note：系统重启会失效，请自行写入脚本并设置开机启动）。</p>
+<p>回到 ssh，粘贴复制的内容并执行即可（Note：系统重启会失效，请自行写入脚本并设置开机启动）。</p>
 </li>
 </ul>
 <p><em>Tips: Centos 7 可能会提示:</em>  <code>-bash: ifconfig: command not found</code></p>
@@ -1056,7 +1056,7 @@ options ipv6 <span class="nv">disable</span><span class="o">=</span>1
 yum install net-tools.x86_64 
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="设置ipv6开机自启">设置IPv6开机自启</h3>
+</div><h3 id="设置-ipv6-开机自启">设置 IPv6 开机自启</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -1065,7 +1065,7 @@ yum install net-tools.x86_64
 <pre class="chroma"><code class="language-bash" data-lang="bash">vim /root/ipv6.sh
 </code></pre></td></tr></table>
 </div>
-</div><p>输入如下内容：  <em>即从he网站上复制的<code>Linux-net-tools</code>的代码</em></p>
+</div><p>输入如下内容：  <em>即从 he 网站上复制的<code>Linux-net-tools</code>的代码</em></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -1114,7 +1114,7 @@ route -A inet6 add ::/0 dev sit1
 </code></pre></td></tr></table>
 </div>
 </div><p>保存并退出，这样重启后也有 IPv6。</p>
-<h3 id="测试ipv6隧道可用性">测试ipv6隧道可用性</h3>
+<h3 id="测试-ipv6-隧道可用性">测试 IPv6 隧道可用性</h3>
 <p>配置好隧道后，可以使用<code>ping6</code>命令进行验证。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1127,7 +1127,7 @@ ping6 www.google.com <span class="c1"># 如果返回ipv6地址即为成功</span
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="解决谷歌访问出现验证码">解决谷歌访问出现验证码</h3>
-<p>阿里云的较多海外机房在访问谷歌时会出现验证提示，可以强制使用IPv6访问谷歌来避免IP认证。</p>
+<p>阿里云的较多海外机房在访问谷歌时会出现验证提示，可以强制使用 IPv6 访问谷歌来避免 IP 认证。</p>
 <p>可将谷歌的网址放入 hosts 文件并指定 IPv6 地址解决。</p>
 <p>编辑文件<code>vim /etc/hosts</code>并加入以下内容：</p>
 <div class="highlight"><div class="chroma">
@@ -1141,10 +1141,10 @@ ping6 www.google.com <span class="c1"># 如果返回ipv6地址即为成功</span
 <pre class="chroma"><code class="language-bash" data-lang="bash">2404:6800:4005:80a::2003 www.google.com.hk
 2404:6800:4005:80a::2003 google.com.hk <span class="c1"># 服务器所在地区的后缀</span>
 2404:6800:4005:80a::2003 www.google.com
-2404:6800:4005:80a::2003 google.com <span class="c1"># ipv6地址可以改为ping6命令返回的地址，延迟会更小</span>
+2404:6800:4005:80a::2003 google.com <span class="c1"># ipv6地址可以改为 ping6 命令返回的地址，延迟会更小</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>如果hosts文件没有立刻生效，可以尝试使用<code>hostname xxx</code>刷新，如果依旧无效可尝试重启。</p>
+</div><p>如果 hosts 文件没有立刻生效，可以尝试使用 <code>hostname xxx</code> 刷新，如果依旧无效可尝试重启。</p>
 ]]></content>
             
             
