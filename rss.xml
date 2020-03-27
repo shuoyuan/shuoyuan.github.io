@@ -23,7 +23,7 @@
         
             <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
         
-        <lastBuildDate>Fri, 27 Mar 2020 14:14:03 +0800</lastBuildDate>
+        <lastBuildDate>Fri, 27 Mar 2020 14:23:23 +0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss+xml" href="https://iyuanshuo.com/rss.xml" />
         
@@ -74,7 +74,7 @@ $$</p>
 <h3 id="deep-component">Deep Component</h3>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/deep.png" alt="deep" style="zoom:40%;" /></p>
 <p>深度部分是一个前馈神经网络。与图像或者语音这类输入不同，图像语音的输入一般是连续而且密集的，然而用于 CTR 的输入一般是及其稀疏的。因此需要重新设计网络结构。具体实现中为，在第一层隐含层之前，引入一个嵌入层来完成将输入向量压缩到低维稠密向量。</p>
-<p><img src="http://images.iyuanshuo.com/2018/04/21/embedding_layer.png" alt="embedding_layer" style="zoom:50%;" /></p>
+<p><img src="http://images.iyuanshuo.com/2018/04/21/embedding_layer.png" alt="embedding_layer" style="zoom:40%;" /></p>
 <p>嵌入层 (embedding layer) 的结构如上图所示。</p>
 <p>对于 Fig.4 这个网络结构有两个很有意思的 point：</p>
 <ol>
