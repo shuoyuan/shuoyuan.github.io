@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">Shuo Yuan&#39;s Home Page</title>
     <subtitle type="html">这是 shuoyuan 的生活与技术博客！</subtitle>
-    <updated>2020-03-27T11:48:53+08:00</updated>
+    <updated>2020-03-27T11:51:04+08:00</updated>
     <id>https://iyuanshuo.com/</id>
     <link rel="alternate" type="text/html" href="https://iyuanshuo.com/" />
     <link rel="self" type="application/atom+xml" href="https://iyuanshuo.com/atom.xml" />
@@ -20,7 +20,7 @@
             <title type="text">Wide & Deep Learning 模型介绍</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/wide-deep-learning-2018042112/" />
             <id>https://iyuanshuo.com/research/wide-deep-learning-2018042112/</id>
-            <updated>2020-03-27T11:48:52+08:00</updated>
+            <updated>2020-03-27T11:51:03+08:00</updated>
             <published>2018-04-21T12:30:00+00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -31,7 +31,7 @@
     
     <summary type="html"><![CDATA[Wide & Deep Learning 是由 Google Inc 发表的 paper：Wide & Deep Learning for Recommender Systems 中提出的一种使用非线性特征的线……]]></summary>
             
-                <content type="html"><![CDATA[<p>Wide &amp; Deep Learning 是由 Google Inc 发表的 paper：Wide &amp; Deep Learning for Recommender Systems 中提出的一种使用非线性特征的线性模型和一个用来 embedding 特征的深度学习并且使用联合训练 (joint training) 的方法<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。</p>
+                <content type="html"><![CDATA[<p>Wide &amp; Deep Learning 是由 Google Inc 发表的 paper：Wide &amp; Deep Learning for Recommender Systems 中提出的一种使用非线性特征的线性模型和一个用来 embedding 特征的深度学习进行联合训练 (joint training) 的方法<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。</p>
 <h2 id="introduction2">Introduction<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></h2>
 <p>通过将稀疏数据的非线性转化特征引入到广义线性模型被广泛应用于大规模的回归和分类问题。通过广泛的使用交叉特征转化，使得特征交互的记忆性有效并且具有可解释性。然后，这导致应用过程需要做许多的特征工作。相对来说，通过从稀疏数据中学习低纬稠密的 embedding 特征，并应用到深度学习中，只需要少量的特征工程就能对潜在的特征组合具有更好的泛化性。但是当用户项目交互是稀疏和高纬数据的时候，利用了 embeddings 的深度学习则表现得过于笼统 (over-generalize)，推荐的都是些相关性很低的 items。在这篇文章中，提出了一个 wide &amp; deep 联合学习模型，去结合推荐系统的 <strong>memorization</strong>和 <strong>generalization</strong>。</p>
 <p>通过结合使用<strong>非线性特征的线性模型</strong>和用来 <strong>embedding 特征的深度学习</strong>，并且使用<strong>联合训练 (joint training)</strong> 的方法进行优化。主要思想基于交叉特征的线性模型只能从历史出现过的数据中找到非线性 (<strong>显性的非线性</strong>) ，深度学习可以找到没有出现过的非线性 (<strong>隐性的非线性</strong>) 。Memorization 就是去把历史数据中显性的非线性找出来，而 generalization 通过找出隐性的非线性提高模型的泛化性。</p>
