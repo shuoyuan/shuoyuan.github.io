@@ -23,7 +23,7 @@
         
             <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
         
-        <lastBuildDate>Fri, 27 Mar 2020 12:50:05 +0800</lastBuildDate>
+        <lastBuildDate>Fri, 27 Mar 2020 12:55:35 +0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss+xml" href="https://iyuanshuo.com/rss.xml" />
         
@@ -69,8 +69,7 @@ $$</p>
 <p>FM 部分是一个因子分解机。关于因子分解机可以参阅文章 Factorization machines<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>。因为引入了隐变量的原因，对于几乎不出现或者很少出现的隐变量，FM 也可以很好的学习。</p>
 <p>FM的输出公式为：
 $$
-y(x)=w_0+\sum_{i=1} ^n(w_i x_i)+\sum_{i=1}^{n-1}\sum_{j=i+1}^n(\left&lt;v_i,v_j\right&gt;x_ix_j)
-\tag{2}
+y(x)=w_{0}+\sum_{i=1}^{n}\left(w_{i} x_{i}\right)+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n}\left(\left\langle v_{i}, v_{j}\right\rangle x_{i} x_{j}\right)\tag{2}
 $$</p>
 <h3 id="deep-component">Deep Component</h3>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/deep.png" alt="deep" style="zoom:40%;" /></p>
