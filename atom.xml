@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">Shuo Yuan&#39;s Home Page</title>
     <subtitle type="html">这是 shuoyuan 的生活与技术博客！</subtitle>
-    <updated>2020-04-27T12:42:09+08:00</updated>
+    <updated>2020-11-09T11:30:33+08:00</updated>
     <id>https://iyuanshuo.com/</id>
     <link rel="alternate" type="text/html" href="https://iyuanshuo.com/" />
     <link rel="self" type="application/atom+xml" href="https://iyuanshuo.com/atom.xml" />
@@ -15,12 +15,12 @@
                 <email>isaulyuan@gmail.com</email>
             </author>
     <rights>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</rights>
-    <generator uri="https://gohugo.io/" version="0.65.2">Hugo</generator>
+    <generator uri="https://gohugo.io/" version="0.78.1">Hugo</generator>
         <entry>
             <title type="text">DeepFM 模型介绍及应用</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/deep-fm-2018050111/" />
             <id>https://iyuanshuo.com/research/deep-fm-2018050111/</id>
-            <updated>2020-03-27T14:23:23+08:00</updated>
+            <updated>2020-11-09T11:24:22+08:00</updated>
             <published>2018-05-01T11:20:00+00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -33,52 +33,51 @@
             
                 <content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
 <p>对于一个基于 CTR 预估的推荐系统，最重要的是学习到用户点击行为背后隐含的特征组合。在不同的推荐场景中，低阶组合特征或者高阶组合特征可能都会对最终的 CTR 产生影响。</p>
-<p>Wide &amp; Deep Learning 通过组合使用 cross-product transformation 特征的线性模型和 DNN 模型进行 Joint train 从而实现 memorization 和 generalization 的结合。但是对于 Wide 模型来说还是需要做一些特征交叉来实现 memorization，而因子分解机 (Factorization Machines, FM) 通过对于每一维特征的隐变量内积来提取特征组合，最终的结果也非常好。虽然理论上来讲 FM 可以对高阶特征组合进行建模，但实际上因为计算复杂度的原因一般都只用到了二阶特征组合。</p>
+<p>Wide &amp; Deep Learning 通过组合使用 cross-product transformation 特征的线性模型和 DNN 模型进行 Joint train 从而实现 memorization 和 generalization 的结合。但是对于 Wide 模型来说还是需要做一些特征交叉来实现 memorization，比如因子分解机 (Factorization Machines, FM) 通过对每一维特征的隐变量内积来提取特征组合从而获得很好的效果。虽然理论上来讲 FM 可以对高阶特征组合进行建模，但实际上因为计算复杂度等原因一般都只用到二阶特征组合。</p>
 <p>关于 Wide &amp; Deep Learning 请参考博文：<a href="https://iyuanshuo.com/research/wide-deep-learning-2018042112/">Wide &amp; Deep Learning模型介绍</a></p>
-<p>那么对于高阶的特征组合来说，我们很自然的想法，通过多层的神经网络即 DNN 去解决。</p>
-<p>对于离散特征的处理，我们使用的是将特征转换成为 Onehot 的形式，但是将 Onehot 类型的特征输入到 DNN 中，会导致网络参数太多难以训练<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
+<p>那么对于高阶的特征组合来说，我们很自然的想法是通过多层的神经网络即 DNN 来处理。</p>
+<p>对于离散特征的处理，我们使用的是将特征转换成为 Onehot 的形式。但是将 Onehot 类型的特征输入到 DNN 中时会导致网络参数太多而难以训练<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/onehot_for_dnn.png" alt="onehot_for_dnn" style="zoom: 67%;" /></p>
-<p>此时可以借鉴 word2vec 的思路，进行 embedding。将 Onehot 编码后的向量经过一个 embedding 层输出 Dense Vector。具体的思路就是，将一个特征 Onehot 编码后会生成多个特征，但是每个特征里面只有一个为 $1$，其他都为 $0$，这些由一个特征生成的多个互斥的特征引用 FFM 的思想的话就属于一个 Field。</p>
+<p>此时可以借鉴 word2vec 的思路进行 embedding，通过将 Onehot 编码后的向量经过一个 embedding 层输出 Dense Vector。具体的思路是将一个特征 Onehot 编码后会生成多个特征，但是每个特征里面只有一个为 $1$，其他都为 $0$，这些由一个特征生成的多个互斥的特征引用 FFM 思想的话就属于一个 Field。</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/onehot_densevector.png" alt="onehot_densevector" style="zoom:67%;" /></p>
-<p>如果将 embedding 层的输出再加两层的全连接层，让 Dense Vector 进行组合，那么高阶特征的组合就出来了。</p>
+<p>如果将 embedding 层的输出再加两层全连接层，让 Dense Vector 进行组合就完成了高阶特征的组合。</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/densevector_full.png" alt="densevector_full" style="zoom: 50%;" /></p>
-<p>但是低阶和高阶特征组合隐含地体现在隐藏层中，如果我们希望把低阶特征组合单独建模，然后融合高阶特征组合。</p>
+<p>但是低阶和高阶特征组合隐含地体现在隐藏层中，我们希望把低阶特征组合单独建模，然后融合高阶特征组合。</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/how_to_get_low_order.png" alt="how_to_get_low_order" style="zoom:50%;" /></p>
-<p>也就是我们需要学习低阶的特征组合，也需要学习高阶的特征组合。即将 DNN 与 FM 进行一个合理的融合：</p>
+<p>这意味着我们在学习低阶的特征组合的同时，也需要学习高阶的特征组合，即将 DNN 与 FM 进行一个合理的融合：</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/consider_dnn_fm.png" alt="consider_dnn_fm" style="zoom: 67%;" /></p>
-<p>二者的融合总的来说有两种形式，一是串行结构，二是并行结构</p>
+<p>二者的融合总的来说有两种形式，串行结构与并行结构</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/parallel_dnn_fm.png" alt="parallel_dnn_fm" style="zoom: 50%;" /></p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/series_dnn_fm.png" alt="series_dnn_fm" style="zoom: 50%;" /></p>
-<p>而 DeepFM，就是并行结构中的一种典型代表。</p>
+<p>而 DeepFM，就是并行结构中的典型代表。</p>
 <h2 id="deepfm-模型-2">DeepFm 模型 <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></h2>
 <h3 id="模型结构">模型结构</h3>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/wide_deep_deep_fm.png" alt="wide_deep_deep_fm" style="zoom: 40%;" /></p>
-<p>DeepFM 包含两部分：神经网络部分与因子分解机部分，分别负责低阶特征的提取和高阶特征的提取。这两部分共享同样的输入。DeepFM 的预测结果可以写为：</p>
+<p>DeepFM 包含两部分：神经网络与因子分解机，分别负责提取低阶特征和高阶特征。(PS: 这两部分当然共享同样的输入)。同时，DeepFM 的预测结果为：</p>
 <p>$$
 \hat y = sigmoid({y_{FM}} + {y_{DNN}})\tag1
 $$</p>
 <h3 id="fm-component">FM Component</h3>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/fm.png" alt="fm" style="zoom:40%;" /></p>
-<p>FM 部分是一个因子分解机。关于因子分解机可以参阅文章 Factorization machines<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>。因为引入了隐变量的原因，对于几乎不出现或者很少出现的隐变量，FM 也可以很好的学习。</p>
-<p>FM的输出公式为：</p>
+<p>FM (详情可参阅文章<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>)因为引入了隐变量的原因，对于几乎不出现或者很少出现的隐变量，也可以实现很好的学习。</p>
+<p>FM的输出为：</p>
 <p>$$
 y(x)=w_{0}+\sum_{i=1}^{n}\left(w_{i} x_{i}\right)+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n}\left(\left\langle v_{i}, v_{j}\right\rangle x_{i} x_{j}\right)\tag{2}
 $$</p>
 <h3 id="deep-component">Deep Component</h3>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/deep.png" alt="deep" style="zoom:40%;" /></p>
-<p>深度部分是一个前馈神经网络。与图像或者语音这类输入不同，图像语音的输入一般是连续而且密集的，然而用于 CTR 的输入一般是及其稀疏的。因此需要重新设计网络结构。具体实现中为，在第一层隐含层之前，引入一个嵌入层来完成将输入向量压缩到低维稠密向量。</p>
+<p>深度部分是一个前馈神经网络，与图像或者语音这类输入不同的是图像语音的输入一般是连续而且密集的。然而用于 CTR 的输入一般是极其稀疏的，因此需要重新设计网络结构以适应相应的数据特点，因此在第一层隐含层之前引入一个嵌入层 (embedding layer) 来完成将输入向量压缩到低维稠密向量的过程，其结构如下图所示。</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/embedding_layer.png" alt="embedding_layer" style="zoom:40%;" /></p>
-<p>嵌入层 (embedding layer) 的结构如上图所示。</p>
 <p>对于 Fig.4 这个网络结构有两个很有意思的 point：</p>
 <ol>
 <li>
 <p>虽然输入的 field vector 长度不一，但是它们 embedding 出来的长度是固定的；</p>
 </li>
 <li>
-<p>FM 的 latent vector $V$ 向量作为原始特征到 embedding vector 的权重矩阵，放在网络里学习。</p>
+<p>FM 的 latent vector $V$ 向量作为原始特征到 embedding vector 的权重矩阵被放在网络里学习。</p>
 </li>
 </ol>
-<p>这里的第二点如何理解呢，假设我们的 $k=5$，首先，对于输入的一条记录，同一个 Field 只有一个位置是1，那么在由输入得到 dense vector 的过程中，输入层只有一个神经元起作用，得到的 dense vector 其实就是输入层到 embedding 层该神经元相连的五条线的权重，即 $v_{i1}$，$v_{i2}$，$v_{i3}$，$v_{i4}$，$v_{i5}$。这五个值组合起来就是我们在 FM 中所提到的 $v_i$。在 FM 部分和 DNN 部分，这一块是共享权重的，对同一个特征来说，得到的 $V_i$ 是相同的。</p>
+<p>这里的第二点如何理解呢？在假设 $k=5$的前提下，首先对于输入的一条记录，同一个 Field 只有一个位置是1，那么在由输入得到 dense vector 的过程中，输入层只有一个神经元起作用，得到的 dense vector 其实就是输入层到 embedding 层该神经元相连的五条线的权重，即 $v_{i1}$，$v_{i2}$，$v_{i3}$，$v_{i4}$，$v_{i5}$。这五个值组合起来就是在 FM 中所提到的 $v_i$。在 FM 部分和 DNN 部分，这一块是共享权重的，因此对同一个特征来说得到的 $V_i$ 是相同的。</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
@@ -104,7 +103,7 @@ $$</p>
                     
                     
                         
-                            <category scheme="https://iyuanshuo.com/research/" term="research" label="research" />
+                            <category scheme="https://iyuanshuo.com/research/" term="research\" label="research\" />
                         
                     
                 
@@ -129,7 +128,7 @@ $$</p>
             <title type="text">Wide & Deep Learning 模型介绍</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/wide-deep-learning-2018042112/" />
             <id>https://iyuanshuo.com/research/wide-deep-learning-2018042112/</id>
-            <updated>2020-03-27T12:25:55+08:00</updated>
+            <updated>2020-11-09T11:21:58+08:00</updated>
             <published>2018-04-21T12:30:00+00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -142,7 +141,7 @@ $$</p>
             
                 <content type="html"><![CDATA[<p>Wide &amp; Deep Learning 是由 Google Inc 发表的 paper &lt;Wide &amp; Deep Learning for Recommender Systems&gt; 中提出的一种使用非线性特征的线性模型和一个用来 embedding 特征的深度学习进行联合训练 (joint training) 的方法<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。</p>
 <h2 id="introduction2">Introduction<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></h2>
-<p>通过将稀疏数据的非线性转化特征引入到广义线性模型被广泛应用于大规模的回归和分类问题。通过广泛的使用交叉特征转化，使得特征交互的记忆性有效并且具有可解释性。然后，这导致应用过程需要做许多的特征工作。相对来说，通过从稀疏数据中学习低纬稠密的 embedding 特征，并应用到深度学习中，只需要少量的特征工程就能对潜在的特征组合具有更好的泛化性。但是当用户项目交互是稀疏和高纬数据的时候，利用了 embeddings 的深度学习则表现得过于笼统 (over-generalize)，推荐的都是些相关性很低的 items。在这篇文章中，提出了一个 wide &amp; deep 联合学习模型，去结合推荐系统的 <strong>memorization</strong>和 <strong>generalization</strong>。</p>
+<p>通过将稀疏数据的非线性转化特征引入到广义线性模型被广泛应用于大规模的回归和分类问题。通过广泛的使用交叉特征转化，使得特征交互的记忆性有效并且具有可解释性。然而，这导致应用过程需要做许多的特征工作。相对来说，通过从稀疏数据中学习低纬稠密的 embedding 特征，并应用到深度学习中，只需要少量的特征工程就能对潜在的特征组合具有更好的泛化性。但是当用户项目交互是稀疏和高纬数据的时候，利用了 embeddings 的深度学习则表现得过于笼统 (over-generalize)，推荐的都是些相关性很低的 items。在这篇文章中，提出了一个 wide &amp; deep 联合学习模型，去结合推荐系统的 <strong>memorization</strong>和 <strong>generalization</strong>。</p>
 <p>通过结合使用<strong>非线性特征的线性模型</strong>和用来 <strong>embedding 特征的深度学习</strong>，并且使用<strong>联合训练 (joint training)</strong> 的方法进行优化。主要思想基于交叉特征的线性模型只能从历史出现过的数据中找到非线性 (<strong>显性的非线性</strong>) ，深度学习可以找到没有出现过的非线性 (<strong>隐性的非线性</strong>) 。Memorization 就是去把历史数据中显性的非线性找出来，而 generalization 通过找出隐性的非线性提高模型的泛化性。</p>
 <p>推荐系统可以被看做是一个搜索排序系统，其中输入的 query 是一系列的用户和文本信息，输出是 items 的排序列表。给定一个 query，推荐的任务就是到数据库中去找出相关的 items，然后对这些 items 根据相关对象，如点击或者购买行为，并进行排序。</p>
 <p>和传统的搜索排序问题一样，在推荐系统中一个挑战就是区域同时达到 memorization 和 generalization。Memorization 可以被大概定义为学习 items 或者 features 之间的相关频率，在历史数据中探索相关性的可行性。Generalizaion 的话则是基于相关性的传递，去探索一些在过去没有出现过的特征组合。基于 memorization 的推荐相对来说具有<strong>局部性</strong>，是在哪些用户和 items 已经有直接相关联的活动上。相较于 memorization，generalization 尝试去提高推荐 items 的<strong>多元化</strong>。</p>
@@ -200,7 +199,7 @@ $$</p>
                     
                     
                         
-                            <category scheme="https://iyuanshuo.com/research/" term="research" label="research" />
+                            <category scheme="https://iyuanshuo.com/research/" term="research\" label="research\" />
                         
                     
                 
@@ -225,7 +224,7 @@ $$</p>
             <title type="text">Factorization Machines 因式分解机</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/factorization-machine-2018032810/" />
             <id>https://iyuanshuo.com/research/factorization-machine-2018032810/</id>
-            <updated>2020-03-27T11:39:21+08:00</updated>
+            <updated>2020-11-09T11:21:58+08:00</updated>
             <published>2018-03-28T10:01:12+00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -234,39 +233,38 @@ $$</p>
                     </author>
             <rights>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</rights>
     
-    <summary type="html"><![CDATA[概述 在使用线性模型，例如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需……]]></summary>
+    <summary type="html"><![CDATA[概述 在使用线性模型如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需要人……]]></summary>
             
                 <content type="html"><![CDATA[<h2 id="概述">概述</h2>
-<p>在使用线性模型，例如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需要人工进行一些特征的二维或者三维交叉。FM（Factorization machines）提供了一种思路可以自动进行特征交叉，同时能够处理非常稀疏数据，具有线性的时间复杂度，计算简单。</p>
-<p>由于FM实现简单效果非常好，而且应用范围非常广，FM是近期非常火的技术，在比赛或者大公司都比较常见。</p>
+<p>在使用线性模型如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需要人工进行一些特征的二维或者三维交叉。FM（Factorization machines）提供了一种思路可以自动进行特征交叉的同时也能够处理非常稀疏数据，具有线性的时间复杂度。</p>
+<p>由于FM实现简单效果非常好因此应用范围非常广，在比赛或者大公司都比较常见。</p>
 <h2 id="fm优势">FM优势</h2>
-<p>FM能够解决的问题及优点<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
+<p>FM能够解决的问题及优点包括<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
 <ul>
 <li>FM能够解决分类和回归问题</li>
 <li>FM能够代替SVD、SVD++等进行矩阵分解</li>
 <li>FM可以处理非常稀疏数据，此时SVM等模型会失效</li>
 <li>FM线性时间复杂度，计算简单</li>
-<li>FM可表示性较强，FM将模型参数表示为K维向量，向量之间可以交叉运算，即使两个交叉特征没有对应训练数据，也能表示出权重。</li>
+<li>FM可表示性较强，将模型参数表示为K维向量。向量之间可以交叉运算，即使两个交叉特征没有对应训练数据，也能表示出权重。</li>
 </ul>
 <h2 id="二维-fm">二维-FM</h2>
-<p>先回顾一下线性回归模型，其建模时采用的函数是：</p>
+<p>先回顾一下线性回归模型，其建模为：</p>
 <p>$$
 \begin{aligned}
 \hat y({\rm{x}}) &amp; = {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n} \<br>
 &amp;= {\omega <em>0} + \sum\limits</em>{i = 1}^n {{\omega _i}{x_i}} 
 \end{aligned} \tag{1}
 $$</p>
-<p>从方程中可以看出各特征分量$x_i$和$x_j\ (i \ne j )$之间是相互孤立的，该模型仅考虑单个的特征分量，没有考虑特征分量之间的相互关系。</p>
+<p>从上式可以看出各特征分量$x_i$和$x_j\ (i \ne j )$之间是相互孤立的，因此仅考虑了单个的特征分量而没有考虑特征分量之间的相互关系。</p>
 <p>在$(1)$的基础上改写为：</p>
 <p>$$
 \begin{aligned}
 \hat y({\rm{x}}) = {\omega <em>0} + \sum\limits</em>{i = 1}^n {{\omega <em>i}{x_i}}  + \sum\limits</em>{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {{\omega _{ij}}{x_i}} {x_j}} 
 \end{aligned} \tag{2}
 $$</p>
-<p>这样也将任意两个不同的特征向量之间的关系也考虑进来了。</p>
-<p>但是，有一个问题就是，在稀疏数据中这种直接在${x_i} {x_j}$前面配上一个系数$\omega_{ij}$的方式会有很大的缺陷。因为对于观察样本中未出现过交互的特征分量，不能对相应的参数进行估计<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
-<p>一定要注意的是，在高度稀疏数据场景中，由于数据量的不足，样本中出现未交互的特征分量是很普遍的。</p>
-<p>为了克服这个缺陷，我们在(2)中的系数$\omega_{ij}$上做文章，将其换成另外一种形式。针对每个维度的特征分量$x_i$，引入辅助向量：</p>
+<p>这样也就将任意两个不同的特征向量之间的关系同时考虑进来了。</p>
+<p>但是，有一个问题是在稀疏数据中这种直接在${x_i} {x_j}$前面配上一个系数$\omega_{ij}$的方式会有很大的缺陷：对于观察样本中未出现过交互的特征分量，不能对相应的参数进行估计<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。一定要注意的是，在高度稀疏数据场景中，由于数据量的不足，样本中出现未交互的特征分量是很普遍的。</p>
+<p>为了克服这个缺陷，考虑在(2)中的系数$\omega_{ij}$上进行适当的处理以将其换成另外一种形式。针对每个维度的特征分量$x_i$，引入辅助向量：</p>
 <p>$$
 \begin{aligned}
 {{\rm{v}}<em>i} = {({v</em>{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},\ \ i = 1,2, \cdots ,n
@@ -278,7 +276,7 @@ $$</p>
 {{\hat \omega }<em>{ij}} = {{\rm{v}}<em>i}^T{{\rm{v}}<em>j}: = \sum\limits</em>{l = 1}^k {{v</em>{il}}{x</em>{jl}}} 
 \end{aligned}
 $$</p>
-<p>如此，我们可以获得FM的二维模型。</p>
+<p>如此，可获得FM的二维模型。</p>
 <h3 id="模型">模型</h3>
 <p>对于2次特征交叉的FM模型可以表示为<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>：</p>
 <p>$$
@@ -294,7 +292,7 @@ $$</p>
 \end{aligned} \tag{3.1}
 $$</p>
 <h3 id="二维-fm计算复杂度">二维-FM计算复杂度</h3>
-<p>如果对式子(1)直接进行计算，那么其复杂度是$O(kn^2)$，但是我们可以通过简单的数学变换将其转化为$O(kn)$，由于前面两项的计算复杂度都是$O(kn)$，所以我们只需要对第三项进行处理<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>：</p>
+<p>如果对式子(1)直接进行计算，那么其复杂度是$O(kn^2)$，但是可以通过简单的数学变换将其转化为$O(kn)$。由于前面两项的计算复杂度都是$O(kn)$，所以只需要对第三项进行处理<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>：</p>
 <p>$$
 \begin{aligned}
 &amp;\sum\limits_{i = 1}^n {\sum\limits_{j = i + 1}^n {\left( { &lt; {v_i},{v_j} &gt; {x_i}{x_j}} \right)} } {\rm{ }} \<br>
@@ -354,7 +352,7 @@ $$</p>
                     
                     
                         
-                            <category scheme="https://iyuanshuo.com/research/" term="research" label="research" />
+                            <category scheme="https://iyuanshuo.com/research/" term="research\" label="research\" />
                         
                     
                 
@@ -379,7 +377,7 @@ $$</p>
             <title type="text">GBDT 梯度提升树的基本原理</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/gbdt-principle-2018031321/" />
             <id>https://iyuanshuo.com/research/gbdt-principle-2018031321/</id>
-            <updated>2020-03-27T12:50:05+08:00</updated>
+            <updated>2020-11-09T11:21:58+08:00</updated>
             <published>2018-03-13T21:26:42+00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -391,12 +389,12 @@ $$</p>
     <summary type="html"><![CDATA[什么是GBDT? GBDT (Gradient Boosting Decision Tree) 是一种基于boosting集成学习（ensemble met……]]></summary>
             
                 <content type="html"><![CDATA[<h2 id="什么是gbdt">什么是GBDT?</h2>
-<p>GBDT (Gradient Boosting Decision Tree) 是一种基于boosting集成学习（ensemble method）的算法，但和传统的Adaboost有很大不同。在Adaboost，我们是利用前一轮迭代弱学习器的误差率来更新训练集的权重，这样一轮轮的迭代下去。GBDT也是迭代，使用了前向分布算法，但是弱学习器限定了只能使用CART回归树模型，同时迭代思路和Adaboost也有所不同。GBDT选用的弱分类器一般是低方差高偏差，因为Boosting主要关注降低偏差，因此Boosting能基于泛化性能相当弱的学习器构建出很强的集成。GBDT的训练过程如下<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
+<p>GBDT (Gradient Boosting Decision Tree) 是一种基于boosting集成学习（ensemble method）的算法，但和传统的Adaboost有很大不同。在Adaboost，我们是利用前一轮迭代弱学习器的误差率来更新训练集的权重。GBDT也是迭代并且使用了前向分布算法，但是弱学习器限定了只能使用CART回归树模型，同时迭代思路和Adaboost也有所不同。GBDT选用的弱分类器一般是低方差高偏差，因为Boosting主要关注降低偏差，因此Boosting能基于泛化性能相当弱的学习器构建出很强的集成。GBDT的训练过程如下<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
 <p><img src="http://images.iyuanshuo.com//blog/article/GBDT.png" alt="Fig 1. GBDT 的训练过程"></p>
 <h3 id="boost">Boost</h3>
 <p>Boost是一个加法模型，它是由若干个基函数及其权值乘积之和的累加。</p>
 <h3 id="gradient-boosting">Gradient Boosting</h3>
-<p>GBDT是把所有树的结论累加起来做最终结论的，所以可以想到每棵树的结论并不是年龄本身，而是年龄的一个累加量。GBDT的核心就在于，每一棵树学的是之前所有树结论和的残差，这个残差就是一个加预测值后能得真实值的累加量。比如A的真实年龄是18岁，但第一棵树的预测年龄是12岁，差了6岁，即残差为6岁。那么在第二棵树里我们把A的年龄设为6岁去学习，如果第二棵树真的能把A分到6岁的叶子节点，那累加两棵树的结论就是A的真实年龄；如果第二棵树的结论是5岁，则A仍然存在1岁的残差，第三棵树里A的年龄就变成1岁，继续学。这就是Gradient Boosting在GBDT中的意义<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
+<p>GBDT把所有树的结论累加起来做最终结论，所以可以想到每棵树的结论并不是年龄本身，而是年龄的一个累加量。GBDT的核心就在于，每一棵树学的是之前所有树结论和的残差，这个残差就是一个加预测值后能得真实值的累加量。比如A的真实年龄是18岁，但第一棵树的预测年龄是12岁，差了6岁，即残差为6岁。那么在第二棵树里我们把A的年龄设为6岁去学习，如果第二棵树真的能把A分到6岁的叶子节点，那累加两棵树的结论就是A的真实年龄；如果第二棵树的结论是5岁，则A仍然存在1岁的残差，第三棵树里A的年龄就变成1岁，继续学。这就是Gradient Boosting在GBDT中的意义<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
 <p>根据上面那个简单的例子，我们知道假设损失函数为平方损失（square loss）时，我们使用残差来进行下一轮的训练，即GBDT算法的每一步在生成决策树时只需要拟合前面的模型的残差，从而使得损失函数最小。那如何使损失函数最小呢？Freidman提出了用损失函数的负梯度来拟合本轮损失的近似值，进而拟合一个CART回归树，这就是GBDT的负梯度拟合。损失函数的负梯度在当前模型的值为：</p>
 <p>$$
 -[\frac{\partial L(y,f(x_i))}{\partial f(x_i)}]<em>{f(x)=f</em>{m-1}(x)}\tag1
@@ -505,7 +503,7 @@ $$</p>
                     
                     
                         
-                            <category scheme="https://iyuanshuo.com/research/" term="research" label="research" />
+                            <category scheme="https://iyuanshuo.com/research/" term="research\" label="research\" />
                         
                     
                 
@@ -585,7 +583,7 @@ $$</p>
                     
                     
                         
-                            <category scheme="https://iyuanshuo.com/research/" term="research" label="research" />
+                            <category scheme="https://iyuanshuo.com/research/" term="research\" label="research\" />
                         
                     
                 
@@ -670,7 +668,7 @@ $$</p>
                     
                     
                         
-                            <category scheme="https://iyuanshuo.com/research/" term="research" label="research" />
+                            <category scheme="https://iyuanshuo.com/research/" term="research\" label="research\" />
                         
                     
                 
@@ -726,7 +724,7 @@ $$</p>
 brew install  git
 <span class="c1"># centos</span>
 yum install -y git
-<span class="c1"># ubuntu</span>  
+<span class="c1"># ubuntu  </span>
 sudo apt-get install git
 </code></pre></td></tr></table>
 </div>
@@ -949,7 +947,7 @@ git merge origin/master
                     
                     
                         
-                            <category scheme="https://iyuanshuo.com/tech/" term="tech" label="tech" />
+                            <category scheme="https://iyuanshuo.com/tech/" term="tech\" label="tech\" />
                         
                     
                 
@@ -1007,7 +1005,7 @@ git merge origin/master
 <td class="lntd">
 <pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">alias</span> net-pf-10 off
 <span class="nb">alias</span> ipv6 off
-options ipv6 <span class="nv">disable</span><span class="o">=</span>1
+options ipv6 <span class="nv">disable</span><span class="o">=</span><span class="m">1</span>
 </code></pre></td></tr></table>
 </div>
 </div><ul>
@@ -1156,7 +1154,7 @@ ping6 www.google.com <span class="c1"># 如果返回ipv6地址即为成功</span
                     
                     
                         
-                            <category scheme="https://iyuanshuo.com/tech/" term="tech" label="tech" />
+                            <category scheme="https://iyuanshuo.com/tech/" term="tech\" label="tech\" />
                         
                     
                 

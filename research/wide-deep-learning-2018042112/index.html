@@ -3,7 +3,7 @@
     <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
     <meta charset="UTF-8" />
 
-    <meta name="generator" content="Hugo 0.65.2" /><meta name="theme-color" content="#fff" />
+    <meta name="generator" content="Hugo 0.78.1" /><meta name="theme-color" content="#fff" />
         <script>
             const userPrefers = localStorage.getItem('theme');
             const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -50,7 +50,7 @@
 
     <title>Wide &amp; Deep Learning 模型介绍 | Shuo Yuan&#39;s Home Page</title>
 
-    <link rel="stylesheet" href="/css/meme.min.4a906cbabc6eeb8d956adef99799b9cabf6f757036617ff42df017220e988912.css" integrity="sha256-SpBsurxu642Vat75l5m5yr9vdXA2YX/0LfAXIg6YiRI=" data-instant-track />
+    <link rel="stylesheet" href="/css/meme.min.bb43e132c4b5a610ead375dd32ba9e1ba4de0f66261cc7c03b27194c863ff88f.css" integrity="sha256-u0PhMsS1phDq03XdMrqeG6TeD2YmHMfAOycZTIY/+I8=" data-instant-track />
 
     <link href="https://fonts.googleapis.com/css?family=EB+Garamond:400,400i,700,700i|Noto+Serif+SC:400,700|Source+Code+Pro:400,400i,700,700i|Cinzel+Decorative:700&display=swap&subset=chinese-simplified" rel="stylesheet" />
 
@@ -85,7 +85,7 @@
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "datePublished": "2018-04-21T12:30:00+00:00",
-        "dateModified": "2020-03-27T12:25:55+08:00",
+        "dateModified": "2020-11-09T11:21:58+08:00",
         "url": "https://iyuanshuo.com/research/wide-deep-learning-2018042112/",
         "headline": "Wide \u0026 Deep Learning 模型介绍",
         "description": "Wide \u0026amp; Deep Learning 是由 Google Inc 发表的 paper \u0026lt;Wide \u0026amp; Deep Learning for Recommender Systems\u0026gt; 中提出的一种使用非线性特征的线性模型和一个用来……",
@@ -143,7 +143,7 @@
         <meta property="og:image" content="http://images.iyuanshuo.com/20200327121146.png" />
 <meta property="og:type" content="article" />
     <meta property="article:published_time" content="2018-04-21T12:30:00+00:00" />
-    <meta property="article:modified_time" content="2020-03-27T12:25:55+08:00" />
+    <meta property="article:modified_time" content="2020-11-09T11:21:58+08:00" />
     
     <meta property="article:section" content="research" />
 
@@ -236,17 +236,17 @@
                 <nav class="contents">
   <h2 id="contents" class="contents-title">目录</h2><ol class="toc">
     <li><a id="contents:introduction2" href="#introduction2">Introduction</a></li>
-    <li><a id="contents:wide--deep-learning3" href="#wide--deep-learning3">Wide & Deep Learning</a>
+    <li><a id="contents:wide--deep-learning3" href="#wide--deep-learning3">Wide &amp; Deep Learning</a>
       <ol>
         <li><a id="contents:the-wide-component-wide-组件" href="#the-wide-component-wide-组件">The Wide Component (Wide 组件)</a></li>
         <li><a id="contents:the-deep-component--deep-组件" href="#the-deep-component--deep-组件">The Deep Component  (Deep 组件)</a></li>
-        <li><a id="contents:wide--deep-模型的联合训练" href="#wide--deep-模型的联合训练">Wide & Deep 模型的联合训练</a></li>
+        <li><a id="contents:wide--deep-模型的联合训练" href="#wide--deep-模型的联合训练">Wide &amp; Deep 模型的联合训练</a></li>
       </ol>
     </li>
   </ol>
 </nav><div class="post-body"><p>Wide &amp; Deep Learning 是由 Google Inc 发表的 paper &lt;Wide &amp; Deep Learning for Recommender Systems&gt; 中提出的一种使用非线性特征的线性模型和一个用来 embedding 特征的深度学习进行联合训练 (joint training) 的方法<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">[1]</a></sup>。</p>
 <h2 id="introduction2"><a href="#introduction2" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:introduction2" class="headings">Introduction<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">[2]</a></sup></a></h2>
-<p>通过将稀疏数据的非线性转化特征引入到广义线性模型被广泛应用于大规模的回归和分类问题。通过广泛的使用交叉特征转化，使得特征交互的记忆性有效并且具有可解释性。然后，这导致应用过程需要做许多的特征工作。相对来说，通过从稀疏数据中学习低纬稠密的 embedding 特征，并应用到深度学习中，只需要少量的特征工程就能对潜在的特征组合具有更好的泛化性。但是当用户项目交互是稀疏和高纬数据的时候，利用了 embeddings 的深度学习则表现得过于笼统 (over-generalize)，推荐的都是些相关性很低的 items。在这篇文章中，提出了一个 wide &amp; deep 联合学习模型，去结合推荐系统的 <strong>memorization</strong>和 <strong>generalization</strong>。</p>
+<p>通过将稀疏数据的非线性转化特征引入到广义线性模型被广泛应用于大规模的回归和分类问题。通过广泛的使用交叉特征转化，使得特征交互的记忆性有效并且具有可解释性。然而，这导致应用过程需要做许多的特征工作。相对来说，通过从稀疏数据中学习低纬稠密的 embedding 特征，并应用到深度学习中，只需要少量的特征工程就能对潜在的特征组合具有更好的泛化性。但是当用户项目交互是稀疏和高纬数据的时候，利用了 embeddings 的深度学习则表现得过于笼统 (over-generalize)，推荐的都是些相关性很低的 items。在这篇文章中，提出了一个 wide &amp; deep 联合学习模型，去结合推荐系统的 <strong>memorization</strong>和 <strong>generalization</strong>。</p>
 <p>通过结合使用<strong>非线性特征的线性模型</strong>和用来 <strong>embedding 特征的深度学习</strong>，并且使用<strong>联合训练 (joint training)</strong> 的方法进行优化。主要思想基于交叉特征的线性模型只能从历史出现过的数据中找到非线性 (<strong>显性的非线性</strong>) ，深度学习可以找到没有出现过的非线性 (<strong>隐性的非线性</strong>) 。Memorization 就是去把历史数据中显性的非线性找出来，而 generalization 通过找出隐性的非线性提高模型的泛化性。</p>
 <p>推荐系统可以被看做是一个搜索排序系统，其中输入的 query 是一系列的用户和文本信息，输出是 items 的排序列表。给定一个 query，推荐的任务就是到数据库中去找出相关的 items，然后对这些 items 根据相关对象，如点击或者购买行为，并进行排序。</p>
 <p>和传统的搜索排序问题一样，在推荐系统中一个挑战就是区域同时达到 memorization 和 generalization。Memorization 可以被大概定义为学习 items 或者 features 之间的相关频率，在历史数据中探索相关性的可行性。Generalizaion 的话则是基于相关性的传递，去探索一些在过去没有出现过的特征组合。基于 memorization 的推荐相对来说具有<strong>局部性</strong>，是在哪些用户和 items 已经有直接相关联的活动上。相较于 memorization，generalization 尝试去提高推荐 items 的<strong>多元化</strong>。</p>

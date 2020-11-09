@@ -3,7 +3,7 @@
     <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
     <meta charset="UTF-8" />
 
-    <meta name="generator" content="Hugo 0.65.2" /><meta name="theme-color" content="#fff" />
+    <meta name="generator" content="Hugo 0.78.1" /><meta name="theme-color" content="#fff" />
         <script>
             const userPrefers = localStorage.getItem('theme');
             const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -50,7 +50,7 @@
 
     <title>DeepFM 模型介绍及应用 | Shuo Yuan&#39;s Home Page</title>
 
-    <link rel="stylesheet" href="/css/meme.min.4a906cbabc6eeb8d956adef99799b9cabf6f757036617ff42df017220e988912.css" integrity="sha256-SpBsurxu642Vat75l5m5yr9vdXA2YX/0LfAXIg6YiRI=" data-instant-track />
+    <link rel="stylesheet" href="/css/meme.min.bb43e132c4b5a610ead375dd32ba9e1ba4de0f66261cc7c03b27194c863ff88f.css" integrity="sha256-u0PhMsS1phDq03XdMrqeG6TeD2YmHMfAOycZTIY/+I8=" data-instant-track />
 
     <link href="https://fonts.googleapis.com/css?family=EB+Garamond:400,400i,700,700i|Noto+Serif+SC:400,700|Source+Code+Pro:400,400i,700,700i|Cinzel+Decorative:700&display=swap&subset=chinese-simplified" rel="stylesheet" />
 
@@ -85,13 +85,13 @@
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "datePublished": "2018-05-01T11:20:00+00:00",
-        "dateModified": "2020-03-27T14:23:23+08:00",
+        "dateModified": "2020-11-09T11:24:22+08:00",
         "url": "https://iyuanshuo.com/research/deep-fm-2018050111/",
         "headline": "DeepFM 模型介绍及应用",
         "description": "Introduction 对于一个基于 CTR 预估的推荐系统，最重要的是学习到用户点击行为背后隐含的特征组合。在不……",
         "inLanguage" : "zh-CN",
         "articleSection": "research",
-        "wordCount":  1344 ,
+        "wordCount":  1309 ,
         "image": ["http://images.iyuanshuo.com/2018/04/21/onehot_for_dnn.png","http://images.iyuanshuo.com/2018/04/21/onehot_densevector.png","http://images.iyuanshuo.com/2018/04/21/densevector_full.png","http://images.iyuanshuo.com/2018/04/21/how_to_get_low_order.png","http://images.iyuanshuo.com/2018/04/21/consider_dnn_fm.png","http://images.iyuanshuo.com/2018/04/21/parallel_dnn_fm.png","http://images.iyuanshuo.com/2018/04/21/series_dnn_fm.png","http://images.iyuanshuo.com/2018/04/21/wide_deep_deep_fm.png","http://images.iyuanshuo.com/2018/04/21/fm.png","http://images.iyuanshuo.com/2018/04/21/deep.png","http://images.iyuanshuo.com/2018/04/21/embedding_layer.png"],
         "author": {
             "@type": "Person",
@@ -143,7 +143,7 @@
         <meta property="og:image" content="http://images.iyuanshuo.com/2018/04/21/onehot_for_dnn.png" />
 <meta property="og:type" content="article" />
     <meta property="article:published_time" content="2018-05-01T11:20:00+00:00" />
-    <meta property="article:modified_time" content="2020-03-27T14:23:23+08:00" />
+    <meta property="article:modified_time" content="2020-11-09T11:24:22+08:00" />
     
     <meta property="article:section" content="research" />
 
@@ -246,52 +246,51 @@
   </ol>
 </nav><div class="post-body"><h2 id="introduction"><a href="#introduction" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:introduction" class="headings">Introduction</a></h2>
 <p>对于一个基于 CTR 预估的推荐系统，最重要的是学习到用户点击行为背后隐含的特征组合。在不同的推荐场景中，低阶组合特征或者高阶组合特征可能都会对最终的 CTR 产生影响。</p>
-<p>Wide &amp; Deep Learning 通过组合使用 cross-product transformation 特征的线性模型和 DNN 模型进行 Joint train 从而实现 memorization 和 generalization 的结合。但是对于 Wide 模型来说还是需要做一些特征交叉来实现 memorization，而因子分解机 (Factorization Machines, FM) 通过对于每一维特征的隐变量内积来提取特征组合，最终的结果也非常好。虽然理论上来讲 FM 可以对高阶特征组合进行建模，但实际上因为计算复杂度的原因一般都只用到了二阶特征组合。</p>
+<p>Wide &amp; Deep Learning 通过组合使用 cross-product transformation 特征的线性模型和 DNN 模型进行 Joint train 从而实现 memorization 和 generalization 的结合。但是对于 Wide 模型来说还是需要做一些特征交叉来实现 memorization，比如因子分解机 (Factorization Machines, FM) 通过对每一维特征的隐变量内积来提取特征组合从而获得很好的效果。虽然理论上来讲 FM 可以对高阶特征组合进行建模，但实际上因为计算复杂度等原因一般都只用到二阶特征组合。</p>
 <p>关于 Wide &amp; Deep Learning 请参考博文：<a href="https://iyuanshuo.com/research/wide-deep-learning-2018042112/" target="_blank" rel="noopener">Wide &amp; Deep Learning模型介绍</a></p>
-<p>那么对于高阶的特征组合来说，我们很自然的想法，通过多层的神经网络即 DNN 去解决。</p>
-<p>对于离散特征的处理，我们使用的是将特征转换成为 Onehot 的形式，但是将 Onehot 类型的特征输入到 DNN 中，会导致网络参数太多难以训练<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">[1]</a></sup>：</p>
+<p>那么对于高阶的特征组合来说，我们很自然的想法是通过多层的神经网络即 DNN 来处理。</p>
+<p>对于离散特征的处理，我们使用的是将特征转换成为 Onehot 的形式。但是将 Onehot 类型的特征输入到 DNN 中时会导致网络参数太多而难以训练<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">[1]</a></sup>：</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/onehot_for_dnn.png" alt="onehot_for_dnn" style="zoom: 67%;" / data-zoomable></p>
-<p>此时可以借鉴 word2vec 的思路，进行 embedding。将 Onehot 编码后的向量经过一个 embedding 层输出 Dense Vector。具体的思路就是，将一个特征 Onehot 编码后会生成多个特征，但是每个特征里面只有一个为 <span>$1$</span>，其他都为 <span>$0$</span>，这些由一个特征生成的多个互斥的特征引用 FFM 的思想的话就属于一个 Field。</p>
+<p>此时可以借鉴 word2vec 的思路进行 embedding，通过将 Onehot 编码后的向量经过一个 embedding 层输出 Dense Vector。具体的思路是将一个特征 Onehot 编码后会生成多个特征，但是每个特征里面只有一个为 <span>$1$</span>，其他都为 <span>$0$</span>，这些由一个特征生成的多个互斥的特征引用 FFM 思想的话就属于一个 Field。</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/onehot_densevector.png" alt="onehot_densevector" style="zoom:67%;" / data-zoomable></p>
-<p>如果将 embedding 层的输出再加两层的全连接层，让 Dense Vector 进行组合，那么高阶特征的组合就出来了。</p>
+<p>如果将 embedding 层的输出再加两层全连接层，让 Dense Vector 进行组合就完成了高阶特征的组合。</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/densevector_full.png" alt="densevector_full" style="zoom: 50%;" / data-zoomable></p>
-<p>但是低阶和高阶特征组合隐含地体现在隐藏层中，如果我们希望把低阶特征组合单独建模，然后融合高阶特征组合。</p>
+<p>但是低阶和高阶特征组合隐含地体现在隐藏层中，我们希望把低阶特征组合单独建模，然后融合高阶特征组合。</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/how_to_get_low_order.png" alt="how_to_get_low_order" style="zoom:50%;" / data-zoomable></p>
-<p>也就是我们需要学习低阶的特征组合，也需要学习高阶的特征组合。即将 DNN 与 FM 进行一个合理的融合：</p>
+<p>这意味着我们在学习低阶的特征组合的同时，也需要学习高阶的特征组合，即将 DNN 与 FM 进行一个合理的融合：</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/consider_dnn_fm.png" alt="consider_dnn_fm" style="zoom: 67%;" / data-zoomable></p>
-<p>二者的融合总的来说有两种形式，一是串行结构，二是并行结构</p>
+<p>二者的融合总的来说有两种形式，串行结构与并行结构</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/parallel_dnn_fm.png" alt="parallel_dnn_fm" style="zoom: 50%;" / data-zoomable></p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/series_dnn_fm.png" alt="series_dnn_fm" style="zoom: 50%;" / data-zoomable></p>
-<p>而 DeepFM，就是并行结构中的一种典型代表。</p>
+<p>而 DeepFM，就是并行结构中的典型代表。</p>
 <h2 id="deepfm-模型-2"><a href="#deepfm-模型-2" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:deepfm-模型-2" class="headings">DeepFm 模型 <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">[2]</a></sup></a></h2>
 <h3 id="模型结构"><a href="#模型结构" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:模型结构" class="headings">模型结构</a></h3>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/wide_deep_deep_fm.png" alt="wide_deep_deep_fm" style="zoom: 40%;" / data-zoomable></p>
-<p>DeepFM 包含两部分：神经网络部分与因子分解机部分，分别负责低阶特征的提取和高阶特征的提取。这两部分共享同样的输入。DeepFM 的预测结果可以写为：</p>
+<p>DeepFM 包含两部分：神经网络与因子分解机，分别负责提取低阶特征和高阶特征。(PS: 这两部分当然共享同样的输入)。同时，DeepFM 的预测结果为：</p>
 <div>$$
 \hat y = sigmoid({y_{FM}} + {y_{DNN}})\tag1
 $$</div>
 <h3 id="fm-component"><a href="#fm-component" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:fm-component" class="headings">FM Component</a></h3>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/fm.png" alt="fm" style="zoom:40%;" / data-zoomable></p>
-<p>FM 部分是一个因子分解机。关于因子分解机可以参阅文章 Factorization machines<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">[3]</a></sup>。因为引入了隐变量的原因，对于几乎不出现或者很少出现的隐变量，FM 也可以很好的学习。</p>
-<p>FM的输出公式为：</p>
+<p>FM (详情可参阅文章<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">[3]</a></sup>)因为引入了隐变量的原因，对于几乎不出现或者很少出现的隐变量，也可以实现很好的学习。</p>
+<p>FM的输出为：</p>
 <div>$$
 y(x)=w_{0}+\sum_{i=1}^{n}\left(w_{i} x_{i}\right)+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n}\left(\left\langle v_{i}, v_{j}\right\rangle x_{i} x_{j}\right)\tag{2}
 $$</div>
 <h3 id="deep-component"><a href="#deep-component" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:deep-component" class="headings">Deep Component</a></h3>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/deep.png" alt="deep" style="zoom:40%;" / data-zoomable></p>
-<p>深度部分是一个前馈神经网络。与图像或者语音这类输入不同，图像语音的输入一般是连续而且密集的，然而用于 CTR 的输入一般是及其稀疏的。因此需要重新设计网络结构。具体实现中为，在第一层隐含层之前，引入一个嵌入层来完成将输入向量压缩到低维稠密向量。</p>
+<p>深度部分是一个前馈神经网络，与图像或者语音这类输入不同的是图像语音的输入一般是连续而且密集的。然而用于 CTR 的输入一般是极其稀疏的，因此需要重新设计网络结构以适应相应的数据特点，因此在第一层隐含层之前引入一个嵌入层 (embedding layer) 来完成将输入向量压缩到低维稠密向量的过程，其结构如下图所示。</p>
 <p><img src="http://images.iyuanshuo.com/2018/04/21/embedding_layer.png" alt="embedding_layer" style="zoom:40%;" / data-zoomable></p>
-<p>嵌入层 (embedding layer) 的结构如上图所示。</p>
 <p>对于 Fig.4 这个网络结构有两个很有意思的 point：</p>
 <ol>
 <li>
 <p>虽然输入的 field vector 长度不一，但是它们 embedding 出来的长度是固定的；</p>
 </li>
 <li>
-<p>FM 的 latent vector <span>$V$</span> 向量作为原始特征到 embedding vector 的权重矩阵，放在网络里学习。</p>
+<p>FM 的 latent vector <span>$V$</span> 向量作为原始特征到 embedding vector 的权重矩阵被放在网络里学习。</p>
 </li>
 </ol>
-<p>这里的第二点如何理解呢，假设我们的 <span>$k=5$</span>，首先，对于输入的一条记录，同一个 Field 只有一个位置是1，那么在由输入得到 dense vector 的过程中，输入层只有一个神经元起作用，得到的 dense vector 其实就是输入层到 embedding 层该神经元相连的五条线的权重，即 <span>$v_{i1}$</span>，<span>$v_{i2}$</span>，<span>$v_{i3}$</span>，<span>$v_{i4}$</span>，<span>$v_{i5}$</span>。这五个值组合起来就是我们在 FM 中所提到的 <span>$v_i$</span>。在 FM 部分和 DNN 部分，这一块是共享权重的，对同一个特征来说，得到的 <span>$V_i$</span> 是相同的。</p>
+<p>这里的第二点如何理解呢？在假设 <span>$k=5$</span>的前提下，首先对于输入的一条记录，同一个 Field 只有一个位置是1，那么在由输入得到 dense vector 的过程中，输入层只有一个神经元起作用，得到的 dense vector 其实就是输入层到 embedding 层该神经元相连的五条线的权重，即 <span>$v_{i1}$</span>，<span>$v_{i2}$</span>，<span>$v_{i3}$</span>，<span>$v_{i4}$</span>，<span>$v_{i5}$</span>。这五个值组合起来就是在 FM 中所提到的 <span>$v_i$</span>。在 FM 部分和 DNN 部分，这一块是共享权重的，因此对同一个特征来说得到的 <span>$V_i$</span> 是相同的。</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>

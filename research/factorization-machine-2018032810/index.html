@@ -3,7 +3,7 @@
     <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
     <meta charset="UTF-8" />
 
-    <meta name="generator" content="Hugo 0.65.2" /><meta name="theme-color" content="#fff" />
+    <meta name="generator" content="Hugo 0.78.1" /><meta name="theme-color" content="#fff" />
         <script>
             const userPrefers = localStorage.getItem('theme');
             const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -50,14 +50,14 @@
 
     <title>Factorization Machines 因式分解机 | Shuo Yuan&#39;s Home Page</title>
 
-    <link rel="stylesheet" href="/css/meme.min.4a906cbabc6eeb8d956adef99799b9cabf6f757036617ff42df017220e988912.css" integrity="sha256-SpBsurxu642Vat75l5m5yr9vdXA2YX/0LfAXIg6YiRI=" data-instant-track />
+    <link rel="stylesheet" href="/css/meme.min.bb43e132c4b5a610ead375dd32ba9e1ba4de0f66261cc7c03b27194c863ff88f.css" integrity="sha256-u0PhMsS1phDq03XdMrqeG6TeD2YmHMfAOycZTIY/+I8=" data-instant-track />
 
     <link href="https://fonts.googleapis.com/css?family=EB+Garamond:400,400i,700,700i|Noto+Serif+SC:400,700|Source+Code+Pro:400,400i,700,700i|Cinzel+Decorative:700&display=swap&subset=chinese-simplified" rel="stylesheet" />
 
     <meta name="author" content="Shuo Yuan" />
     
     
-    <meta name="description" content="概述 在使用线性模型，例如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需……" />
+    <meta name="description" content="概述 在使用线性模型如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需要人……" />
 
     <link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
     <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#2a6df4" />
@@ -85,13 +85,13 @@
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "datePublished": "2018-03-28T10:01:12+00:00",
-        "dateModified": "2020-03-27T11:39:21+08:00",
+        "dateModified": "2020-11-09T11:21:58+08:00",
         "url": "https://iyuanshuo.com/research/factorization-machine-2018032810/",
         "headline": "Factorization Machines 因式分解机",
-        "description": "概述 在使用线性模型，例如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需……",
+        "description": "概述 在使用线性模型如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需要人……",
         "inLanguage" : "zh-CN",
         "articleSection": "research",
-        "wordCount":  1510 ,
+        "wordCount":  1479 ,
         "image": ["http://images.iyuanshuo.com//blog/article/libFM.PNG"],
         "author": {
             "@type": "Person",
@@ -135,7 +135,7 @@
 
 
 <meta property="og:title" content="Factorization Machines 因式分解机" />
-<meta property="og:description" content="概述 在使用线性模型，例如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需……" />
+<meta property="og:description" content="概述 在使用线性模型如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需要人……" />
 <meta property="og:url" content="https://iyuanshuo.com/research/factorization-machine-2018032810/" />
 <meta property="og:site_name" content="Shuo Yuan&#39;s Home Page" />
 <meta property="og:locale" content="zh-CN" />
@@ -143,7 +143,7 @@
         <meta property="og:image" content="http://images.iyuanshuo.com//blog/article/libFM.PNG" />
 <meta property="og:type" content="article" />
     <meta property="article:published_time" content="2018-03-28T10:01:12+00:00" />
-    <meta property="article:modified_time" content="2020-03-27T11:39:21+08:00" />
+    <meta property="article:modified_time" content="2020-11-09T11:21:58+08:00" />
     
     <meta property="article:section" content="research" />
 
@@ -247,36 +247,35 @@
     <li><a id="contents:fm应用" href="#fm应用">FM应用</a></li>
   </ol>
 </nav><div class="post-body"><h2 id="概述"><a href="#概述" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:概述" class="headings">概述</a></h2>
-<p>在使用线性模型，例如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需要人工进行一些特征的二维或者三维交叉。FM（Factorization machines）提供了一种思路可以自动进行特征交叉，同时能够处理非常稀疏数据，具有线性的时间复杂度，计算简单。</p>
-<p>由于FM实现简单效果非常好，而且应用范围非常广，FM是近期非常火的技术，在比赛或者大公司都比较常见。</p>
+<p>在使用线性模型如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需要人工进行一些特征的二维或者三维交叉。FM（Factorization machines）提供了一种思路可以自动进行特征交叉的同时也能够处理非常稀疏数据，具有线性的时间复杂度。</p>
+<p>由于FM实现简单效果非常好因此应用范围非常广，在比赛或者大公司都比较常见。</p>
 <h2 id="fm优势"><a href="#fm优势" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:fm优势" class="headings">FM优势</a></h2>
-<p>FM能够解决的问题及优点<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">[1]</a></sup>：</p>
+<p>FM能够解决的问题及优点包括<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">[1]</a></sup>：</p>
 <ul>
 <li>FM能够解决分类和回归问题</li>
 <li>FM能够代替SVD、SVD++等进行矩阵分解</li>
 <li>FM可以处理非常稀疏数据，此时SVM等模型会失效</li>
 <li>FM线性时间复杂度，计算简单</li>
-<li>FM可表示性较强，FM将模型参数表示为K维向量，向量之间可以交叉运算，即使两个交叉特征没有对应训练数据，也能表示出权重。</li>
+<li>FM可表示性较强，将模型参数表示为K维向量。向量之间可以交叉运算，即使两个交叉特征没有对应训练数据，也能表示出权重。</li>
 </ul>
 <h2 id="二维-fm"><a href="#二维-fm" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:二维-fm" class="headings">二维-FM</a></h2>
-<p>先回顾一下线性回归模型，其建模时采用的函数是：</p>
+<p>先回顾一下线性回归模型，其建模为：</p>
 <div>$$
 \begin{aligned}
 \hat y({\rm{x}}) & = {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n} \\
 &= {\omega _0} + \sum\limits_{i = 1}^n {{\omega _i}{x_i}} 
 \end{aligned} \tag{1}
 $$</div>
-<p>从方程中可以看出各特征分量<span>$x_i$</span>和<span>$x_j\ (i \ne j )$</span>之间是相互孤立的，该模型仅考虑单个的特征分量，没有考虑特征分量之间的相互关系。</p>
+<p>从上式可以看出各特征分量<span>$x_i$</span>和<span>$x_j\ (i \ne j )$</span>之间是相互孤立的，因此仅考虑了单个的特征分量而没有考虑特征分量之间的相互关系。</p>
 <p>在<span>$(1)$</span>的基础上改写为：</p>
 <div>$$
 \begin{aligned}
 \hat y({\rm{x}}) = {\omega _0} + \sum\limits_{i = 1}^n {{\omega _i}{x_i}}  + \sum\limits_{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {{\omega _{ij}}{x_i}} {x_j}} 
 \end{aligned} \tag{2}
 $$</div>
-<p>这样也将任意两个不同的特征向量之间的关系也考虑进来了。</p>
-<p>但是，有一个问题就是，在稀疏数据中这种直接在<span>${x_i} {x_j}$</span>前面配上一个系数<span>$\omega_{ij}$</span>的方式会有很大的缺陷。因为对于观察样本中未出现过交互的特征分量，不能对相应的参数进行估计<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">[2]</a></sup>。</p>
-<p>一定要注意的是，在高度稀疏数据场景中，由于数据量的不足，样本中出现未交互的特征分量是很普遍的。</p>
-<p>为了克服这个缺陷，我们在(2)中的系数<span>$\omega_{ij}$</span>上做文章，将其换成另外一种形式。针对每个维度的特征分量<span>$x_i$</span>，引入辅助向量：</p>
+<p>这样也就将任意两个不同的特征向量之间的关系同时考虑进来了。</p>
+<p>但是，有一个问题是在稀疏数据中这种直接在<span>${x_i} {x_j}$</span>前面配上一个系数<span>$\omega_{ij}$</span>的方式会有很大的缺陷：对于观察样本中未出现过交互的特征分量，不能对相应的参数进行估计<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">[2]</a></sup>。一定要注意的是，在高度稀疏数据场景中，由于数据量的不足，样本中出现未交互的特征分量是很普遍的。</p>
+<p>为了克服这个缺陷，考虑在(2)中的系数<span>$\omega_{ij}$</span>上进行适当的处理以将其换成另外一种形式。针对每个维度的特征分量<span>$x_i$</span>，引入辅助向量：</p>
 <div>$$
 \begin{aligned}
 {{\rm{v}}_i} = {({v_{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},\ \ i = 1,2, \cdots ,n
@@ -288,7 +287,7 @@ $$</div>
 {{\hat \omega }_{ij}} = {{\rm{v}}_i}^T{{\rm{v}}_j}: = \sum\limits_{l = 1}^k {{v_{il}}{x_{jl}}} 
 \end{aligned}
 $$</div>
-<p>如此，我们可以获得FM的二维模型。</p>
+<p>如此，可获得FM的二维模型。</p>
 <h3 id="模型"><a href="#模型" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:模型" class="headings">模型</a></h3>
 <p>对于2次特征交叉的FM模型可以表示为<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">[2]</a></sup>：</p>
 <div>$$
@@ -304,7 +303,7 @@ $$</div>
 \end{aligned} \tag{3.1}
 $$</div>
 <h3 id="二维-fm计算复杂度"><a href="#二维-fm计算复杂度" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href="#contents:二维-fm计算复杂度" class="headings">二维-FM计算复杂度</a></h3>
-<p>如果对式子(1)直接进行计算，那么其复杂度是<span>$O(kn^2)$</span>，但是我们可以通过简单的数学变换将其转化为<span>$O(kn)$</span>，由于前面两项的计算复杂度都是<span>$O(kn)$</span>，所以我们只需要对第三项进行处理<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">[3]</a></sup>：</p>
+<p>如果对式子(1)直接进行计算，那么其复杂度是<span>$O(kn^2)$</span>，但是可以通过简单的数学变换将其转化为<span>$O(kn)$</span>。由于前面两项的计算复杂度都是<span>$O(kn)$</span>，所以只需要对第三项进行处理<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">[3]</a></sup>：</p>
 <div>$$
 \begin{aligned}
 &\sum\limits_{i = 1}^n {\sum\limits_{j = i + 1}^n {\left( { < {v_i},{v_j} > {x_i}{x_j}} \right)} } {\rm{ }} \\
@@ -395,7 +394,7 @@ $$</div>
                 
                 <div class="share-item linkedin">
                     
-                    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://iyuanshuo.com/research/factorization-machine-2018032810/&amp;title=Factorization%20Machines%20%e5%9b%a0%e5%bc%8f%e5%88%86%e8%a7%a3%e6%9c%ba&amp;summary=%e6%a6%82%e8%bf%b0%20%e5%9c%a8%e4%bd%bf%e7%94%a8%e7%ba%bf%e6%80%a7%e6%a8%a1%e5%9e%8b%ef%bc%8c%e4%be%8b%e5%a6%82LR%e6%a8%a1%e5%9e%8b%e6%97%b6%ef%bc%8c%e7%89%b9%e5%be%81%e5%b7%a5%e7%a8%8b%e6%98%af%e5%be%88%e5%a4%a7%e4%b8%80%e5%9d%97%e5%b7%a5%e4%bd%9c%ef%bc%8c%e6%9c%89%e6%97%b6%e4%b8%ba%e4%ba%86%e4%ba%a7%e7%94%9f%e8%be%83%e5%a5%bd%e7%9a%84%e6%95%88%e6%9e%9c%e9%9c%80%e2%80%a6%e2%80%a6&amp;source=Shuo%20Yuan%27s%20Home%20Page" title="分享到「LinkedIn」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon linkedin-icon"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg></a>
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://iyuanshuo.com/research/factorization-machine-2018032810/&amp;title=Factorization%20Machines%20%e5%9b%a0%e5%bc%8f%e5%88%86%e8%a7%a3%e6%9c%ba&amp;summary=%e6%a6%82%e8%bf%b0%20%e5%9c%a8%e4%bd%bf%e7%94%a8%e7%ba%bf%e6%80%a7%e6%a8%a1%e5%9e%8b%e5%a6%82LR%e6%a8%a1%e5%9e%8b%e6%97%b6%ef%bc%8c%e7%89%b9%e5%be%81%e5%b7%a5%e7%a8%8b%e6%98%af%e5%be%88%e5%a4%a7%e4%b8%80%e5%9d%97%e5%b7%a5%e4%bd%9c%ef%bc%8c%e6%9c%89%e6%97%b6%e4%b8%ba%e4%ba%86%e4%ba%a7%e7%94%9f%e8%be%83%e5%a5%bd%e7%9a%84%e6%95%88%e6%9e%9c%e9%9c%80%e8%a6%81%e4%ba%ba%e2%80%a6%e2%80%a6&amp;source=Shuo%20Yuan%27s%20Home%20Page" title="分享到「LinkedIn」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon linkedin-icon"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg></a>
                 </div>
             
 
@@ -419,7 +418,7 @@ $$</div>
                 
                 <div class="share-item douban">
                     
-                    <a href="https://www.douban.com/share/service?href=https://iyuanshuo.com/research/factorization-machine-2018032810/&amp;name=Factorization%20Machines%20%e5%9b%a0%e5%bc%8f%e5%88%86%e8%a7%a3%e6%9c%ba&amp;text=%e6%a6%82%e8%bf%b0%20%e5%9c%a8%e4%bd%bf%e7%94%a8%e7%ba%bf%e6%80%a7%e6%a8%a1%e5%9e%8b%ef%bc%8c%e4%be%8b%e5%a6%82LR%e6%a8%a1%e5%9e%8b%e6%97%b6%ef%bc%8c%e7%89%b9%e5%be%81%e5%b7%a5%e7%a8%8b%e6%98%af%e5%be%88%e5%a4%a7%e4%b8%80%e5%9d%97%e5%b7%a5%e4%bd%9c%ef%bc%8c%e6%9c%89%e6%97%b6%e4%b8%ba%e4%ba%86%e4%ba%a7%e7%94%9f%e8%be%83%e5%a5%bd%e7%9a%84%e6%95%88%e6%9e%9c%e9%9c%80%e2%80%a6%e2%80%a6" title="分享到「豆瓣」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon douban-icon"><path d="M.643.92v2.412h22.714V.92H.643zm1.974 4.926v9.42h18.764v-9.42H2.617zm2.72 2.408H18.69v4.605H5.338V8.254zm1.657 7.412l-2.512.938c1.037 1.461 1.87 2.825 2.512 4.091H0v2.385h24v-2.385h-6.678c.818-1.176 1.589-2.543 2.303-4.091l-2.73-.938a29.952 29.952 0 01-2.479 5.03h-4.75c-.786-1.962-1.677-3.641-2.672-5.03Z"/></svg></a>
+                    <a href="https://www.douban.com/share/service?href=https://iyuanshuo.com/research/factorization-machine-2018032810/&amp;name=Factorization%20Machines%20%e5%9b%a0%e5%bc%8f%e5%88%86%e8%a7%a3%e6%9c%ba&amp;text=%e6%a6%82%e8%bf%b0%20%e5%9c%a8%e4%bd%bf%e7%94%a8%e7%ba%bf%e6%80%a7%e6%a8%a1%e5%9e%8b%e5%a6%82LR%e6%a8%a1%e5%9e%8b%e6%97%b6%ef%bc%8c%e7%89%b9%e5%be%81%e5%b7%a5%e7%a8%8b%e6%98%af%e5%be%88%e5%a4%a7%e4%b8%80%e5%9d%97%e5%b7%a5%e4%bd%9c%ef%bc%8c%e6%9c%89%e6%97%b6%e4%b8%ba%e4%ba%86%e4%ba%a7%e7%94%9f%e8%be%83%e5%a5%bd%e7%9a%84%e6%95%88%e6%9e%9c%e9%9c%80%e8%a6%81%e4%ba%ba%e2%80%a6%e2%80%a6" title="分享到「豆瓣」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon douban-icon"><path d="M.643.92v2.412h22.714V.92H.643zm1.974 4.926v9.42h18.764v-9.42H2.617zm2.72 2.408H18.69v4.605H5.338V8.254zm1.657 7.412l-2.512.938c1.037 1.461 1.87 2.825 2.512 4.091H0v2.385h24v-2.385h-6.678c.818-1.176 1.589-2.543 2.303-4.091l-2.73-.938a29.952 29.952 0 01-2.479 5.03h-4.75c-.786-1.962-1.677-3.641-2.672-5.03Z"/></svg></a>
                 </div>
             
 
@@ -427,7 +426,7 @@ $$</div>
                 
                 <div class="share-item qq">
                     
-                    <a href="https://connect.qq.com/widget/shareqq/index.html?url=https://iyuanshuo.com/research/factorization-machine-2018032810/&amp;title=Factorization%20Machines%20%e5%9b%a0%e5%bc%8f%e5%88%86%e8%a7%a3%e6%9c%ba&amp;summary=%e6%a6%82%e8%bf%b0%20%e5%9c%a8%e4%bd%bf%e7%94%a8%e7%ba%bf%e6%80%a7%e6%a8%a1%e5%9e%8b%ef%bc%8c%e4%be%8b%e5%a6%82LR%e6%a8%a1%e5%9e%8b%e6%97%b6%ef%bc%8c%e7%89%b9%e5%be%81%e5%b7%a5%e7%a8%8b%e6%98%af%e5%be%88%e5%a4%a7%e4%b8%80%e5%9d%97%e5%b7%a5%e4%bd%9c%ef%bc%8c%e6%9c%89%e6%97%b6%e4%b8%ba%e4%ba%86%e4%ba%a7%e7%94%9f%e8%be%83%e5%a5%bd%e7%9a%84%e6%95%88%e6%9e%9c%e9%9c%80%e2%80%a6%e2%80%a6&amp;pics=http://images.iyuanshuo.com//blog/article/libFM.PNG&amp;site=Shuo%20Yuan%27s%20Home%20Page" title="分享到「QQ」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon qq-icon"><path d="M433.754 420.445c-11.526 1.393-44.86-52.741-44.86-52.741 0 31.345-16.136 72.247-51.051 101.786 16.842 5.192 54.843 19.167 45.803 34.421-7.316 12.343-125.51 7.881-159.632 4.037-34.122 3.844-152.316 8.306-159.632-4.037-9.045-15.25 28.918-29.214 45.783-34.415-34.92-29.539-51.059-70.445-51.059-101.792 0 0-33.334 54.134-44.859 52.741-5.37-.65-12.424-29.644 9.347-99.704 10.261-33.024 21.995-60.478 40.144-105.779C60.683 98.063 108.982.006 224 0c113.737.006 163.156 96.133 160.264 214.963 18.118 45.223 29.912 72.85 40.144 105.778 21.768 70.06 14.716 99.053 9.346 99.704z"/></svg></a>
+                    <a href="https://connect.qq.com/widget/shareqq/index.html?url=https://iyuanshuo.com/research/factorization-machine-2018032810/&amp;title=Factorization%20Machines%20%e5%9b%a0%e5%bc%8f%e5%88%86%e8%a7%a3%e6%9c%ba&amp;summary=%e6%a6%82%e8%bf%b0%20%e5%9c%a8%e4%bd%bf%e7%94%a8%e7%ba%bf%e6%80%a7%e6%a8%a1%e5%9e%8b%e5%a6%82LR%e6%a8%a1%e5%9e%8b%e6%97%b6%ef%bc%8c%e7%89%b9%e5%be%81%e5%b7%a5%e7%a8%8b%e6%98%af%e5%be%88%e5%a4%a7%e4%b8%80%e5%9d%97%e5%b7%a5%e4%bd%9c%ef%bc%8c%e6%9c%89%e6%97%b6%e4%b8%ba%e4%ba%86%e4%ba%a7%e7%94%9f%e8%be%83%e5%a5%bd%e7%9a%84%e6%95%88%e6%9e%9c%e9%9c%80%e8%a6%81%e4%ba%ba%e2%80%a6%e2%80%a6&amp;pics=http://images.iyuanshuo.com//blog/article/libFM.PNG&amp;site=Shuo%20Yuan%27s%20Home%20Page" title="分享到「QQ」" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon qq-icon"><path d="M433.754 420.445c-11.526 1.393-44.86-52.741-44.86-52.741 0 31.345-16.136 72.247-51.051 101.786 16.842 5.192 54.843 19.167 45.803 34.421-7.316 12.343-125.51 7.881-159.632 4.037-34.122 3.844-152.316 8.306-159.632-4.037-9.045-15.25 28.918-29.214 45.783-34.415-34.92-29.539-51.059-70.445-51.059-101.792 0 0-33.334 54.134-44.859 52.741-5.37-.65-12.424-29.644 9.347-99.704 10.261-33.024 21.995-60.478 40.144-105.779C60.683 98.063 108.982.006 224 0c113.737.006 163.156 96.133 160.264 214.963 18.118 45.223 29.912 72.85 40.144 105.778 21.768 70.06 14.716 99.053 9.346 99.704z"/></svg></a>
                 </div>
             
 
