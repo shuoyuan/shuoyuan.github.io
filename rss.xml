@@ -7,99 +7,99 @@
 
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>Shuo Yuan&#39;s Home Page</title>
+        <title>Shuo Yuan&#39;s Blog</title>
         <link>https://iyuanshuo.com/</link>
-        <description>这是 shuoyuan 的生活与技术博客！</description>
-        <generator>Hugo 0.78.1 https://gohugo.io/</generator>
+        <description>这是 shuoyuan 的生活与技术博客。</description>
+        <generator>Hugo 0.82.1 https://gohugo.io/</generator>
         
-            <language>zh-CN</language>
-        
-        
-            <managingEditor>isaulyuan@gmail.com (Shuo Yuan)</managingEditor>
+            <language>en-US</language>
         
         
-            <webMaster>isaulyuan@gmail.com (Shuo Yuan)</webMaster>
+            <managingEditor>ishawnyuan@gmail.com (Shuo Yuan)</managingEditor>
         
         
-            <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
+            <webMaster>ishawnyuan@gmail.com (Shuo Yuan)</webMaster>
         
-        <lastBuildDate>Mon, 09 Nov 2020 11:30:33 +0800</lastBuildDate>
         
-            <atom:link rel="self" type="application/rss+xml" href="https://iyuanshuo.com/rss.xml" />
+            <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
+        
+        <lastBuildDate>Wed, 21 Apr 2021 14:53:17 &#43;0800</lastBuildDate>
+        
+            <atom:link rel="self" type="application/rss&#43;xml" href="https://iyuanshuo.com/rss.xml" />
         
         
             <item>
                 <title>DeepFM 模型介绍及应用</title>
                 <link>https://iyuanshuo.com/research/deep-fm-2018050111/</link>
                 <guid isPermaLink="true">https://iyuanshuo.com/research/deep-fm-2018050111/</guid>
-                <pubDate>Tue, 01 May 2018 11:20:00 +0000</pubDate>
+                <pubDate>Tue, 01 May 2018 11:20:00 &#43;0000</pubDate>
                 
-                    <author>isaulyuan@gmail.com (Shuo Yuan)</author>
+                    <author>ishawnyuan@gmail.com (Shuo Yuan)</author>
                 
-                <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
+                <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
                 
-                    <description><![CDATA[<h2 id="introduction">Introduction</h2>
-<p>对于一个基于 CTR 预估的推荐系统，最重要的是学习到用户点击行为背后隐含的特征组合。在不同的推荐场景中，低阶组合特征或者高阶组合特征可能都会对最终的 CTR 产生影响。</p>
-<p>Wide &amp; Deep Learning 通过组合使用 cross-product transformation 特征的线性模型和 DNN 模型进行 Joint train 从而实现 memorization 和 generalization 的结合。但是对于 Wide 模型来说还是需要做一些特征交叉来实现 memorization，比如因子分解机 (Factorization Machines, FM) 通过对每一维特征的隐变量内积来提取特征组合从而获得很好的效果。虽然理论上来讲 FM 可以对高阶特征组合进行建模，但实际上因为计算复杂度等原因一般都只用到二阶特征组合。</p>
-<p>关于 Wide &amp; Deep Learning 请参考博文：<a href="https://iyuanshuo.com/research/wide-deep-learning-2018042112/">Wide &amp; Deep Learning模型介绍</a></p>
-<p>那么对于高阶的特征组合来说，我们很自然的想法是通过多层的神经网络即 DNN 来处理。</p>
-<p>对于离散特征的处理，我们使用的是将特征转换成为 Onehot 的形式。但是将 Onehot 类型的特征输入到 DNN 中时会导致网络参数太多而难以训练<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
-<p><img src="http://images.iyuanshuo.com/2018/04/21/onehot_for_dnn.png" alt="onehot_for_dnn" style="zoom: 67%;" /></p>
-<p>此时可以借鉴 word2vec 的思路进行 embedding，通过将 Onehot 编码后的向量经过一个 embedding 层输出 Dense Vector。具体的思路是将一个特征 Onehot 编码后会生成多个特征，但是每个特征里面只有一个为 $1$，其他都为 $0$，这些由一个特征生成的多个互斥的特征引用 FFM 思想的话就属于一个 Field。</p>
-<p><img src="http://images.iyuanshuo.com/2018/04/21/onehot_densevector.png" alt="onehot_densevector" style="zoom:67%;" /></p>
-<p>如果将 embedding 层的输出再加两层全连接层，让 Dense Vector 进行组合就完成了高阶特征的组合。</p>
-<p><img src="http://images.iyuanshuo.com/2018/04/21/densevector_full.png" alt="densevector_full" style="zoom: 50%;" /></p>
-<p>但是低阶和高阶特征组合隐含地体现在隐藏层中，我们希望把低阶特征组合单独建模，然后融合高阶特征组合。</p>
-<p><img src="http://images.iyuanshuo.com/2018/04/21/how_to_get_low_order.png" alt="how_to_get_low_order" style="zoom:50%;" /></p>
-<p>这意味着我们在学习低阶的特征组合的同时，也需要学习高阶的特征组合，即将 DNN 与 FM 进行一个合理的融合：</p>
-<p><img src="http://images.iyuanshuo.com/2018/04/21/consider_dnn_fm.png" alt="consider_dnn_fm" style="zoom: 67%;" /></p>
-<p>二者的融合总的来说有两种形式，串行结构与并行结构</p>
-<p><img src="http://images.iyuanshuo.com/2018/04/21/parallel_dnn_fm.png" alt="parallel_dnn_fm" style="zoom: 50%;" /></p>
-<p><img src="http://images.iyuanshuo.com/2018/04/21/series_dnn_fm.png" alt="series_dnn_fm" style="zoom: 50%;" /></p>
-<p>而 DeepFM，就是并行结构中的典型代表。</p>
-<h2 id="deepfm-模型-2">DeepFm 模型 <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></h2>
-<h3 id="模型结构">模型结构</h3>
-<p><img src="http://images.iyuanshuo.com/2018/04/21/wide_deep_deep_fm.png" alt="wide_deep_deep_fm" style="zoom: 40%;" /></p>
-<p>DeepFM 包含两部分：神经网络与因子分解机，分别负责提取低阶特征和高阶特征。(PS: 这两部分当然共享同样的输入)。同时，DeepFM 的预测结果为：</p>
-<p>$$
+                    <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;对于一个基于 CTR 预估的推荐系统，最重要的是学习到用户点击行为背后隐含的特征组合。在不同的推荐场景中，低阶组合特征或者高阶组合特征可能都会对最终的 CTR 产生影响。&lt;/p&gt;
+&lt;p&gt;Wide &amp;amp; Deep Learning 通过组合使用 cross-product transformation 特征的线性模型和 DNN 模型进行 Joint train 从而实现 memorization 和 generalization 的结合。但是对于 Wide 模型来说还是需要做一些特征交叉来实现 memorization，比如因子分解机 (Factorization Machines, FM) 通过对每一维特征的隐变量内积来提取特征组合从而获得很好的效果。虽然理论上来讲 FM 可以对高阶特征组合进行建模，但实际上因为计算复杂度等原因一般都只用到二阶特征组合。&lt;/p&gt;
+&lt;p&gt;关于 Wide &amp;amp; Deep Learning 请参考博文：&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/&#34;&gt;Wide &amp;amp; Deep Learning模型介绍&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;那么对于高阶的特征组合来说，我们很自然的想法是通过多层的神经网络即 DNN 来处理。&lt;/p&gt;
+&lt;p&gt;对于离散特征的处理，我们使用的是将特征转换成为 Onehot 的形式。但是将 Onehot 类型的特征输入到 DNN 中时会导致网络参数太多而难以训练&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/onehot_for_dnn.png&#34; alt=&#34;onehot_for_dnn&#34; style=&#34;zoom: 67%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;此时可以借鉴 word2vec 的思路进行 embedding，通过将 Onehot 编码后的向量经过一个 embedding 层输出 Dense Vector。具体的思路是将一个特征 Onehot 编码后会生成多个特征，但是每个特征里面只有一个为 $1$，其他都为 $0$，这些由一个特征生成的多个互斥的特征引用 FFM 思想的话就属于一个 Field。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/onehot_densevector.png&#34; alt=&#34;onehot_densevector&#34; style=&#34;zoom:67%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;如果将 embedding 层的输出再加两层全连接层，让 Dense Vector 进行组合就完成了高阶特征的组合。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/densevector_full.png&#34; alt=&#34;densevector_full&#34; style=&#34;zoom: 50%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;但是低阶和高阶特征组合隐含地体现在隐藏层中，我们希望把低阶特征组合单独建模，然后融合高阶特征组合。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/how_to_get_low_order.png&#34; alt=&#34;how_to_get_low_order&#34; style=&#34;zoom:50%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;这意味着我们在学习低阶的特征组合的同时，也需要学习高阶的特征组合，即将 DNN 与 FM 进行一个合理的融合：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/consider_dnn_fm.png&#34; alt=&#34;consider_dnn_fm&#34; style=&#34;zoom: 67%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;二者的融合总的来说有两种形式，串行结构与并行结构&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/parallel_dnn_fm.png&#34; alt=&#34;parallel_dnn_fm&#34; style=&#34;zoom: 50%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/series_dnn_fm.png&#34; alt=&#34;series_dnn_fm&#34; style=&#34;zoom: 50%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;而 DeepFM，就是并行结构中的典型代表。&lt;/p&gt;
+&lt;h2 id=&#34;deepfm-模型-2&#34;&gt;DeepFm 模型 &lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
+&lt;h3 id=&#34;模型结构&#34;&gt;模型结构&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/wide_deep_deep_fm.png&#34; alt=&#34;wide_deep_deep_fm&#34; style=&#34;zoom: 40%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;DeepFM 包含两部分：神经网络与因子分解机，分别负责提取低阶特征和高阶特征。(PS: 这两部分当然共享同样的输入)。同时，DeepFM 的预测结果为：&lt;/p&gt;
+&lt;p&gt;$$
 \hat y = sigmoid({y_{FM}} + {y_{DNN}})\tag1
-$$</p>
-<h3 id="fm-component">FM Component</h3>
-<p><img src="http://images.iyuanshuo.com/2018/04/21/fm.png" alt="fm" style="zoom:40%;" /></p>
-<p>FM (详情可参阅文章<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>)因为引入了隐变量的原因，对于几乎不出现或者很少出现的隐变量，也可以实现很好的学习。</p>
-<p>FM的输出为：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;h3 id=&#34;fm-component&#34;&gt;FM Component&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/fm.png&#34; alt=&#34;fm&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;FM (详情可参阅文章&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;)因为引入了隐变量的原因，对于几乎不出现或者很少出现的隐变量，也可以实现很好的学习。&lt;/p&gt;
+&lt;p&gt;FM的输出为：&lt;/p&gt;
+&lt;p&gt;$$
 y(x)=w_{0}+\sum_{i=1}^{n}\left(w_{i} x_{i}\right)+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n}\left(\left\langle v_{i}, v_{j}\right\rangle x_{i} x_{j}\right)\tag{2}
-$$</p>
-<h3 id="deep-component">Deep Component</h3>
-<p><img src="http://images.iyuanshuo.com/2018/04/21/deep.png" alt="deep" style="zoom:40%;" /></p>
-<p>深度部分是一个前馈神经网络，与图像或者语音这类输入不同的是图像语音的输入一般是连续而且密集的。然而用于 CTR 的输入一般是极其稀疏的，因此需要重新设计网络结构以适应相应的数据特点，因此在第一层隐含层之前引入一个嵌入层 (embedding layer) 来完成将输入向量压缩到低维稠密向量的过程，其结构如下图所示。</p>
-<p><img src="http://images.iyuanshuo.com/2018/04/21/embedding_layer.png" alt="embedding_layer" style="zoom:40%;" /></p>
-<p>对于 Fig.4 这个网络结构有两个很有意思的 point：</p>
-<ol>
-<li>
-<p>虽然输入的 field vector 长度不一，但是它们 embedding 出来的长度是固定的；</p>
-</li>
-<li>
-<p>FM 的 latent vector $V$ 向量作为原始特征到 embedding vector 的权重矩阵被放在网络里学习。</p>
-</li>
-</ol>
-<p>这里的第二点如何理解呢？在假设 $k=5$的前提下，首先对于输入的一条记录，同一个 Field 只有一个位置是1，那么在由输入得到 dense vector 的过程中，输入层只有一个神经元起作用，得到的 dense vector 其实就是输入层到 embedding 层该神经元相连的五条线的权重，即 $v_{i1}$，$v_{i2}$，$v_{i3}$，$v_{i4}$，$v_{i5}$。这五个值组合起来就是在 FM 中所提到的 $v_i$。在 FM 部分和 DNN 部分，这一块是共享权重的，因此对同一个特征来说得到的 $V_i$ 是相同的。</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p><a href="https://ask.hellobi.com/blog/wenwen/11840">推荐系统遇上深度学习(三)--DeepFM模型理论和实践</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:2" role="doc-endnote">
-<p><a href="https://arxiv.org/abs/1703.04247">DeepFM: a factorization-machine based neural network for CTR prediction</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:3" role="doc-endnote">
-<p><a href="https://ieeexplore.ieee.org/abstract/document/5694074/">Factorization machines</a> <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-]]></description>
+$$&lt;/p&gt;
+&lt;h3 id=&#34;deep-component&#34;&gt;Deep Component&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/deep.png&#34; alt=&#34;deep&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;深度部分是一个前馈神经网络，与图像或者语音这类输入不同的是图像语音的输入一般是连续而且密集的。然而用于 CTR 的输入一般是极其稀疏的，因此需要重新设计网络结构以适应相应的数据特点，因此在第一层隐含层之前引入一个嵌入层 (embedding layer) 来完成将输入向量压缩到低维稠密向量的过程，其结构如下图所示。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/embedding_layer.png&#34; alt=&#34;embedding_layer&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;对于 Fig.4 这个网络结构有两个很有意思的 point：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;虽然输入的 field vector 长度不一，但是它们 embedding 出来的长度是固定的；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;FM 的 latent vector $V$ 向量作为原始特征到 embedding vector 的权重矩阵被放在网络里学习。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这里的第二点如何理解呢？在假设 $k=5$的前提下，首先对于输入的一条记录，同一个 Field 只有一个位置是1，那么在由输入得到 dense vector 的过程中，输入层只有一个神经元起作用，得到的 dense vector 其实就是输入层到 embedding 层该神经元相连的五条线的权重，即 $v_{i1}$，$v_{i2}$，$v_{i3}$，$v_{i4}$，$v_{i5}$。这五个值组合起来就是在 FM 中所提到的 $v_i$。在 FM 部分和 DNN 部分，这一块是共享权重的，因此对同一个特征来说得到的 $V_i$ 是相同的。&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://ask.hellobi.com/blog/wenwen/11840&#34;&gt;推荐系统遇上深度学习(三)--DeepFM模型理论和实践&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1703.04247&#34;&gt;DeepFM: a factorization-machine based neural network for CTR prediction&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://ieeexplore.ieee.org/abstract/document/5694074/&#34;&gt;Factorization machines&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
                 
                 
                 
@@ -110,7 +110,7 @@ $$</p>
                         
                         
                             
-                                <category domain="https://iyuanshuo.com/research/">research\</category>
+                                <category domain="https://iyuanshuo.com/research/">research</category>
                             
                         
                     
@@ -132,65 +132,65 @@ $$</p>
             </item>
         
             <item>
-                <title>Wide & Deep Learning 模型介绍</title>
+                <title>Wide &amp; Deep Learning 模型介绍</title>
                 <link>https://iyuanshuo.com/research/wide-deep-learning-2018042112/</link>
                 <guid isPermaLink="true">https://iyuanshuo.com/research/wide-deep-learning-2018042112/</guid>
-                <pubDate>Sat, 21 Apr 2018 12:30:00 +0000</pubDate>
+                <pubDate>Sat, 21 Apr 2018 12:30:00 &#43;0000</pubDate>
                 
-                    <author>isaulyuan@gmail.com (Shuo Yuan)</author>
+                    <author>ishawnyuan@gmail.com (Shuo Yuan)</author>
                 
-                <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
+                <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
                 
-                    <description><![CDATA[<p>Wide &amp; Deep Learning 是由 Google Inc 发表的 paper &lt;Wide &amp; Deep Learning for Recommender Systems&gt; 中提出的一种使用非线性特征的线性模型和一个用来 embedding 特征的深度学习进行联合训练 (joint training) 的方法<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。</p>
-<h2 id="introduction2">Introduction<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></h2>
-<p>通过将稀疏数据的非线性转化特征引入到广义线性模型被广泛应用于大规模的回归和分类问题。通过广泛的使用交叉特征转化，使得特征交互的记忆性有效并且具有可解释性。然而，这导致应用过程需要做许多的特征工作。相对来说，通过从稀疏数据中学习低纬稠密的 embedding 特征，并应用到深度学习中，只需要少量的特征工程就能对潜在的特征组合具有更好的泛化性。但是当用户项目交互是稀疏和高纬数据的时候，利用了 embeddings 的深度学习则表现得过于笼统 (over-generalize)，推荐的都是些相关性很低的 items。在这篇文章中，提出了一个 wide &amp; deep 联合学习模型，去结合推荐系统的 <strong>memorization</strong>和 <strong>generalization</strong>。</p>
-<p>通过结合使用<strong>非线性特征的线性模型</strong>和用来 <strong>embedding 特征的深度学习</strong>，并且使用<strong>联合训练 (joint training)</strong> 的方法进行优化。主要思想基于交叉特征的线性模型只能从历史出现过的数据中找到非线性 (<strong>显性的非线性</strong>) ，深度学习可以找到没有出现过的非线性 (<strong>隐性的非线性</strong>) 。Memorization 就是去把历史数据中显性的非线性找出来，而 generalization 通过找出隐性的非线性提高模型的泛化性。</p>
-<p>推荐系统可以被看做是一个搜索排序系统，其中输入的 query 是一系列的用户和文本信息，输出是 items 的排序列表。给定一个 query，推荐的任务就是到数据库中去找出相关的 items，然后对这些 items 根据相关对象，如点击或者购买行为，并进行排序。</p>
-<p>和传统的搜索排序问题一样，在推荐系统中一个挑战就是区域同时达到 memorization 和 generalization。Memorization 可以被大概定义为学习 items 或者 features 之间的相关频率，在历史数据中探索相关性的可行性。Generalizaion 的话则是基于相关性的传递，去探索一些在过去没有出现过的特征组合。基于 memorization 的推荐相对来说具有<strong>局部性</strong>，是在哪些用户和 items 已经有直接相关联的活动上。相较于 memorization，generalization 尝试去提高推荐 items 的<strong>多元化</strong>。</p>
-<p>在工业中，对于大规模的在线推荐和排序系统，像逻辑回归这样的广义线性模型由于实现简单，可扩展性好，可解释性强而被广泛使用。通过喂给它一些 one-hot 编码的稀疏特征，比如二值特征 (user_installed_app=netfix) 表示用户安装了 Netflix。Memorization 则可以通过对稀疏特征做交叉积转换获得，就是求交叉特征。比如 AND 操作  (user_installed_app= netflix, impression_app=pandora) 这两个特征，当用户安装了Netflix并且之后展示在Pandora上，那么得到特征的值为1，其余为0。这个交叉特征展示了特征对之间的相关性和目标 lable 之间的关联。在逻辑回归上实现 generalization 可以通过增加一些粗粒度的特征实现，如 AND(user_installed_category=video, impression_category=music )，但是这些都是需要人工做特征工程实现，工作量极大。此外，cross-product transformation 的一个限制就是他们不能生成从未在训练数据中出现过的 query-item 特征对。</p>
-<p>而 Embedding-based 的模型，比如因子分解机 (FM) 或深度神经网络，只需要很少的特征工程，通过为每个 query 和 item 特征对 (pair) 学到一个低维的 dense embedding vector，可以泛化到之前未见过的 query-item 特征对。但是如果潜在的 query-item 矩阵是稀疏，高秩的话，为 query 和 items 学习出一个有效的低纬表示往往很困难，比如基于特殊偏好的 users，或者一些很少出现的小众 items。在这种情况下，大多数的 query-item 没有交互，但是稠密的 embedding 还是会对全部的 query-item 对有非零的输出预测，因此能做出一些过泛化和做出一些不太相关的推荐。另一方面，利用交叉积特征 (cross-product features transformations) 的线性模型能用很少的参数记住那些异常规则 (exception_rules) 。</p>
-<h2 id="wide--deep-learning3">Wide &amp; Deep Learning<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></h2>
-<p><img src="http://images.iyuanshuo.com/20200327121146.png" alt="model"></p>
-<h3 id="the-wide-component-wide-组件">The Wide Component (Wide 组件)</h3>
-<p>Wide 组件是一个泛化的线性模型，$y=w^Tx+b$，如 Fig.1 图左所示。$y$ 是预测值，$x = [x_1, x_2, …, x_d]$ 是 $d$ 维特征向量，$w = [w_1, w_2,…, w_d]$ 是模型参数，$b$ 是 bias。特征集包括原始的输入特征和转换后 (cross-product transformation) 的特征。Cross-product transformation 有如下定义：</p>
-<p>$$
+                    <description>&lt;p&gt;Wide &amp;amp; Deep Learning 是由 Google Inc 发表的 paper &amp;lt;Wide &amp;amp; Deep Learning for Recommender Systems&amp;gt; 中提出的一种使用非线性特征的线性模型和一个用来 embedding 特征的深度学习进行联合训练 (joint training) 的方法&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;introduction2&#34;&gt;Introduction&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
+&lt;p&gt;通过将稀疏数据的非线性转化特征引入到广义线性模型被广泛应用于大规模的回归和分类问题。通过广泛的使用交叉特征转化，使得特征交互的记忆性有效并且具有可解释性。然而，这导致应用过程需要做许多的特征工作。相对来说，通过从稀疏数据中学习低纬稠密的 embedding 特征，并应用到深度学习中，只需要少量的特征工程就能对潜在的特征组合具有更好的泛化性。但是当用户项目交互是稀疏和高纬数据的时候，利用了 embeddings 的深度学习则表现得过于笼统 (over-generalize)，推荐的都是些相关性很低的 items。在这篇文章中，提出了一个 wide &amp;amp; deep 联合学习模型，去结合推荐系统的 &lt;strong&gt;memorization&lt;/strong&gt;和 &lt;strong&gt;generalization&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;通过结合使用&lt;strong&gt;非线性特征的线性模型&lt;/strong&gt;和用来 &lt;strong&gt;embedding 特征的深度学习&lt;/strong&gt;，并且使用&lt;strong&gt;联合训练 (joint training)&lt;/strong&gt; 的方法进行优化。主要思想基于交叉特征的线性模型只能从历史出现过的数据中找到非线性 (&lt;strong&gt;显性的非线性&lt;/strong&gt;) ，深度学习可以找到没有出现过的非线性 (&lt;strong&gt;隐性的非线性&lt;/strong&gt;) 。Memorization 就是去把历史数据中显性的非线性找出来，而 generalization 通过找出隐性的非线性提高模型的泛化性。&lt;/p&gt;
+&lt;p&gt;推荐系统可以被看做是一个搜索排序系统，其中输入的 query 是一系列的用户和文本信息，输出是 items 的排序列表。给定一个 query，推荐的任务就是到数据库中去找出相关的 items，然后对这些 items 根据相关对象，如点击或者购买行为，并进行排序。&lt;/p&gt;
+&lt;p&gt;和传统的搜索排序问题一样，在推荐系统中一个挑战就是区域同时达到 memorization 和 generalization。Memorization 可以被大概定义为学习 items 或者 features 之间的相关频率，在历史数据中探索相关性的可行性。Generalizaion 的话则是基于相关性的传递，去探索一些在过去没有出现过的特征组合。基于 memorization 的推荐相对来说具有&lt;strong&gt;局部性&lt;/strong&gt;，是在哪些用户和 items 已经有直接相关联的活动上。相较于 memorization，generalization 尝试去提高推荐 items 的&lt;strong&gt;多元化&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;在工业中，对于大规模的在线推荐和排序系统，像逻辑回归这样的广义线性模型由于实现简单，可扩展性好，可解释性强而被广泛使用。通过喂给它一些 one-hot 编码的稀疏特征，比如二值特征 (user_installed_app=netfix) 表示用户安装了 Netflix。Memorization 则可以通过对稀疏特征做交叉积转换获得，就是求交叉特征。比如 AND 操作  (user_installed_app= netflix, impression_app=pandora) 这两个特征，当用户安装了Netflix并且之后展示在Pandora上，那么得到特征的值为1，其余为0。这个交叉特征展示了特征对之间的相关性和目标 lable 之间的关联。在逻辑回归上实现 generalization 可以通过增加一些粗粒度的特征实现，如 AND(user_installed_category=video, impression_category=music )，但是这些都是需要人工做特征工程实现，工作量极大。此外，cross-product transformation 的一个限制就是他们不能生成从未在训练数据中出现过的 query-item 特征对。&lt;/p&gt;
+&lt;p&gt;而 Embedding-based 的模型，比如因子分解机 (FM) 或深度神经网络，只需要很少的特征工程，通过为每个 query 和 item 特征对 (pair) 学到一个低维的 dense embedding vector，可以泛化到之前未见过的 query-item 特征对。但是如果潜在的 query-item 矩阵是稀疏，高秩的话，为 query 和 items 学习出一个有效的低纬表示往往很困难，比如基于特殊偏好的 users，或者一些很少出现的小众 items。在这种情况下，大多数的 query-item 没有交互，但是稠密的 embedding 还是会对全部的 query-item 对有非零的输出预测，因此能做出一些过泛化和做出一些不太相关的推荐。另一方面，利用交叉积特征 (cross-product features transformations) 的线性模型能用很少的参数记住那些异常规则 (exception_rules) 。&lt;/p&gt;
+&lt;h2 id=&#34;wide--deep-learning3&#34;&gt;Wide &amp;amp; Deep Learning&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327121146.png&#34; alt=&#34;model&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;the-wide-component-wide-组件&#34;&gt;The Wide Component (Wide 组件)&lt;/h3&gt;
+&lt;p&gt;Wide 组件是一个泛化的线性模型，$y=w^Tx+b$，如 Fig.1 图左所示。$y$ 是预测值，$x = [x_1, x_2, …, x_d]$ 是 $d$ 维特征向量，$w = [w_1, w_2,…, w_d]$ 是模型参数，$b$ 是 bias。特征集包括原始的输入特征和转换后 (cross-product transformation) 的特征。Cross-product transformation 有如下定义：&lt;/p&gt;
+&lt;p&gt;$$
 \begin{aligned}
 \phi_k(x)=\prod_{i=1}^{d}x_{i}^{c_{ki}}, c_{ki} \in {0, 1}
 \end{aligned} \tag{1}
-$$</p>
-<p>其中 $c_{ki}$ 为一个 <code>boolean</code> 变量，如果第 $i$ 个特征是第 $k$ 个变换 $\phi_k$ 的一部分，则为1，否则为0。对于二值特征，一个 cross-product transformation (比如：“AND(gender=female, language=en)”) 只能当组成特征 (“gender=female” 和 “language=en”) 都为1时才会为1, 否则为0。这可以捕获二值特征间的交叉，为通用的线性模型添加非线性 (显性的) 。</p>
-<h3 id="the-deep-component--deep-组件">The Deep Component  (Deep 组件)</h3>
-<p>Deep 组件是一个前馈神经网络 (feed-forward NN)，如 Fig.1 图右所示。对于类别型特征，原始的输入是特征字符串 (比如：language=en) 。这些稀疏的、高维的类别型特征首先被转换成一个低维的、dense 的、real-valued 的向量，通常叫做 <code>embedding vector</code>。Embedding 的维度通常是 $O(10)$ 到 $O(100)$ 阶。该 <code>embedding vectors</code> 被随机初始化，接着通过最小化最终的 loss 的方式训练得到该值。这些低维的 dense embedding vectors 通过前向传递被 feed 给神经网络的隐层。特别地，每个隐层都会执行以下的计算：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;其中 $c_{ki}$ 为一个 &lt;code&gt;boolean&lt;/code&gt; 变量，如果第 $i$ 个特征是第 $k$ 个变换 $\phi_k$ 的一部分，则为1，否则为0。对于二值特征，一个 cross-product transformation (比如：“AND(gender=female, language=en)”) 只能当组成特征 (“gender=female” 和 “language=en”) 都为1时才会为1, 否则为0。这可以捕获二值特征间的交叉，为通用的线性模型添加非线性 (显性的) 。&lt;/p&gt;
+&lt;h3 id=&#34;the-deep-component--deep-组件&#34;&gt;The Deep Component  (Deep 组件)&lt;/h3&gt;
+&lt;p&gt;Deep 组件是一个前馈神经网络 (feed-forward NN)，如 Fig.1 图右所示。对于类别型特征，原始的输入是特征字符串 (比如：language=en) 。这些稀疏的、高维的类别型特征首先被转换成一个低维的、dense 的、real-valued 的向量，通常叫做 &lt;code&gt;embedding vector&lt;/code&gt;。Embedding 的维度通常是 $O(10)$ 到 $O(100)$ 阶。该 &lt;code&gt;embedding vectors&lt;/code&gt; 被随机初始化，接着通过最小化最终的 loss 的方式训练得到该值。这些低维的 dense embedding vectors 通过前向传递被 feed 给神经网络的隐层。特别地，每个隐层都会执行以下的计算：&lt;/p&gt;
+&lt;p&gt;$$
 \begin{aligned}
 a^{l+1} = f(W^{(l)} a^{(l)} + b^{(l)})
 \end{aligned} \tag2
-$$</p>
-<p>其中，$l$ 是层数，$f$ 是激活函数 (通常为ReLUs) ，$a(l)$，$b(l)$ 和 $W(l)$ 分别是第 $l$ 层的 activations，bias，以及 weights。</p>
-<h3 id="wide--deep-模型的联合训练">Wide &amp; Deep 模型的联合训练</h3>
-<p>Wide 组件和 Deep 组件组合在一起，对它们的输入日志进行一个加权求和来做为预测，它会被 feed 给一个常见的 logistic loss function 来进行联合训练。注意，**联合训练 (joint training) <strong>和</strong>集成训练 (ensemble) **有明显的区别。在 ensemble 中，每个独立的模型会单独训练，相互并不知道，只有在预测时会组合在一起。相反地，联合训练 (joint training) 会同时优化所有参数，通过将 wide 组件和 deep 组件在训练时进行加权求和的方式进行。这也暗示了模型的 size：对于一个 ensemble，由于训练是不联合的 (disjoint) ，每个单独的模型 size 通常需要更大些 (例如：更多的特征和转换) 来达到合理的精度。相比之下，对于联合训练 (joint training) 来说，wide 组件只需要补充 deep 组件的缺点，使用一小部分的 cross-product 特征转换即可，而非使用一个 full-size 的 wide 模型。</p>
-<p>一个 Wide&amp;Deep 模型的联合训练，通过对梯度进行后向传播算法、SGD 优化来完成。训练中使用 FTRL 算法和L1正则做为 Wide 组件的优化器，对 Deep 组件使用 AdaGrad。</p>
-<p>组合模型如 Fig.1 图中所示。对于一个 logistic regression 问题，模型的预测为：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;其中，$l$ 是层数，$f$ 是激活函数 (通常为ReLUs) ，$a(l)$，$b(l)$ 和 $W(l)$ 分别是第 $l$ 层的 activations，bias，以及 weights。&lt;/p&gt;
+&lt;h3 id=&#34;wide--deep-模型的联合训练&#34;&gt;Wide &amp;amp; Deep 模型的联合训练&lt;/h3&gt;
+&lt;p&gt;Wide 组件和 Deep 组件组合在一起，对它们的输入日志进行一个加权求和来做为预测，它会被 feed 给一个常见的 logistic loss function 来进行联合训练。注意，**联合训练 (joint training) &lt;strong&gt;和&lt;/strong&gt;集成训练 (ensemble) **有明显的区别。在 ensemble 中，每个独立的模型会单独训练，相互并不知道，只有在预测时会组合在一起。相反地，联合训练 (joint training) 会同时优化所有参数，通过将 wide 组件和 deep 组件在训练时进行加权求和的方式进行。这也暗示了模型的 size：对于一个 ensemble，由于训练是不联合的 (disjoint) ，每个单独的模型 size 通常需要更大些 (例如：更多的特征和转换) 来达到合理的精度。相比之下，对于联合训练 (joint training) 来说，wide 组件只需要补充 deep 组件的缺点，使用一小部分的 cross-product 特征转换即可，而非使用一个 full-size 的 wide 模型。&lt;/p&gt;
+&lt;p&gt;一个 Wide&amp;amp;Deep 模型的联合训练，通过对梯度进行后向传播算法、SGD 优化来完成。训练中使用 FTRL 算法和L1正则做为 Wide 组件的优化器，对 Deep 组件使用 AdaGrad。&lt;/p&gt;
+&lt;p&gt;组合模型如 Fig.1 图中所示。对于一个 logistic regression 问题，模型的预测为：&lt;/p&gt;
+&lt;p&gt;$$
 P(Y = 1 | x) = \sigma(w_{wide}^{T} [x, \phi(x)] + w_{deep}^{T} a^{(l_f)} + b)\tag3
-$$</p>
-<p>其中 $Y$ 是二分类的 label，$\sigma(·)$ 是 sigmoid function， $\phi(x)$ 是对原始特征 $x$ 做 cross product transformations，$b$ 是 bias 项。$w_{wide}$ 是所有 wide 模型权重向量，$w_{deep}$ 是应用在最终激活函数 $a^{(l_f)}$ 上的权重。</p>
-<hr>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p><a href="http://delivery.acm.org/10.1145/2990000/2988454/p7-cheng.pdf?ip=59.64.129.94&amp;id=2988454&amp;acc=OA&amp;key=BF85BBA5741FDC6E%2E66A15327C2E204FC%2E4D4702B0C3E38B35%2E5945DC2EABF3343C&amp;__acm__=1524286862_5eea25e811738c9a07c334624118b607">Wide &amp; Deep Learning for Recommender Systems</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:2" role="doc-endnote">
-<p><a href="https://blog.csdn.net/sxf1061926959/article/details/78440220?readlog">The Wide and Deep Learning Model (译文+Tensorlfow源码解析) </a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:3" role="doc-endnote">
-<p><a href="http://d0evi1.com/widedeep-recsys/">基于Wide &amp; Deep Learning的推荐系统</a> <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-]]></description>
+$$&lt;/p&gt;
+&lt;p&gt;其中 $Y$ 是二分类的 label，$\sigma(·)$ 是 sigmoid function， $\phi(x)$ 是对原始特征 $x$ 做 cross product transformations，$b$ 是 bias 项。$w_{wide}$ 是所有 wide 模型权重向量，$w_{deep}$ 是应用在最终激活函数 $a^{(l_f)}$ 上的权重。&lt;/p&gt;
+&lt;hr&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;http://delivery.acm.org/10.1145/2990000/2988454/p7-cheng.pdf?ip=59.64.129.94&amp;amp;id=2988454&amp;amp;acc=OA&amp;amp;key=BF85BBA5741FDC6E%2E66A15327C2E204FC%2E4D4702B0C3E38B35%2E5945DC2EABF3343C&amp;amp;__acm__=1524286862_5eea25e811738c9a07c334624118b607&#34;&gt;Wide &amp;amp; Deep Learning for Recommender Systems&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/sxf1061926959/article/details/78440220?readlog&#34;&gt;The Wide and Deep Learning Model (译文+Tensorlfow源码解析) &lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;http://d0evi1.com/widedeep-recsys/&#34;&gt;基于Wide &amp;amp; Deep Learning的推荐系统&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
                 
                 
                 
@@ -201,7 +201,7 @@ $$</p>
                         
                         
                             
-                                <category domain="https://iyuanshuo.com/research/">research\</category>
+                                <category domain="https://iyuanshuo.com/research/">research</category>
                             
                         
                     
@@ -226,119 +226,119 @@ $$</p>
                 <title>Factorization Machines 因式分解机</title>
                 <link>https://iyuanshuo.com/research/factorization-machine-2018032810/</link>
                 <guid isPermaLink="true">https://iyuanshuo.com/research/factorization-machine-2018032810/</guid>
-                <pubDate>Wed, 28 Mar 2018 10:01:12 +0000</pubDate>
+                <pubDate>Wed, 28 Mar 2018 10:01:12 &#43;0000</pubDate>
                 
-                    <author>isaulyuan@gmail.com (Shuo Yuan)</author>
+                    <author>ishawnyuan@gmail.com (Shuo Yuan)</author>
                 
-                <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
+                <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
                 
-                    <description><![CDATA[<h2 id="概述">概述</h2>
-<p>在使用线性模型如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需要人工进行一些特征的二维或者三维交叉。FM（Factorization machines）提供了一种思路可以自动进行特征交叉的同时也能够处理非常稀疏数据，具有线性的时间复杂度。</p>
-<p>由于FM实现简单效果非常好因此应用范围非常广，在比赛或者大公司都比较常见。</p>
-<h2 id="fm优势">FM优势</h2>
-<p>FM能够解决的问题及优点包括<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
-<ul>
-<li>FM能够解决分类和回归问题</li>
-<li>FM能够代替SVD、SVD++等进行矩阵分解</li>
-<li>FM可以处理非常稀疏数据，此时SVM等模型会失效</li>
-<li>FM线性时间复杂度，计算简单</li>
-<li>FM可表示性较强，将模型参数表示为K维向量。向量之间可以交叉运算，即使两个交叉特征没有对应训练数据，也能表示出权重。</li>
-</ul>
-<h2 id="二维-fm">二维-FM</h2>
-<p>先回顾一下线性回归模型，其建模为：</p>
-<p>$$
+                    <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
+&lt;p&gt;在使用线性模型如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需要人工进行一些特征的二维或者三维交叉。FM（Factorization machines）提供了一种思路可以自动进行特征交叉的同时也能够处理非常稀疏数据，具有线性的时间复杂度。&lt;/p&gt;
+&lt;p&gt;由于FM实现简单效果非常好因此应用范围非常广，在比赛或者大公司都比较常见。&lt;/p&gt;
+&lt;h2 id=&#34;fm优势&#34;&gt;FM优势&lt;/h2&gt;
+&lt;p&gt;FM能够解决的问题及优点包括&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;FM能够解决分类和回归问题&lt;/li&gt;
+&lt;li&gt;FM能够代替SVD、SVD++等进行矩阵分解&lt;/li&gt;
+&lt;li&gt;FM可以处理非常稀疏数据，此时SVM等模型会失效&lt;/li&gt;
+&lt;li&gt;FM线性时间复杂度，计算简单&lt;/li&gt;
+&lt;li&gt;FM可表示性较强，将模型参数表示为K维向量。向量之间可以交叉运算，即使两个交叉特征没有对应训练数据，也能表示出权重。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;二维-fm&#34;&gt;二维-FM&lt;/h2&gt;
+&lt;p&gt;先回顾一下线性回归模型，其建模为：&lt;/p&gt;
+&lt;p&gt;$$
 \begin{aligned}
-\hat y({\rm{x}}) &amp; = {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n} \<br>
-&amp;= {\omega <em>0} + \sum\limits</em>{i = 1}^n {{\omega _i}{x_i}} 
+\hat y({\rm{x}}) &amp;amp; = {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n} \&lt;br&gt;
+&amp;amp;= {\omega &lt;em&gt;0} + \sum\limits&lt;/em&gt;{i = 1}^n {{\omega _i}{x_i}} 
 \end{aligned} \tag{1}
-$$</p>
-<p>从上式可以看出各特征分量$x_i$和$x_j\ (i \ne j )$之间是相互孤立的，因此仅考虑了单个的特征分量而没有考虑特征分量之间的相互关系。</p>
-<p>在$(1)$的基础上改写为：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;从上式可以看出各特征分量$x_i$和$x_j\ (i \ne j )$之间是相互孤立的，因此仅考虑了单个的特征分量而没有考虑特征分量之间的相互关系。&lt;/p&gt;
+&lt;p&gt;在$(1)$的基础上改写为：&lt;/p&gt;
+&lt;p&gt;$$
 \begin{aligned}
-\hat y({\rm{x}}) = {\omega <em>0} + \sum\limits</em>{i = 1}^n {{\omega <em>i}{x_i}}  + \sum\limits</em>{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {{\omega _{ij}}{x_i}} {x_j}} 
+\hat y({\rm{x}}) = {\omega &lt;em&gt;0} + \sum\limits&lt;/em&gt;{i = 1}^n {{\omega &lt;em&gt;i}{x_i}}  + \sum\limits&lt;/em&gt;{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {{\omega _{ij}}{x_i}} {x_j}} 
 \end{aligned} \tag{2}
-$$</p>
-<p>这样也就将任意两个不同的特征向量之间的关系同时考虑进来了。</p>
-<p>但是，有一个问题是在稀疏数据中这种直接在${x_i} {x_j}$前面配上一个系数$\omega_{ij}$的方式会有很大的缺陷：对于观察样本中未出现过交互的特征分量，不能对相应的参数进行估计<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。一定要注意的是，在高度稀疏数据场景中，由于数据量的不足，样本中出现未交互的特征分量是很普遍的。</p>
-<p>为了克服这个缺陷，考虑在(2)中的系数$\omega_{ij}$上进行适当的处理以将其换成另外一种形式。针对每个维度的特征分量$x_i$，引入辅助向量：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;这样也就将任意两个不同的特征向量之间的关系同时考虑进来了。&lt;/p&gt;
+&lt;p&gt;但是，有一个问题是在稀疏数据中这种直接在${x_i} {x_j}$前面配上一个系数$\omega_{ij}$的方式会有很大的缺陷：对于观察样本中未出现过交互的特征分量，不能对相应的参数进行估计&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。一定要注意的是，在高度稀疏数据场景中，由于数据量的不足，样本中出现未交互的特征分量是很普遍的。&lt;/p&gt;
+&lt;p&gt;为了克服这个缺陷，考虑在(2)中的系数$\omega_{ij}$上进行适当的处理以将其换成另外一种形式。针对每个维度的特征分量$x_i$，引入辅助向量：&lt;/p&gt;
+&lt;p&gt;$$
 \begin{aligned}
-{{\rm{v}}<em>i} = {({v</em>{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},\ \ i = 1,2, \cdots ,n
+{{\rm{v}}&lt;em&gt;i} = {({v&lt;/em&gt;{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},\ \ i = 1,2, \cdots ,n
 \end{aligned}
-$$</p>
-<p>其中$k$为超参数，将(2)中的$\omega_{ij}$改写为：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;其中$k$为超参数，将(2)中的$\omega_{ij}$改写为：&lt;/p&gt;
+&lt;p&gt;$$
 \begin{aligned}
-{{\hat \omega }<em>{ij}} = {{\rm{v}}<em>i}^T{{\rm{v}}<em>j}: = \sum\limits</em>{l = 1}^k {{v</em>{il}}{x</em>{jl}}} 
+{{\hat \omega }&lt;em&gt;{ij}} = {{\rm{v}}&lt;em&gt;i}^T{{\rm{v}}&lt;em&gt;j}: = \sum\limits&lt;/em&gt;{l = 1}^k {{v&lt;/em&gt;{il}}{x&lt;/em&gt;{jl}}} 
 \end{aligned}
-$$</p>
-<p>如此，可获得FM的二维模型。</p>
-<h3 id="模型">模型</h3>
-<p>对于2次特征交叉的FM模型可以表示为<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;如此，可获得FM的二维模型。&lt;/p&gt;
+&lt;h3 id=&#34;模型&#34;&gt;模型&lt;/h3&gt;
+&lt;p&gt;对于2次特征交叉的FM模型可以表示为&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
+&lt;p&gt;$$
 \begin{aligned}
-y(x) = {w_0} + \sum\limits_{i = 1}^n {({w_i}{x_i})}  + \sum\limits_{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {( &lt; {v_i},{v_j} &gt; {x_i}{x_j})} } 
+y(x) = {w_0} + \sum\limits_{i = 1}^n {({w_i}{x_i})}  + \sum\limits_{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {( &amp;lt; {v_i},{v_j} &amp;gt; {x_i}{x_j})} } 
 \end{aligned} \tag{3}
-$$</p>
-<p>其中模型参数有$w_0$为截距，$w_i$为一维特征权重，$v_i$为每一维度特征的分布式表示，也即$w_0$为整体偏置量，$W$对特征向量的每个分量的强度进行建模，$V$对特征向量中任意两个分量之间的关系进行建模。</p>
-<p>其中特征交叉权重计算为:</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;其中模型参数有$w_0$为截距，$w_i$为一维特征权重，$v_i$为每一维度特征的分布式表示，也即$w_0$为整体偏置量，$W$对特征向量的每个分量的强度进行建模，$V$对特征向量中任意两个分量之间的关系进行建模。&lt;/p&gt;
+&lt;p&gt;其中特征交叉权重计算为:&lt;/p&gt;
+&lt;p&gt;$$
 \begin{aligned}
-&lt; {v_i},{v_j} &gt;  = \sum\limits_{f = 1}^k {{v_{i,f}}} {v_{j,f}}
+&amp;lt; {v_i},{v_j} &amp;gt;  = \sum\limits_{f = 1}^k {{v_{i,f}}} {v_{j,f}}
 \end{aligned} \tag{3.1}
-$$</p>
-<h3 id="二维-fm计算复杂度">二维-FM计算复杂度</h3>
-<p>如果对式子(1)直接进行计算，那么其复杂度是$O(kn^2)$，但是可以通过简单的数学变换将其转化为$O(kn)$。由于前面两项的计算复杂度都是$O(kn)$，所以只需要对第三项进行处理<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;h3 id=&#34;二维-fm计算复杂度&#34;&gt;二维-FM计算复杂度&lt;/h3&gt;
+&lt;p&gt;如果对式子(1)直接进行计算，那么其复杂度是$O(kn^2)$，但是可以通过简单的数学变换将其转化为$O(kn)$。由于前面两项的计算复杂度都是$O(kn)$，所以只需要对第三项进行处理&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
+&lt;p&gt;$$
 \begin{aligned}
-&amp;\sum\limits_{i = 1}^n {\sum\limits_{j = i + 1}^n {\left( { &lt; {v_i},{v_j} &gt; {x_i}{x_j}} \right)} } {\rm{ }} \<br>
-&amp;= \frac{1}{2}\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\left( { &lt; {v_i},{v_j} &gt; {x_i}{x_j}} \right)} }  - \frac{1}{2}\sum\limits_{i = 1}^n  &lt;  {v_i},{v_i} &gt; {x_i}{x_i} \ 
-&amp;= \frac{1}{2}\left( {\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{{j_f}}}{x_i}{x_j}} \right)} } }  - \sum\limits_{i = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{i,f}}{x_i}{x_i}} \right)} } } \right) \<br>
-&amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)\left( {\sum\limits_{j = 1}^n {{v_{j,f}}} {x_j}} \right) - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)} \<br>
-&amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {{{\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)}^2} - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)}
+&amp;amp;\sum\limits_{i = 1}^n {\sum\limits_{j = i + 1}^n {\left( { &amp;lt; {v_i},{v_j} &amp;gt; {x_i}{x_j}} \right)} } {\rm{ }} \&lt;br&gt;
+&amp;amp;= \frac{1}{2}\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\left( { &amp;lt; {v_i},{v_j} &amp;gt; {x_i}{x_j}} \right)} }  - \frac{1}{2}\sum\limits_{i = 1}^n  &amp;lt;  {v_i},{v_i} &amp;gt; {x_i}{x_i} \ 
+&amp;amp;= \frac{1}{2}\left( {\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{{j_f}}}{x_i}{x_j}} \right)} } }  - \sum\limits_{i = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{i,f}}{x_i}{x_i}} \right)} } } \right) \&lt;br&gt;
+&amp;amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)\left( {\sum\limits_{j = 1}^n {{v_{j,f}}} {x_j}} \right) - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)} \&lt;br&gt;
+&amp;amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {{{\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)}^2} - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)}
 \end{aligned} \tag{4}
-$$</p>
-<p>相当于特征分布式表示中每一维度和特征进行求和平方和平方求和相减。</p>
-<h3 id="二维-fm的梯度计算">二维-FM的梯度计算</h3>
-<p>采用SGD进行模型计算 :</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;相当于特征分布式表示中每一维度和特征进行求和平方和平方求和相减。&lt;/p&gt;
+&lt;h3 id=&#34;二维-fm的梯度计算&#34;&gt;二维-FM的梯度计算&lt;/h3&gt;
+&lt;p&gt;采用SGD进行模型计算 :&lt;/p&gt;
+&lt;p&gt;$$
 \frac{\partial }{{\partial \theta }}y(x) = \left{ {\begin{array}{*{20}{l}}
-{1,}&amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\omega <em>0}}\<br>
-{{x_i},}&amp;{{\rm{if }}\ \theta\  {\rm{is}}\ {\omega <em>i}}\<br>
-{{x_i}\sum\limits</em>{j = 1}^n {{v</em>{j,f}}} {x_j} - {v_{i,f}}x_i^2,}&amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\nu _{i,f}}}
+{1,}&amp;amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\omega &lt;em&gt;0}}\&lt;br&gt;
+{{x_i},}&amp;amp;{{\rm{if }}\ \theta\  {\rm{is}}\ {\omega &lt;em&gt;i}}\&lt;br&gt;
+{{x_i}\sum\limits&lt;/em&gt;{j = 1}^n {{v&lt;/em&gt;{j,f}}} {x_j} - {v_{i,f}}x_i^2,}&amp;amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\nu _{i,f}}}
 \end{array}} \right.{\rm{ }} \tag{5}
-$$</p>
-<p>基于随机梯度的方式求解<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>：</p>
-<p><img src="http://images.iyuanshuo.com//blog/article/libFM.PNG" alt=""></p>
-<h2 id="fm应用">FM应用</h2>
-<p>在很多应用中，FM可以取代常用模型并且能够取得不错效果，例如</p>
-<ul>
-<li>FM - SVM，能够处理稀疏特征</li>
-<li>FM - MF</li>
-<li>FM - SVD++</li>
-<li>FM - PITF</li>
-<li>FM - FPMC</li>
-</ul>
-<p>具体可以参考相关引用的论文。</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p><a href="https://blog.csdn.net/fangqingan_java/article/details/50677340">【每周一文】Factorization Machines</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:2" role="doc-endnote">
-<p><a href="http://www.cnblogs.com/pinard/p/6370127.html">分解机(Factorization Machines)推荐算法原理</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:3" role="doc-endnote">
-<p><a href="https://blog.csdn.net/beyondjv610/article/details/79301683">Factorization Machines（因子分解机）</a> <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:4" role="doc-endnote">
-<p><a href="https://dl.acm.org/citation.cfm?id=2168771">Factorization Machines with libFM. S Rendle</a> <a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-]]></description>
+$$&lt;/p&gt;
+&lt;p&gt;基于随机梯度的方式求解&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com//blog/article/libFM.PNG&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;fm应用&#34;&gt;FM应用&lt;/h2&gt;
+&lt;p&gt;在很多应用中，FM可以取代常用模型并且能够取得不错效果，例如&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;FM - SVM，能够处理稀疏特征&lt;/li&gt;
+&lt;li&gt;FM - MF&lt;/li&gt;
+&lt;li&gt;FM - SVD++&lt;/li&gt;
+&lt;li&gt;FM - PITF&lt;/li&gt;
+&lt;li&gt;FM - FPMC&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;具体可以参考相关引用的论文。&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/fangqingan_java/article/details/50677340&#34;&gt;【每周一文】Factorization Machines&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.cnblogs.com/pinard/p/6370127.html&#34;&gt;分解机(Factorization Machines)推荐算法原理&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/beyondjv610/article/details/79301683&#34;&gt;Factorization Machines（因子分解机）&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://dl.acm.org/citation.cfm?id=2168771&#34;&gt;Factorization Machines with libFM. S Rendle&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
                 
                 
                 
@@ -349,7 +349,7 @@ $$</p>
                         
                         
                             
-                                <category domain="https://iyuanshuo.com/research/">research\</category>
+                                <category domain="https://iyuanshuo.com/research/">research</category>
                             
                         
                     
@@ -374,117 +374,117 @@ $$</p>
                 <title>GBDT 梯度提升树的基本原理</title>
                 <link>https://iyuanshuo.com/research/gbdt-principle-2018031321/</link>
                 <guid isPermaLink="true">https://iyuanshuo.com/research/gbdt-principle-2018031321/</guid>
-                <pubDate>Tue, 13 Mar 2018 21:26:42 +0000</pubDate>
+                <pubDate>Tue, 13 Mar 2018 21:26:42 &#43;0000</pubDate>
                 
-                    <author>isaulyuan@gmail.com (Shuo Yuan)</author>
+                    <author>ishawnyuan@gmail.com (Shuo Yuan)</author>
                 
-                <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
+                <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
                 
-                    <description><![CDATA[<h2 id="什么是gbdt">什么是GBDT?</h2>
-<p>GBDT (Gradient Boosting Decision Tree) 是一种基于boosting集成学习（ensemble method）的算法，但和传统的Adaboost有很大不同。在Adaboost，我们是利用前一轮迭代弱学习器的误差率来更新训练集的权重。GBDT也是迭代并且使用了前向分布算法，但是弱学习器限定了只能使用CART回归树模型，同时迭代思路和Adaboost也有所不同。GBDT选用的弱分类器一般是低方差高偏差，因为Boosting主要关注降低偏差，因此Boosting能基于泛化性能相当弱的学习器构建出很强的集成。GBDT的训练过程如下<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
-<p><img src="http://images.iyuanshuo.com//blog/article/GBDT.png" alt="Fig 1. GBDT 的训练过程"></p>
-<h3 id="boost">Boost</h3>
-<p>Boost是一个加法模型，它是由若干个基函数及其权值乘积之和的累加。</p>
-<h3 id="gradient-boosting">Gradient Boosting</h3>
-<p>GBDT把所有树的结论累加起来做最终结论，所以可以想到每棵树的结论并不是年龄本身，而是年龄的一个累加量。GBDT的核心就在于，每一棵树学的是之前所有树结论和的残差，这个残差就是一个加预测值后能得真实值的累加量。比如A的真实年龄是18岁，但第一棵树的预测年龄是12岁，差了6岁，即残差为6岁。那么在第二棵树里我们把A的年龄设为6岁去学习，如果第二棵树真的能把A分到6岁的叶子节点，那累加两棵树的结论就是A的真实年龄；如果第二棵树的结论是5岁，则A仍然存在1岁的残差，第三棵树里A的年龄就变成1岁，继续学。这就是Gradient Boosting在GBDT中的意义<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
-<p>根据上面那个简单的例子，我们知道假设损失函数为平方损失（square loss）时，我们使用残差来进行下一轮的训练，即GBDT算法的每一步在生成决策树时只需要拟合前面的模型的残差，从而使得损失函数最小。那如何使损失函数最小呢？Freidman提出了用损失函数的负梯度来拟合本轮损失的近似值，进而拟合一个CART回归树，这就是GBDT的负梯度拟合。损失函数的负梯度在当前模型的值为：</p>
-<p>$$
--[\frac{\partial L(y,f(x_i))}{\partial f(x_i)}]<em>{f(x)=f</em>{m-1}(x)}\tag1
-$$</p>
-<p>Boosting的最大好处在于，每一步的残差计算其实变相地增大了分错样本的权重，而已经分对的样本则都趋向于0。因为对于已经分对的样本，其残差为0，在下一轮中几乎不起作用。</p>
-<h2 id="gbdt算法">GBDT算法</h2>
-<p>知道了怎么解决损失函数拟合的问题，即GBDT的负梯度拟合之后，需要使用这些负梯度进行训练。假设$r_{mi}$表示第$m$轮的第$i$个样本的损失函数的负梯度：</p>
-<p>$$
+                    <description>&lt;h2 id=&#34;什么是gbdt&#34;&gt;什么是GBDT?&lt;/h2&gt;
+&lt;p&gt;GBDT (Gradient Boosting Decision Tree) 是一种基于boosting集成学习（ensemble method）的算法，但和传统的Adaboost有很大不同。在Adaboost，我们是利用前一轮迭代弱学习器的误差率来更新训练集的权重。GBDT也是迭代并且使用了前向分布算法，但是弱学习器限定了只能使用CART回归树模型，同时迭代思路和Adaboost也有所不同。GBDT选用的弱分类器一般是低方差高偏差，因为Boosting主要关注降低偏差，因此Boosting能基于泛化性能相当弱的学习器构建出很强的集成。GBDT的训练过程如下&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com//blog/article/GBDT.png&#34; alt=&#34;Fig 1. GBDT 的训练过程&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;boost&#34;&gt;Boost&lt;/h3&gt;
+&lt;p&gt;Boost是一个加法模型，它是由若干个基函数及其权值乘积之和的累加。&lt;/p&gt;
+&lt;h3 id=&#34;gradient-boosting&#34;&gt;Gradient Boosting&lt;/h3&gt;
+&lt;p&gt;GBDT把所有树的结论累加起来做最终结论，所以可以想到每棵树的结论并不是年龄本身，而是年龄的一个累加量。GBDT的核心就在于，每一棵树学的是之前所有树结论和的残差，这个残差就是一个加预测值后能得真实值的累加量。比如A的真实年龄是18岁，但第一棵树的预测年龄是12岁，差了6岁，即残差为6岁。那么在第二棵树里我们把A的年龄设为6岁去学习，如果第二棵树真的能把A分到6岁的叶子节点，那累加两棵树的结论就是A的真实年龄；如果第二棵树的结论是5岁，则A仍然存在1岁的残差，第三棵树里A的年龄就变成1岁，继续学。这就是Gradient Boosting在GBDT中的意义&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;p&gt;根据上面那个简单的例子，我们知道假设损失函数为平方损失（square loss）时，我们使用残差来进行下一轮的训练，即GBDT算法的每一步在生成决策树时只需要拟合前面的模型的残差，从而使得损失函数最小。那如何使损失函数最小呢？Freidman提出了用损失函数的负梯度来拟合本轮损失的近似值，进而拟合一个CART回归树，这就是GBDT的负梯度拟合。损失函数的负梯度在当前模型的值为：&lt;/p&gt;
+&lt;p&gt;$$
+-[\frac{\partial L(y,f(x_i))}{\partial f(x_i)}]&lt;em&gt;{f(x)=f&lt;/em&gt;{m-1}(x)}\tag1
+$$&lt;/p&gt;
+&lt;p&gt;Boosting的最大好处在于，每一步的残差计算其实变相地增大了分错样本的权重，而已经分对的样本则都趋向于0。因为对于已经分对的样本，其残差为0，在下一轮中几乎不起作用。&lt;/p&gt;
+&lt;h2 id=&#34;gbdt算法&#34;&gt;GBDT算法&lt;/h2&gt;
+&lt;p&gt;知道了怎么解决损失函数拟合的问题，即GBDT的负梯度拟合之后，需要使用这些负梯度进行训练。假设$r_{mi}$表示第$m$轮的第$i$个样本的损失函数的负梯度：&lt;/p&gt;
+&lt;p&gt;$$
 r_{mi} = -\bigg[\frac{\partial L(y_i, f(x_i)))}{\partial f(x_i)}\bigg]_{f(x) = f_{m-1};; (x)}\tag2
-$$</p>
-<p>利用$(x_i,r_{mi})\quad(i=1,2,..n)$，我们可以拟合第$m$棵CART回归树，其对应的叶节点区域$R_{mj}, j =1,2,..., J$，其中$J$为叶子节点的个数。</p>
-<p>针对每个叶子节点里的样本，我们求出损失函数最小，也就是拟合叶子节点最好的的输出值$c_{mj}$如下：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;利用$(x_i,r_{mi})\quad(i=1,2,..n)$，我们可以拟合第$m$棵CART回归树，其对应的叶节点区域$R_{mj}, j =1,2,..., J$，其中$J$为叶子节点的个数。&lt;/p&gt;
+&lt;p&gt;针对每个叶子节点里的样本，我们求出损失函数最小，也就是拟合叶子节点最好的的输出值$c_{mj}$如下：&lt;/p&gt;
+&lt;p&gt;$$
 c_{mj} = \underbrace{arg; min}_{c}\sum\limits_{x_i \in R_{mj}} L(y_i,f_{m-1}(x_i) +c)\tag3
-$$</p>
-<p>从而可以获得本轮的CART回归树的拟合函数：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;从而可以获得本轮的CART回归树的拟合函数：&lt;/p&gt;
+&lt;p&gt;$$
 h_m(x) = \sum\limits_{j=1}^{J}c_{mj}I(x \in R_{mj})\tag4
-$$</p>
-<p>最后获得强学习器的表达式：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;最后获得强学习器的表达式：&lt;/p&gt;
+&lt;p&gt;$$
 f_{m}(x) = f_{m-1}(x) + \sum\limits_{j=1}^{J}c_{mj}I(x \in R_{mj})\tag5
-$$</p>
-<p>请结合上面的例子，理解每一轮更新强学习器都需要加上前面所有轮的输出！</p>
-<h3 id="gbdt回归算法">GBDT回归算法</h3>
-<p>Freidman提出的梯度提升(Gradient Boosting)算法：利用最速下降的近似方法，即利用损失函数的负梯度在当前模型的值，作为回归问题中提升树算法的残差的近似值，拟合一个回归树。算法如下<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>：</p>
-<p><img src="http://images.iyuanshuo.com//blog/article/GBDT%20algorithm.png" alt=""></p>
-<p>算法步骤解释：</p>
-<p>1、初始化，估计使损失函数极小化的常数值，它是只有一个根节点的树，即$\gamma$是一个常数值；</p>
-<p>2、对于每轮CART回归树：</p>
-<pre><code>（a）计算损失函数的负梯度在当前模型的值，将它作为残差的估计
+$$&lt;/p&gt;
+&lt;p&gt;请结合上面的例子，理解每一轮更新强学习器都需要加上前面所有轮的输出！&lt;/p&gt;
+&lt;h3 id=&#34;gbdt回归算法&#34;&gt;GBDT回归算法&lt;/h3&gt;
+&lt;p&gt;Freidman提出的梯度提升(Gradient Boosting)算法：利用最速下降的近似方法，即利用损失函数的负梯度在当前模型的值，作为回归问题中提升树算法的残差的近似值，拟合一个回归树。算法如下&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com//blog/article/GBDT%20algorithm.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;算法步骤解释：&lt;/p&gt;
+&lt;p&gt;1、初始化，估计使损失函数极小化的常数值，它是只有一个根节点的树，即$\gamma$是一个常数值；&lt;/p&gt;
+&lt;p&gt;2、对于每轮CART回归树：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;（a）计算损失函数的负梯度在当前模型的值，将它作为残差的估计
 （b）估计回归树叶节点区域，以拟合残差的近似值
 （c）利用线性搜索估计叶节点区域的值，使损失函数极小化
 （d）更新回归树
-</code></pre>
-<p>3、得到输出的最终模型 $f(x)$。</p>
-<h3 id="gbdt分类算法">GBDT分类算法</h3>
-<p>这里我们再看看GBDT分类算法，GBDT的分类算法从思想上和GBDT的回归算法没有区别，但是由于样本输出不是连续的值，而是离散的类别，导致我们无法直接从输出类别去拟合类别输出的误差<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>。</p>
-<p>为了解决这个问题，主要有两个方法，一个是用指数损失函数，此时GBDT退化为AdaBoost算法。另一种方法是用类似于逻辑回归的对数似然损失函数。也就是说，我们用的是类别的预测概率值和真实概率值的差来拟合损失。本文仅讨论用对数似然损失函数的GBDT分类。而对于对数似然损失函数，我们又有二元分类和多元分类的区别。</p>
-<h4 id="二元gbdt分类算法">二元GBDT分类算法</h4>
-<p>对于二元GBDT，如果用类似于逻辑回归的对数似然损失函数，则损失函数为：</p>
-<p>$$
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;3、得到输出的最终模型 $f(x)$。&lt;/p&gt;
+&lt;h3 id=&#34;gbdt分类算法&#34;&gt;GBDT分类算法&lt;/h3&gt;
+&lt;p&gt;这里我们再看看GBDT分类算法，GBDT的分类算法从思想上和GBDT的回归算法没有区别，但是由于样本输出不是连续的值，而是离散的类别，导致我们无法直接从输出类别去拟合类别输出的误差&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;p&gt;为了解决这个问题，主要有两个方法，一个是用指数损失函数，此时GBDT退化为AdaBoost算法。另一种方法是用类似于逻辑回归的对数似然损失函数。也就是说，我们用的是类别的预测概率值和真实概率值的差来拟合损失。本文仅讨论用对数似然损失函数的GBDT分类。而对于对数似然损失函数，我们又有二元分类和多元分类的区别。&lt;/p&gt;
+&lt;h4 id=&#34;二元gbdt分类算法&#34;&gt;二元GBDT分类算法&lt;/h4&gt;
+&lt;p&gt;对于二元GBDT，如果用类似于逻辑回归的对数似然损失函数，则损失函数为：&lt;/p&gt;
+&lt;p&gt;$$
 (y, f(x)) = log(1+ exp(-yf(x)))\tag6
-$$</p>
-<p>其中$y \in{-1, +1}$。此时的负梯度误差为：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;其中$y \in{-1, +1}$。此时的负梯度误差为：&lt;/p&gt;
+&lt;p&gt;$$
 r_{mi} = -\bigg[\frac{\partial L(y, f(x_i)))}{\partial f(x_i)}\bigg]_{f(x) = f_{m-1};; (x)} = y_i/(1+exp(y_if(x_i)))\tag7
-$$</p>
-<p>对于生成的CART回归树，我们各个叶子节点的最佳残差拟合值为：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;对于生成的CART回归树，我们各个叶子节点的最佳残差拟合值为：&lt;/p&gt;
+&lt;p&gt;$$
 c_{mj} = \underbrace{arg; min}_{c}\sum\limits_{x_i \in R_{mj}} log(1+exp(-y_i(f_{m-1}(x_i) +c)))\tag8
-$$</p>
-<p>由于上面的式子比较难优化，一般使用近似值代替：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;由于上面的式子比较难优化，一般使用近似值代替：&lt;/p&gt;
+&lt;p&gt;$$
 c_{mj} = \sum\limits_{x_i \in R_{mj}}r_{mi}\bigg /  \sum\limits_{x_i \in R_{mj}}|r_{mi}|(1-|r_{mi}|)\tag9
-$$</p>
-<p>除了负梯度计算和叶子节点的最佳残差拟合的线性搜索，二元GBDT分类和GBDT回归算法过程相同。</p>
-<h4 id="多元gbdt分类算法">多元GBDT分类算法</h4>
-<p>多元GBDT要比二元GBDT复杂一些，对应的是多元逻辑回归和二元逻辑回归的复杂度差别。假设类别数为K，则此时我们的对数似然损失函数为：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;除了负梯度计算和叶子节点的最佳残差拟合的线性搜索，二元GBDT分类和GBDT回归算法过程相同。&lt;/p&gt;
+&lt;h4 id=&#34;多元gbdt分类算法&#34;&gt;多元GBDT分类算法&lt;/h4&gt;
+&lt;p&gt;多元GBDT要比二元GBDT复杂一些，对应的是多元逻辑回归和二元逻辑回归的复杂度差别。假设类别数为K，则此时我们的对数似然损失函数为：&lt;/p&gt;
+&lt;p&gt;$$
 L(y, f(x)) = -  \sum\limits_{k=1}^{K}y_klog;p_k(x)\tag{10}
-$$</p>
-<p>其中如果样本输出类别为$k$，则$y_{k}=1$。第$k$类的概率$p_{k}(x)$的表达式为：</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;其中如果样本输出类别为$k$，则$y_{k}=1$。第$k$类的概率$p_{k}(x)$的表达式为：&lt;/p&gt;
+&lt;p&gt;$$
 p_k(x) = exp(f_k(x)) \bigg / \sum\limits_{l=1}^{K} exp(f_l(x))\tag{11}
-$$</p>
-<p>集合上两式，我们可以计算出第$t$轮的第$i$个样本对应类别$l$的负梯度误差为:</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;集合上两式，我们可以计算出第$t$轮的第$i$个样本对应类别$l$的负梯度误差为:&lt;/p&gt;
+&lt;p&gt;$$
 r_{mil} = -\bigg[\frac{\partial L(y_i, f(x_i)))}{\partial f(x_i)}\bigg]_{f_k(x) = f_{l, m-1};; (x)} = y_{il} - p_{l, m-1}(x_i)\tag{12}
-$$</p>
-<p>观察上式可以看出，其实这里的误差就是样本$i$对应类别$l$的真实概率和$m−1$轮预测概率的差值。</p>
-<p>对于生成的决策树，我们各个叶子节点的最佳残差拟合值为:</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;观察上式可以看出，其实这里的误差就是样本$i$对应类别$l$的真实概率和$m−1$轮预测概率的差值。&lt;/p&gt;
+&lt;p&gt;对于生成的决策树，我们各个叶子节点的最佳残差拟合值为:&lt;/p&gt;
+&lt;p&gt;$$
 c_{mjl} = \underbrace{arg; min}_{c_{jl}}\sum\limits_{i=0}^{m}\sum\limits_{k=1}^{K} L(y_k, f_{m-1, l}(x) + \sum\limits_{j=0}^{J}c_{jl} I(x_i \in R_{mj}))\tag{13}
-$$</p>
-<p>由于上式比较难优化，我们一般使用近似值代替:</p>
-<p>$$
+$$&lt;/p&gt;
+&lt;p&gt;由于上式比较难优化，我们一般使用近似值代替:&lt;/p&gt;
+&lt;p&gt;$$
 c_{mjl} =  \frac{K-1}{K} ; \frac{\sum\limits_{x_i \in R_{mjl}}r_{mil}}{\sum\limits_{x_i \in R_{mil}}|r_{mil}|(1-|r_{mil}|)}\tag{14}
-$$</p>
-<p>除了负梯度计算和叶子节点的最佳残差拟合的线性搜索，多元GBDT分类和二元GBDT分类以及GBDT回归算法过程相同。</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p><a href="https://www.cnblogs.com/ModifyRong/p/7744987.html">机器学习算法GBDT</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:2" role="doc-endnote">
-<p><a href="https://mp.weixin.qq.com/s/li2_zhx8D6wia6ZgeH9xiA?">GBDT之原理、所解决的问题、应用场景</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:3" role="doc-endnote">
-<p><a href="https://www.google.com/search?q=The%20Elements%20of%20Statistical%20Learning">The Elements of Statistical Learning</a> <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:4" role="doc-endnote">
-<p><a href="https://www.cnblogs.com/pinard/p/6140514.html">梯度提升树 (GBDT) 原理小结</a> <a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-]]></description>
+$$&lt;/p&gt;
+&lt;p&gt;除了负梯度计算和叶子节点的最佳残差拟合的线性搜索，多元GBDT分类和二元GBDT分类以及GBDT回归算法过程相同。&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cnblogs.com/ModifyRong/p/7744987.html&#34;&gt;机器学习算法GBDT&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://mp.weixin.qq.com/s/li2_zhx8D6wia6ZgeH9xiA?&#34;&gt;GBDT之原理、所解决的问题、应用场景&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.google.com/search?q=The%20Elements%20of%20Statistical%20Learning&#34;&gt;The Elements of Statistical Learning&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cnblogs.com/pinard/p/6140514.html&#34;&gt;梯度提升树 (GBDT) 原理小结&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
                 
                 
                 
@@ -495,7 +495,7 @@ $$</p>
                         
                         
                             
-                                <category domain="https://iyuanshuo.com/research/">research\</category>
+                                <category domain="https://iyuanshuo.com/research/">research</category>
                             
                         
                     
@@ -520,46 +520,46 @@ $$</p>
                 <title>Zotero 一站式跨平台文献管理和移动端阅读</title>
                 <link>https://iyuanshuo.com/research/zotero-usage-2018011321/</link>
                 <guid isPermaLink="true">https://iyuanshuo.com/research/zotero-usage-2018011321/</guid>
-                <pubDate>Sat, 13 Jan 2018 21:00:00 +0000</pubDate>
+                <pubDate>Sat, 13 Jan 2018 21:00:00 &#43;0000</pubDate>
                 
-                    <author>isaulyuan@gmail.com (Shuo Yuan)</author>
+                    <author>ishawnyuan@gmail.com (Shuo Yuan)</author>
                 
-                <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
+                <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
                 
-                    <description><![CDATA[<blockquote>
-<p>updated some pics.</p>
-</blockquote>
-<p>本文之前使用的方式是 “<a href="https://iyuanshuo.com/research/zotero-usage-2017062813/">Zotero + Zotfile + 云盘</a>” 实现跨平台同步。这种方式在移动端如手机或Pad上阅读，可以借助 ZotFile 的 Tablet 功能将需要阅读的文献导出到云盘 Tablet 文件夹，然后在移动端使用 PDF Expert 接入该文件夹进行文献阅读批注。最后在 PC 端将这些文献重新拉取，实现移动端同步。</p>
-<p>这种方式的附件与文献条目其实是链接关系，在 Zotero 删除文献条目后其链接的附件并不会删除，难以接受。其次，在移动端阅读时需要先在 PC 端导出，损失了自由度。</p>
-<p>经过一番对比后，重新回归了“Zotero + WebDAV + PaperShip ” ，目前体验比较舒适。相关的软件和插件安装不再赘述，请查看前文<a href="https://iyuanshuo.com/research/zotero-usage-2017062813/">&lt;Zotero 文献管理与多设备同步&gt;</a>。</p>
-<h3 id="zotero--webdav--papership-配置">Zotero + WebDAV + PaperShip 配置</h3>
-<p>首先是支持 WebDAV 的云盘选择，比较可惜的是重度使用的 Onedrive 不支持 WebDAV。国内知名度比较高的有坚果云，国外有 box.com 和 4shared 等，当然自建私有云也是个不错的选择。但是，鉴于坚果云免费用户每月受限的上传和下载流量首先被我 pass，因为有的时候配置新电脑什么的1G或2G的流量并不够用。最后，具有10G免费容量并且没有流量限制的 box.com 比较满足需求，虽然官方说19年底已经不维护 WebDAV 方式接入了，但是目前并不影响正常使用。</p>
-<h4 id="zotero-配置">Zotero 配置</h4>
-<p>这种方式下的 Zotero 配置相对于前文介绍的通过 ZotFile 链接附件同步方式来说更加简单。除了在 Zotero 同步选项卡中需要配置网盘的 WebDAV 信息，其他设置保持原生 Zotero 默认即可正常使用。</p>
-<ul>
-<li>配置 WebDAV，根据不同的网盘配置相应的 URL 和账号密码</li>
-</ul>
-<p><img src="http://images.iyuanshuo.com/20200327094908.png" alt="WebDAV 配置" style="zoom:30%;" /></p>
-<ul>
-<li>此外，对于之前使用 Zotfile 链接附件的用户，需要在 <code>Preference</code> 中将相对路径改为绝对路径</li>
-</ul>
-<p><img src="http://images.iyuanshuo.com/20200327095424.png" alt="附件存储路径修改" style="zoom:30%;" /></p>
-<ul>
-<li>并且在 Zotfile 的设置中取消自定义附件位置</li>
-</ul>
-<p><img src="http://images.iyuanshuo.com/20200327100047.png" alt="Zotfile 取消自定义附件位置" style="zoom:40%;" /></p>
-<p>如果想将之前通过 Zotfile 链接到云盘的文件恢复到 Zotero 默认的位置以便于 Zotero 将所有文件同步到 WebDAV 云盘中，需要在完成上述步骤之后使用 Zotfile 的附件重命名功能。Zotfile 在重命名附件的过程中会将附件移动到其设定的文件夹，这也是 Zotfile 的强大之处。比如前文中通过 Zotfile 链接附件到网盘就是通过自定义附件位置后，通过重命名将附件移动到网盘文件夹并链接到相应条目。在 Zotfile 的设置中取消自定义附件位置之后，使用 Zotfile 重命名同样会将所有附件移动到 Zotero 默认位置，并链接到相应条目。如此之后，Zotero 就能够同步之前所有的文献和附件。</p>
-<ul>
-<li>在 Zotero 中全选数据库中所有条目后右键选择<code>Manage Attachments</code>--&gt;<code>Rename Attachments</code>。当然，重命名规则可以在 Zotfile 配置中修改。</li>
-</ul>
-<p><img src="http://images.iyuanshuo.com/20200327103521.png" alt="使用 Zotfile 批量移动附件" style="zoom:33%;" /></p>
-<h4 id="papership-配置">PaperShip 配置</h4>
-<p>使用这种方式同步比较吸引人的地方是 Zotero 非官方移软件 PaperShip (IOS+IPadOS+MacOS) 支持使用 WebDAV 的同步方式。在移动端配置好 PaperShip 的 WebDAV 之后，可以随时下载需要阅读的文献。值得一提的是，PaperShip 对于 box.com 是重点支持的，在配置选项里与 WebDAV 单独分开。</p>
-<p>在 PaperShip 登录 Zotero 之后，进入<code>Setting</code> --&gt; <code>Zotero File Hosting</code></p>
-<p><img src="http://images.iyuanshuo.com/20200327105918.png" alt="PaperShip 配置" style="zoom: 50%;" /></p>
-<p>至此，在移动端就可以拥有与 PC 端 Zotero 一般无二的文献阅读体验。虽然对 PDF 的批注不太友好，但是考虑到移动端通常是应急使用影响不大。</p>
-<hr>
-]]></description>
+                    <description>&lt;blockquote&gt;
+&lt;p&gt;updated some pics.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;本文之前使用的方式是 “&lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2017062813/&#34;&gt;Zotero + Zotfile + 云盘&lt;/a&gt;” 实现跨平台同步。这种方式在移动端如手机或Pad上阅读，可以借助 ZotFile 的 Tablet 功能将需要阅读的文献导出到云盘 Tablet 文件夹，然后在移动端使用 PDF Expert 接入该文件夹进行文献阅读批注。最后在 PC 端将这些文献重新拉取，实现移动端同步。&lt;/p&gt;
+&lt;p&gt;这种方式的附件与文献条目其实是链接关系，在 Zotero 删除文献条目后其链接的附件并不会删除，难以接受。其次，在移动端阅读时需要先在 PC 端导出，损失了自由度。&lt;/p&gt;
+&lt;p&gt;经过一番对比后，重新回归了“Zotero + WebDAV + PaperShip ” ，目前体验比较舒适。相关的软件和插件安装不再赘述，请查看前文&lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2017062813/&#34;&gt;&amp;lt;Zotero 文献管理与多设备同步&amp;gt;&lt;/a&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;zotero--webdav--papership-配置&#34;&gt;Zotero + WebDAV + PaperShip 配置&lt;/h3&gt;
+&lt;p&gt;首先是支持 WebDAV 的云盘选择，比较可惜的是重度使用的 Onedrive 不支持 WebDAV。国内知名度比较高的有坚果云，国外有 box.com 和 4shared 等，当然自建私有云也是个不错的选择。但是，鉴于坚果云免费用户每月受限的上传和下载流量首先被我 pass，因为有的时候配置新电脑什么的1G或2G的流量并不够用。最后，具有10G免费容量并且没有流量限制的 box.com 比较满足需求，虽然官方说19年底已经不维护 WebDAV 方式接入了，但是目前并不影响正常使用。&lt;/p&gt;
+&lt;h4 id=&#34;zotero-配置&#34;&gt;Zotero 配置&lt;/h4&gt;
+&lt;p&gt;这种方式下的 Zotero 配置相对于前文介绍的通过 ZotFile 链接附件同步方式来说更加简单。除了在 Zotero 同步选项卡中需要配置网盘的 WebDAV 信息，其他设置保持原生 Zotero 默认即可正常使用。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;配置 WebDAV，根据不同的网盘配置相应的 URL 和账号密码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327094908.png&#34; alt=&#34;WebDAV 配置&#34; style=&#34;zoom:30%;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;此外，对于之前使用 Zotfile 链接附件的用户，需要在 &lt;code&gt;Preference&lt;/code&gt; 中将相对路径改为绝对路径&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327095424.png&#34; alt=&#34;附件存储路径修改&#34; style=&#34;zoom:30%;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;并且在 Zotfile 的设置中取消自定义附件位置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327100047.png&#34; alt=&#34;Zotfile 取消自定义附件位置&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;如果想将之前通过 Zotfile 链接到云盘的文件恢复到 Zotero 默认的位置以便于 Zotero 将所有文件同步到 WebDAV 云盘中，需要在完成上述步骤之后使用 Zotfile 的附件重命名功能。Zotfile 在重命名附件的过程中会将附件移动到其设定的文件夹，这也是 Zotfile 的强大之处。比如前文中通过 Zotfile 链接附件到网盘就是通过自定义附件位置后，通过重命名将附件移动到网盘文件夹并链接到相应条目。在 Zotfile 的设置中取消自定义附件位置之后，使用 Zotfile 重命名同样会将所有附件移动到 Zotero 默认位置，并链接到相应条目。如此之后，Zotero 就能够同步之前所有的文献和附件。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在 Zotero 中全选数据库中所有条目后右键选择&lt;code&gt;Manage Attachments&lt;/code&gt;--&amp;gt;&lt;code&gt;Rename Attachments&lt;/code&gt;。当然，重命名规则可以在 Zotfile 配置中修改。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327103521.png&#34; alt=&#34;使用 Zotfile 批量移动附件&#34; style=&#34;zoom:33%;&#34; /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;papership-配置&#34;&gt;PaperShip 配置&lt;/h4&gt;
+&lt;p&gt;使用这种方式同步比较吸引人的地方是 Zotero 非官方移软件 PaperShip (IOS+IPadOS+MacOS) 支持使用 WebDAV 的同步方式。在移动端配置好 PaperShip 的 WebDAV 之后，可以随时下载需要阅读的文献。值得一提的是，PaperShip 对于 box.com 是重点支持的，在配置选项里与 WebDAV 单独分开。&lt;/p&gt;
+&lt;p&gt;在 PaperShip 登录 Zotero 之后，进入&lt;code&gt;Setting&lt;/code&gt; --&amp;gt; &lt;code&gt;Zotero File Hosting&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327105918.png&#34; alt=&#34;PaperShip 配置&#34; style=&#34;zoom: 50%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;至此，在移动端就可以拥有与 PC 端 Zotero 一般无二的文献阅读体验。虽然对 PDF 的批注不太友好，但是考虑到移动端通常是应急使用影响不大。&lt;/p&gt;
+&lt;hr&gt;
+</description>
                 
                 
                 
@@ -570,7 +570,7 @@ $$</p>
                         
                         
                             
-                                <category domain="https://iyuanshuo.com/research/">research\</category>
+                                <category domain="https://iyuanshuo.com/research/">research</category>
                             
                         
                     
@@ -595,51 +595,51 @@ $$</p>
                 <title>Zotero 文献管理与多设备同步</title>
                 <link>https://iyuanshuo.com/research/zotero-usage-2017062813/</link>
                 <guid isPermaLink="true">https://iyuanshuo.com/research/zotero-usage-2017062813/</guid>
-                <pubDate>Wed, 28 Jun 2017 13:00:00 +0000</pubDate>
+                <pubDate>Wed, 28 Jun 2017 13:00:00 &#43;0000</pubDate>
                 
-                    <author>isaulyuan@gmail.com (Shuo Yuan)</author>
+                    <author>ishawnyuan@gmail.com (Shuo Yuan)</author>
                 
-                <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
+                <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
                 
-                    <description><![CDATA[<blockquote>
-<p>2018-01 更新说明：本文介绍的方法已被本人弃用，推荐使用 <a href="https://iyuanshuo.com/research/zotero-usage-2018011321/">Zotero + WebDAV + PaperShip</a></p>
-</blockquote>
-<p>Zotero 作为一款开源的文献管理软件，因其为文献获取、整理、引用和导出过程带来的便利而备受科研工作者的关注。凭借其开源特性和较活跃的社区，积累了丰富的 translator 用于浏览器插件对各个数据库网页中文献信息的精准抓取。在主流的浏览器上，其一键式文献保存和附件自动下载简化了研究者文献整理的操作。功能强大的插件也是 Zotero 被选择的重要原因，比如 better-bibtex 支撑的 BibTeX 文献引用导出功能对于 LaTeX 使用者来说是个强有力的辅助。</p>
-<h3 id="准备元素及系统环境">准备元素及系统环境</h3>
-<ul>
-<li>macOS Mojave (Windows 系统配置类似)</li>
-<li>Zotero (<a href="https://www.zotero.org/download/">下载</a>)</li>
-<li>zotero-better-bibtex (<a href="https://github.com/retorquere/zotero-better-bibtex/releases">下载</a>)</li>
-<li>zotfile (<a href="https://github.com/jlegewie/zotfile/releases">下载</a>)</li>
-<li>Zotero Connector (<a href="https://www.zotero.org/download/">下载</a>)</li>
-<li>Zotero 账户</li>
-</ul>
-<h3 id="安装-zotero-及其插件">安装 Zotero 及其插件</h3>
-<p>从 <a href="https://www.zotero.org/download/">Zotero 官网</a>下载软件，并安装相应的浏览器插件 Zotero Connector (for <a href="https://chrome.google.com/webstore/detail/zotero-connector/ekhagklcjbdpajgpjgmbionohlpdbjgc?hl=en">Chrome</a>)。</p>
-<p>打开 Zotero 软件，点击菜单栏 <code>Tools</code> --&gt; <code>Add-ons</code>，进入 <code>Add-ons Manager</code>；点击右上角的<strong>齿轮</strong>图标，点击 <code>Install Add-on From File</code>，弹出文件浏览器，选中插件安装包 (xpi 文件) 并安装。</p>
-<p><img src="http://images.iyuanshuo.com/zotero_add_on.png" alt="add_ons" style="zoom: 50%;" /></p>
-<p><img src="http://images.iyuanshuo.com/zotero_install_plugin.png" alt="Install_plugin" style="zoom: 30%;" /></p>
-<h3 id="zotero--zotfile--网盘-配置">Zotero + ZotFile + 网盘 配置</h3>
-<ul>
-<li>进入 <code>Preference</code>，在 <code>General</code> 下取消勾选 <code>Automatically take snapshots when creating items from web pages</code>。此选项用于为每个文献自动抓取网页快照，实际用处不大，反而产生许多琐碎的网页文件。</li>
-</ul>
-<p><img src="http://images.iyuanshuo.com/zotero_general_auto_snapshots.png" alt="zotero_general_auto_snapshots" style="zoom: 30%;" /></p>
-<ul>
-<li><code>Sync</code> 选项登陆，勾选 <code>Data Syncing</code> 下的两个选项。Zotero 官方提供的同步包括<strong>数据同步</strong>和<strong>文件同步</strong>。数据部分同步文献基础信息，空间没有限制。文件部分同步 pdf、笔记等附件，免费额度为300MB。借助插件 zotfile 实现网盘（如Onedrive，Dropbox等）同步附件可以有效的突破存储限制。</li>
-</ul>
-<p><img src="http://images.iyuanshuo.com/zotero_sync.png" alt="zotero_sync" style="zoom:30%;" /></p>
-<ul>
-<li>使用网盘Dropbox同步 pdf 文件；选项 <code>Tools</code> 进入 <code>ZotFile Preferences</code> 配置附件存放位置及整理规则，习惯于按照文献发表年份进行 pdf 文件分类。借助浏览器 Connector 下载的文献附件会被 ZotFile 根据自行设定的重命名规则进行重命名，并存放到网盘特定位置。</li>
-</ul>
-<p><img src="http://images.iyuanshuo.com/zotero_zotfile_dropbox.png" alt="zotero_zotfile_dropbox" style="zoom: 33%;" /></p>
-<ul>
-<li>Zotero 的附件存放设置需要与 ZotFile 相匹配，保证文献条目和附件的关联。</li>
-</ul>
-<p><img src="http://images.iyuanshuo.com/zotero_preference_dropbox.png" alt="zotero_preference_dropbox" style="zoom: 30%;" /></p>
-<h3 id="latex-引用">LaTeX 引用</h3>
-<p>使用 zotero-better-bibtex 导出 bib 文件，Citation key format 设置为 <code>[auth:lower][year][shorttitle1]</code>。当然也可自行设置 Cite Key 的格式，具体规则请参考<a href="https://retorque.re/zotero-better-bibtex/configuration/">官方文档</a>。该插件自动更新导出的 bib 文件功能简直是 LaTeX 使用者的福音。</p>
-<hr>
-]]></description>
+                    <description>&lt;blockquote&gt;
+&lt;p&gt;2018-01 更新说明：本文介绍的方法已被本人弃用，推荐使用 &lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2018011321/&#34;&gt;Zotero + WebDAV + PaperShip&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Zotero 作为一款开源的文献管理软件，因其为文献获取、整理、引用和导出过程带来的便利而备受科研工作者的关注。凭借其开源特性和较活跃的社区，积累了丰富的 translator 用于浏览器插件对各个数据库网页中文献信息的精准抓取。在主流的浏览器上，其一键式文献保存和附件自动下载简化了研究者文献整理的操作。功能强大的插件也是 Zotero 被选择的重要原因，比如 better-bibtex 支撑的 BibTeX 文献引用导出功能对于 LaTeX 使用者来说是个强有力的辅助。&lt;/p&gt;
+&lt;h3 id=&#34;准备元素及系统环境&#34;&gt;准备元素及系统环境&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;macOS Mojave (Windows 系统配置类似)&lt;/li&gt;
+&lt;li&gt;Zotero (&lt;a href=&#34;https://www.zotero.org/download/&#34;&gt;下载&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;zotero-better-bibtex (&lt;a href=&#34;https://github.com/retorquere/zotero-better-bibtex/releases&#34;&gt;下载&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;zotfile (&lt;a href=&#34;https://github.com/jlegewie/zotfile/releases&#34;&gt;下载&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;Zotero Connector (&lt;a href=&#34;https://www.zotero.org/download/&#34;&gt;下载&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;Zotero 账户&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;安装-zotero-及其插件&#34;&gt;安装 Zotero 及其插件&lt;/h3&gt;
+&lt;p&gt;从 &lt;a href=&#34;https://www.zotero.org/download/&#34;&gt;Zotero 官网&lt;/a&gt;下载软件，并安装相应的浏览器插件 Zotero Connector (for &lt;a href=&#34;https://chrome.google.com/webstore/detail/zotero-connector/ekhagklcjbdpajgpjgmbionohlpdbjgc?hl=en&#34;&gt;Chrome&lt;/a&gt;)。&lt;/p&gt;
+&lt;p&gt;打开 Zotero 软件，点击菜单栏 &lt;code&gt;Tools&lt;/code&gt; --&amp;gt; &lt;code&gt;Add-ons&lt;/code&gt;，进入 &lt;code&gt;Add-ons Manager&lt;/code&gt;；点击右上角的&lt;strong&gt;齿轮&lt;/strong&gt;图标，点击 &lt;code&gt;Install Add-on From File&lt;/code&gt;，弹出文件浏览器，选中插件安装包 (xpi 文件) 并安装。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_add_on.png&#34; alt=&#34;add_ons&#34; style=&#34;zoom: 50%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_install_plugin.png&#34; alt=&#34;Install_plugin&#34; style=&#34;zoom: 30%;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;zotero--zotfile--网盘-配置&#34;&gt;Zotero + ZotFile + 网盘 配置&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;进入 &lt;code&gt;Preference&lt;/code&gt;，在 &lt;code&gt;General&lt;/code&gt; 下取消勾选 &lt;code&gt;Automatically take snapshots when creating items from web pages&lt;/code&gt;。此选项用于为每个文献自动抓取网页快照，实际用处不大，反而产生许多琐碎的网页文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_general_auto_snapshots.png&#34; alt=&#34;zotero_general_auto_snapshots&#34; style=&#34;zoom: 30%;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Sync&lt;/code&gt; 选项登陆，勾选 &lt;code&gt;Data Syncing&lt;/code&gt; 下的两个选项。Zotero 官方提供的同步包括&lt;strong&gt;数据同步&lt;/strong&gt;和&lt;strong&gt;文件同步&lt;/strong&gt;。数据部分同步文献基础信息，空间没有限制。文件部分同步 pdf、笔记等附件，免费额度为300MB。借助插件 zotfile 实现网盘（如Onedrive，Dropbox等）同步附件可以有效的突破存储限制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_sync.png&#34; alt=&#34;zotero_sync&#34; style=&#34;zoom:30%;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用网盘Dropbox同步 pdf 文件；选项 &lt;code&gt;Tools&lt;/code&gt; 进入 &lt;code&gt;ZotFile Preferences&lt;/code&gt; 配置附件存放位置及整理规则，习惯于按照文献发表年份进行 pdf 文件分类。借助浏览器 Connector 下载的文献附件会被 ZotFile 根据自行设定的重命名规则进行重命名，并存放到网盘特定位置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_zotfile_dropbox.png&#34; alt=&#34;zotero_zotfile_dropbox&#34; style=&#34;zoom: 33%;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Zotero 的附件存放设置需要与 ZotFile 相匹配，保证文献条目和附件的关联。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_preference_dropbox.png&#34; alt=&#34;zotero_preference_dropbox&#34; style=&#34;zoom: 30%;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;latex-引用&#34;&gt;LaTeX 引用&lt;/h3&gt;
+&lt;p&gt;使用 zotero-better-bibtex 导出 bib 文件，Citation key format 设置为 &lt;code&gt;[auth:lower][year][shorttitle1]&lt;/code&gt;。当然也可自行设置 Cite Key 的格式，具体规则请参考&lt;a href=&#34;https://retorque.re/zotero-better-bibtex/configuration/&#34;&gt;官方文档&lt;/a&gt;。该插件自动更新导出的 bib 文件功能简直是 LaTeX 使用者的福音。&lt;/p&gt;
+&lt;hr&gt;
+</description>
                 
                 
                 
@@ -650,7 +650,7 @@ $$</p>
                         
                         
                             
-                                <category domain="https://iyuanshuo.com/research/">research\</category>
+                                <category domain="https://iyuanshuo.com/research/">research</category>
                             
                         
                     
@@ -664,482 +664,6 @@ $$</p>
                                 
                                 
                                     <category domain="https://iyuanshuo.com/tags/zotero/">Zotero</category>
-                                
-                            
-                        
-                    
-                
-            </item>
-        
-            <item>
-                <title>Git 基本使用</title>
-                <link>https://iyuanshuo.com/tech/git-usage-2017010520/</link>
-                <guid isPermaLink="true">https://iyuanshuo.com/tech/git-usage-2017010520/</guid>
-                <pubDate>Thu, 05 Jan 2017 20:00:00 +0000</pubDate>
-                
-                    <author>isaulyuan@gmail.com (Shuo Yuan)</author>
-                
-                <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
-                
-                    <description><![CDATA[<h2 id="私人-git-仓库搭建1">私人 Git 仓库搭建<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></h2>
-<p>虽然 GitHub 社区服务已经非常不错，但由于其开源特质不适合托管私人项目，比如我大磕盐人用 LaTEX 撰写的论文。借助服务器搭建私人 Git 仓库用于 LaTEX 论文撰写和修改全流程管理是不二选择。通过 Git 托管论文可以借助其版本管理功能进行高效的修改对比校验等，比如老师给你修改之后的论文，使用版本对比修改的内容一目了然。</p>
-<h3 id="搭建步骤">搭建步骤</h3>
-<ul>
-<li>安装 Git</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># macOS</span>
-brew install  git
-<span class="c1"># centos</span>
-yum install -y git
-<span class="c1"># ubuntu  </span>
-sudo apt-get install git
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>创建一个 Git 用户用来运行 Git 服务；提示没有权限时加上<code>sudo</code></li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">useradd git
-passwd git <span class="c1"># 创建Git用户密码，客户机非免密登录时需要</span>
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>创建仓库</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">su - git <span class="c1"># 切换到Git用户</span>
-<span class="nb">cd</span> /home/git <span class="c1"># 进入Git用户的根目录</span>
-mkdir test.git <span class="c1"># 创建test仓库</span>
-<span class="nb">cd</span> test.git
-git --bare init <span class="c1"># 仓库初始化，初始化仓库时一定要使用裸库否则不能 push</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="配置客户机免密登录">配置客户机免密登录</h3>
-<p>收集需要免密登录的客户机公钥，一般位于<code>~/.ssh</code>或者<code>C:\Users\saul\.ssh</code> 中的 <code>id_rsa.pub</code>文件中；将公钥写入服务器的<code>/home/git/.ssh/authorized_keys</code>文件中（若没有则创建）。</p>
-<ul>
-<li>首先客户机生成并获取公钥：</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">ssh-keygen -t rsa -C <span class="s2">&#34;youremail@email.com&#34;</span> <span class="c1"># 有配置GitHub公钥可直接使用</span>
-cat ~/.ssh/id_rsa.pub <span class="c1"># 复制打印出的公钥</span>
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>服务器配置</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /home/git
-mkdir .ssh
-chmod <span class="m">700</span> .ssh
-touch .ssh/authorized_keys
-vi .ssh/authorized_keys <span class="c1"># 粘贴公钥</span>
-chmod <span class="m">600</span> .ssh/authorized_keys  
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="客户机克隆仓库">客户机克隆仓库</h3>
-<ul>
-<li>正常未修改 SSH 端口：</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">git clone git@104.153.102.92:/home/git/test.git
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>修改 SSH 端口配置方式：</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">git clone ssh://git@104.153.102.92:10982/home/git/test.git
-</code></pre></td></tr></table>
-</div>
-</div><h2 id="git-放弃本地修改">Git 放弃本地修改</h2>
-<h3 id="尚未使用-git-add-缓存代码">尚未使用 <code>git add</code> 缓存代码</h3>
-<p>可以使用 <code>git checkout -- filepathname</code> (比如：<code>git checkout -- readme.md</code>，不要忘记中间的 <code>--</code> ，不写就成了检出分支了！！)。放弃所有的文件修改可以使用 <code>git checkout .</code> 命令。</p>
-<p>此命令用来放弃掉所有还没有加入到缓存区（就是 <code>git add</code> 命令）的修改：内容修改与整个文件删除。但是此命令不会删除掉刚新建的文件，因为刚新建的文件还没已有加入到 git 的管理系统中，所以对于 git 是未知的，自己手动删除就好了。</p>
-<h3 id="已经使用-git-add-缓存代码">已经使用 <code>git add</code> 缓存代码</h3>
-<p>可以使用 <code>git reset HEAD filepathname</code> （比如：<code>git reset HEAD readme.md</code>）来放弃指定文件的缓存，放弃所以的缓存可以使用 <code>git reset HEAD .</code> 命令。</p>
-<p>此命令用来清除git对于文件修改的缓存，相当于撤销 <code>git add</code> 命令所在的工作。在使用本命令后，本地的修改并不会消失，而是回到了如(未使用git add缓存代码)所示的状态。继续用处理(未使用<code>git add</code>缓存代码)中的操作，就可以放弃本地的修改。</p>
-<h3 id="已经使用-git-commit-提交代码">已经使用 <code>git commit</code> 提交代码</h3>
-<p>可以使用 <code>git reset --hard HEAD^</code> 来回退到上一次commit的状态。此命令可以用来回退到任意版本：<code>git reset --hard commitid</code> 
-你可以使用 <code>git log</code> 命令来查看git的提交历史。</p>
-<ul>
-<li>
-<p>本地新增了一堆文件(并没有<code>git add</code>到暂存区)，想放弃修改。</p>
-<ul>
-<li>单个文件或文件夹：<code>rm filename</code>, <code>rm -rf dir</code></li>
-<li>所有文件/文件夹：<code>git clean -xdf</code></li>
-</ul>
-</li>
-<li>
-<p>本地新增了一堆文件(已经git add到暂存区)，想放弃修改。</p>
-<ul>
-<li>单个文件/文件夹：<code>git reset HEAD filename</code></li>
-<li>所有文件/文件夹：<code>git reset HEAD .</code></li>
-</ul>
-</li>
-</ul>
-<h2 id="git-版本回滚">Git 版本回滚</h2>
-<p>首先查询历史对应不同版本的ID, 用于回退定位：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">git log --pretty<span class="o">=</span>oneline
-</code></pre></td></tr></table>
-</div>
-</div><p>恢复到历史版本：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">git reset --hard fae6966548e3ae76cfa7f38a461c438cf75ba965
-</code></pre></td></tr></table>
-</div>
-</div><p>把修改推到远程服务器：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">git push -f -u origin master
-</code></pre></td></tr></table>
-</div>
-</div><p>重新更新就可以了：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">git pull
-</code></pre></td></tr></table>
-</div>
-</div><h2 id="仓库子模块的使用-2">仓库子模块的使用 <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></h2>
-<p>项目中经常使用别人维护的模块，在 git 中使用子模块的功能能够大大提高开发效率。使用子模块后，不必负责子模块的维护，只需要在必要的时候同步更新子模块即可。</p>
-<ul>
-<li>添加子模块</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">git submodule add url <span class="c1"># url 既可以是https也可以是ssh</span>
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>克隆带子模块的仓库</li>
-</ul>
-<p>克隆的仓库中，子模块中没有代码，需要初始化及更新；</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">git submodule init <span class="c1"># 初始化子模块</span>
-git submodule update <span class="c1"># 更新</span>
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>子模块拉取远程更新代码</li>
-</ul>
-<p>如果想要在子模块中查看新工作，可以进入到<strong>子模块</strong>的目录中运行 <code>git fetch</code> 与 <code>git merge</code>，合并上游分支来更新本地代码。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">git fetch
-git merge origin/master
-</code></pre></td></tr></table>
-</div>
-</div><p>如果不想在子目录中手动抓取与合并， 在主仓库的根目录运行 <code>git submodule update --remote</code>，Git 将会进入子模块然后抓取并更新。</p>
-<hr>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p><a href="https://git-scm.com/book/zh/v2/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E6%90%AD%E5%BB%BA-Git"><em>服务器上的 Git</em></a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:2" role="doc-endnote">
-<p><a href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97">Git 工具 - 子模块</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-]]></description>
-                
-                
-                
-                    
-                    
-                    
-                        
-                        
-                        
-                            
-                                <category domain="https://iyuanshuo.com/tech/">tech\</category>
-                            
-                        
-                    
-                
-                
-                
-                    
-                        
-                            
-                                
-                                
-                                
-                                    <category domain="https://iyuanshuo.com/tags/git/">Git</category>
-                                
-                            
-                        
-                    
-                
-            </item>
-        
-            <item>
-                <title>VPS 构建 IPv6 隧道</title>
-                <link>https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/</link>
-                <guid isPermaLink="true">https://iyuanshuo.com/tech/vps-add-ipv6-tunnel-2016111521/</guid>
-                <pubDate>Tue, 15 Nov 2016 21:00:00 +0000</pubDate>
-                
-                    <author>isaulyuan@gmail.com (Shuo Yuan)</author>
-                
-                <copyright>在保留本文作者及本文链接的前提下，非商业用途随意转载分享。</copyright>
-                
-                    <description><![CDATA[<p>鉴于有的 VPS 商家并没有原生的 IPv6 服务，可以使用 Hurricane Electric Free IPv6 Tunnel Broker 创建 IPv6 隧道为 VPS 提供 IPv6 支持。</p>
-<h3 id="注册并创建-ipv6-通道">注册并创建 IPv6 通道</h3>
-<ul>
-<li>注册 <a href="https://www.tunnelbroker.net/">https://www.tunnelbroker.net/</a> （需要邮箱验证）</li>
-<li>点击 Create Regular Tunnel（https://www.tunnelbroker.net/new_tunnel.php）</li>
-<li>在 IPv4 Endpoint (Your side) 处填上 ECS 的 IPv4 地址在 Available Tunnel Servers 中选择 Hong Kong, HK（如果你面向海外用户，可以选择更接近目标用户的地区）</li>
-<li>点击 Create Tunnel 后，通道就创建完成</li>
-</ul>
-<h3 id="配置-centos-使其支持-ipv6--搬瓦工服务器不需要此步骤">配置 Centos 使其支持 IPv6  （搬瓦工服务器不需要此步骤）</h3>
-<p>阿里云默认镜像里面的 CentOS 都是默认没有启用 IPv6 地址的，需要设置一番。</p>
-<ul>
-<li>编辑文件 <code>/etc/modprobe.d/disable_ipv6.conf</code>，注释以下相关的命令行：</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">alias</span> net-pf-10 off
-<span class="nb">alias</span> ipv6 off
-options ipv6 <span class="nv">disable</span><span class="o">=</span><span class="m">1</span>
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>编辑文件 /etc/sysconfig/network，将其中的 <code>NETWORKING_IPV6=no</code> 改为 <code>NETWORKING_IPV6=yes</code></li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># NETWORKING_IPV6=no</span>
-<span class="nv">NETWORKING_IPV6</span><span class="o">=</span>yes
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>
-<p>可以重启系统使其加载或者执行 <code>depmod -a</code> 和 <code>service network restart</code> 让其重载配置。</p>
-</li>
-<li>
-<p>确认配置都生效后运行 <code>ifconfig</code> 命令，如果可以看到 IPv6 的地址即为成功。</p>
-</li>
-</ul>
-<h3 id="配置-he-隧道地址">配置 HE 隧道地址</h3>
-<p>在 VPS 上配置了 IPv6 环境后，需要配置添加 IPv6 隧道。在 Hurricane Electric Free IPv6 Tunnel Broker 默认有提供<strong>Linux-net-tools</strong>命令可以直接使用。</p>
-<ul>
-<li>
-<p>回到 he 网页，点击 Example Configurations。</p>
-</li>
-<li>
-<p>选择 <strong>Linux-net-tools</strong> 并复制下面文本框的内容。</p>
-</li>
-<li>
-<p>回到 ssh，粘贴复制的内容并执行即可（Note：系统重启会失效，请自行写入脚本并设置开机启动）。</p>
-</li>
-</ul>
-<p><em>Tips: Centos 7 可能会提示:</em>  <code>-bash: ifconfig: command not found</code></p>
-<p><strong>解决方案：</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">yum search ifconfig    <span class="c1"># 提示只要安装net-tools.x86_64即可</span>
-yum install net-tools.x86_64 
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="设置-ipv6-开机自启">设置 IPv6 开机自启</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">vim /root/ipv6.sh
-</code></pre></td></tr></table>
-</div>
-</div><p>输入如下内容：  <em>即从 he 网站上复制的<code>Linux-net-tools</code>的代码</em></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
-</span><span class="cp"></span>
-ifconfig sit0 up
-ifconfig sit0 inet6 tunnel ::66.220.18.42
-ifconfig sit1 up
-ifconfig sit1 inet6 add 2001:470:c:957::2/64
-route -A inet6 add ::/0 dev sit1
-</code></pre></td></tr></table>
-</div>
-</div><p>给文件增加可执行权限：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">chmod +x /root/ipv6.sh
-</code></pre></td></tr></table>
-</div>
-</div><p>编辑启动管理文件：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">vim /etc/rc.d/rc.local
-</code></pre></td></tr></table>
-</div>
-</div><p>在最下方加入下面一行代码：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">sh /root/ipv6.sh
-</code></pre></td></tr></table>
-</div>
-</div><p>保存并退出，这样重启后也有 IPv6。</p>
-<h3 id="测试-ipv6-隧道可用性">测试 IPv6 隧道可用性</h3>
-<p>配置好隧道后，可以使用<code>ping6</code>命令进行验证。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">ping6 ipv6.baidu.com <span class="c1"># 如果你的服务器在国内可使用</span>
-ping6 www.google.com <span class="c1"># 如果返回ipv6地址即为成功</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="解决谷歌访问出现验证码">解决谷歌访问出现验证码</h3>
-<p>阿里云的较多海外机房在访问谷歌时会出现验证提示，可以强制使用 IPv6 访问谷歌来避免 IP 认证。</p>
-<p>可将谷歌的网址放入 hosts 文件并指定 IPv6 地址解决。</p>
-<p>编辑文件<code>vim /etc/hosts</code>并加入以下内容：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">2404:6800:4005:80a::2003 www.google.com.hk
-2404:6800:4005:80a::2003 google.com.hk <span class="c1"># 服务器所在地区的后缀</span>
-2404:6800:4005:80a::2003 www.google.com
-2404:6800:4005:80a::2003 google.com <span class="c1"># ipv6地址可以改为 ping6 命令返回的地址，延迟会更小</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>如果 hosts 文件没有立刻生效，可以尝试使用 <code>hostname xxx</code> 刷新，如果依旧无效可尝试重启。</p>
-]]></description>
-                
-                
-                
-                    
-                    
-                    
-                        
-                        
-                        
-                            
-                                <category domain="https://iyuanshuo.com/tech/">tech\</category>
-                            
-                        
-                    
-                
-                
-                
-                    
-                        
-                            
-                                
-                                
-                                
-                                    <category domain="https://iyuanshuo.com/tags/vps/">VPS</category>
                                 
                             
                         
