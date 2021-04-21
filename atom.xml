@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US">
     <title type="text">Shuo Yuan&#39;s Blog</title>
     <subtitle type="html">这是 shuoyuan 的生活与技术博客。</subtitle>
-    <updated>2021-04-21T14:53:17&#43;08:00</updated>
+    <updated>2021-04-21T15:53:32&#43;08:00</updated>
     <id>https://iyuanshuo.com/</id>
     <link rel="alternate" type="text/html" href="https://iyuanshuo.com/" />
     <link rel="self" type="application/atom&#43;xml" href="https://iyuanshuo.com/atom.xml" />
@@ -20,7 +20,7 @@
             <title type="text">DeepFM 模型介绍及应用</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/deep-fm-2018050111/" />
             <id>https://iyuanshuo.com/research/deep-fm-2018050111/</id>
-            <updated>2021-04-21T14:45:07&#43;08:00</updated>
+            <updated>2021-04-21T15:47:30&#43;08:00</updated>
             <published>2018-05-01T11:20:00&#43;00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -220,7 +220,7 @@ $$&lt;/p&gt;
             <title type="text">Factorization Machines 因式分解机</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/factorization-machine-2018032810/" />
             <id>https://iyuanshuo.com/research/factorization-machine-2018032810/</id>
-            <updated>2021-04-21T14:45:07&#43;08:00</updated>
+            <updated>2021-04-21T15:47:30&#43;08:00</updated>
             <published>2018-03-28T10:01:12&#43;00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -371,7 +371,7 @@ $$&lt;/p&gt;
             <title type="text">GBDT 梯度提升树的基本原理</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/gbdt-principle-2018031321/" />
             <id>https://iyuanshuo.com/research/gbdt-principle-2018031321/</id>
-            <updated>2021-04-21T14:45:07&#43;08:00</updated>
+            <updated>2021-04-21T15:47:30&#43;08:00</updated>
             <published>2018-03-13T21:26:42&#43;00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -520,7 +520,7 @@ $$&lt;/p&gt;
             <title type="text">Zotero 一站式跨平台文献管理和移动端阅读</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/zotero-usage-2018011321/" />
             <id>https://iyuanshuo.com/research/zotero-usage-2018011321/</id>
-            <updated>2021-04-21T14:45:07&#43;08:00</updated>
+            <updated>2021-04-21T15:47:30&#43;08:00</updated>
             <published>2018-01-13T21:00:00&#43;00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -535,9 +535,9 @@ $$&lt;/p&gt;
 &lt;p&gt;本文之前使用的方式是 “&lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2017062813/&#34;&gt;Zotero + Zotfile + 云盘&lt;/a&gt;” 实现跨平台同步。这种方式在移动端如手机或Pad上阅读，可以借助 ZotFile 的 Tablet 功能将需要阅读的文献导出到云盘 Tablet 文件夹，然后在移动端使用 PDF Expert 接入该文件夹进行文献阅读批注。最后在 PC 端将这些文献重新拉取，实现移动端同步。&lt;/p&gt;
 &lt;p&gt;这种方式的附件与文献条目其实是链接关系，在 Zotero 删除文献条目后其链接的附件并不会删除，难以接受。其次，在移动端阅读时需要先在 PC 端导出，损失了自由度。&lt;/p&gt;
 &lt;p&gt;经过一番对比后，重新回归了“Zotero + WebDAV + PaperShip ” ，目前体验比较舒适。相关的软件和插件安装不再赘述，请查看前文&lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2017062813/&#34;&gt;&amp;lt;Zotero 文献管理与多设备同步&amp;gt;&lt;/a&gt;。&lt;/p&gt;
-&lt;h3 id=&#34;zotero--webdav--papership-配置&#34;&gt;Zotero + WebDAV + PaperShip 配置&lt;/h3&gt;
+&lt;h2 id=&#34;zotero--webdav--papership-配置&#34;&gt;Zotero + WebDAV + PaperShip 配置&lt;/h2&gt;
 &lt;p&gt;首先是支持 WebDAV 的云盘选择，比较可惜的是重度使用的 Onedrive 不支持 WebDAV。国内知名度比较高的有坚果云，国外有 box.com 和 4shared 等，当然自建私有云也是个不错的选择。但是，鉴于坚果云免费用户每月受限的上传和下载流量首先被我 pass，因为有的时候配置新电脑什么的1G或2G的流量并不够用。最后，具有10G免费容量并且没有流量限制的 box.com 比较满足需求，虽然官方说19年底已经不维护 WebDAV 方式接入了，但是目前并不影响正常使用。&lt;/p&gt;
-&lt;h4 id=&#34;zotero-配置&#34;&gt;Zotero 配置&lt;/h4&gt;
+&lt;h3 id=&#34;zotero-配置&#34;&gt;Zotero 配置&lt;/h3&gt;
 &lt;p&gt;这种方式下的 Zotero 配置相对于前文介绍的通过 ZotFile 链接附件同步方式来说更加简单。除了在 Zotero 同步选项卡中需要配置网盘的 WebDAV 信息，其他设置保持原生 Zotero 默认即可正常使用。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;配置 WebDAV，根据不同的网盘配置相应的 URL 和账号密码&lt;/li&gt;
@@ -556,7 +556,7 @@ $$&lt;/p&gt;
 &lt;li&gt;在 Zotero 中全选数据库中所有条目后右键选择&lt;code&gt;Manage Attachments&lt;/code&gt;--&amp;gt;&lt;code&gt;Rename Attachments&lt;/code&gt;。当然，重命名规则可以在 Zotfile 配置中修改。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327103521.png&#34; alt=&#34;使用 Zotfile 批量移动附件&#34; style=&#34;zoom:33%;&#34; /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;papership-配置&#34;&gt;PaperShip 配置&lt;/h4&gt;
+&lt;h3 id=&#34;papership-配置&#34;&gt;PaperShip 配置&lt;/h3&gt;
 &lt;p&gt;使用这种方式同步比较吸引人的地方是 Zotero 非官方移软件 PaperShip (IOS+IPadOS+MacOS) 支持使用 WebDAV 的同步方式。在移动端配置好 PaperShip 的 WebDAV 之后，可以随时下载需要阅读的文献。值得一提的是，PaperShip 对于 box.com 是重点支持的，在配置选项里与 WebDAV 单独分开。&lt;/p&gt;
 &lt;p&gt;在 PaperShip 登录 Zotero 之后，进入&lt;code&gt;Setting&lt;/code&gt; --&amp;gt; &lt;code&gt;Zotero File Hosting&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327105918.png&#34; alt=&#34;PaperShip 配置&#34; style=&#34;zoom: 50%;&#34; /&gt;&lt;/p&gt;
@@ -598,7 +598,7 @@ $$&lt;/p&gt;
             <title type="text">Zotero 文献管理与多设备同步</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/zotero-usage-2017062813/" />
             <id>https://iyuanshuo.com/research/zotero-usage-2017062813/</id>
-            <updated>2021-04-21T14:45:07&#43;08:00</updated>
+            <updated>2021-04-21T15:47:30&#43;08:00</updated>
             <published>2017-06-28T13:00:00&#43;00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -611,7 +611,7 @@ $$&lt;/p&gt;
 &lt;p&gt;2018-01 更新说明：本文介绍的方法已被本人弃用，推荐使用 &lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2018011321/&#34;&gt;Zotero + WebDAV + PaperShip&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Zotero 作为一款开源的文献管理软件，因其为文献获取、整理、引用和导出过程带来的便利而备受科研工作者的关注。凭借其开源特性和较活跃的社区，积累了丰富的 translator 用于浏览器插件对各个数据库网页中文献信息的精准抓取。在主流的浏览器上，其一键式文献保存和附件自动下载简化了研究者文献整理的操作。功能强大的插件也是 Zotero 被选择的重要原因，比如 better-bibtex 支撑的 BibTeX 文献引用导出功能对于 LaTeX 使用者来说是个强有力的辅助。&lt;/p&gt;
-&lt;h3 id=&#34;准备元素及系统环境&#34;&gt;准备元素及系统环境&lt;/h3&gt;
+&lt;h2 id=&#34;准备元素及系统环境&#34;&gt;准备元素及系统环境&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;macOS Mojave (Windows 系统配置类似)&lt;/li&gt;
 &lt;li&gt;Zotero (&lt;a href=&#34;https://www.zotero.org/download/&#34;&gt;下载&lt;/a&gt;)&lt;/li&gt;
@@ -620,12 +620,12 @@ $$&lt;/p&gt;
 &lt;li&gt;Zotero Connector (&lt;a href=&#34;https://www.zotero.org/download/&#34;&gt;下载&lt;/a&gt;)&lt;/li&gt;
 &lt;li&gt;Zotero 账户&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;安装-zotero-及其插件&#34;&gt;安装 Zotero 及其插件&lt;/h3&gt;
+&lt;h2 id=&#34;安装-zotero-及其插件&#34;&gt;安装 Zotero 及其插件&lt;/h2&gt;
 &lt;p&gt;从 &lt;a href=&#34;https://www.zotero.org/download/&#34;&gt;Zotero 官网&lt;/a&gt;下载软件，并安装相应的浏览器插件 Zotero Connector (for &lt;a href=&#34;https://chrome.google.com/webstore/detail/zotero-connector/ekhagklcjbdpajgpjgmbionohlpdbjgc?hl=en&#34;&gt;Chrome&lt;/a&gt;)。&lt;/p&gt;
 &lt;p&gt;打开 Zotero 软件，点击菜单栏 &lt;code&gt;Tools&lt;/code&gt; --&amp;gt; &lt;code&gt;Add-ons&lt;/code&gt;，进入 &lt;code&gt;Add-ons Manager&lt;/code&gt;；点击右上角的&lt;strong&gt;齿轮&lt;/strong&gt;图标，点击 &lt;code&gt;Install Add-on From File&lt;/code&gt;，弹出文件浏览器，选中插件安装包 (xpi 文件) 并安装。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_add_on.png&#34; alt=&#34;add_ons&#34; style=&#34;zoom: 50%;&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_install_plugin.png&#34; alt=&#34;Install_plugin&#34; style=&#34;zoom: 30%;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;zotero--zotfile--网盘-配置&#34;&gt;Zotero + ZotFile + 网盘 配置&lt;/h3&gt;
+&lt;h2 id=&#34;zotero--zotfile--网盘-配置&#34;&gt;Zotero + ZotFile + 网盘 配置&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;进入 &lt;code&gt;Preference&lt;/code&gt;，在 &lt;code&gt;General&lt;/code&gt; 下取消勾选 &lt;code&gt;Automatically take snapshots when creating items from web pages&lt;/code&gt;。此选项用于为每个文献自动抓取网页快照，实际用处不大，反而产生许多琐碎的网页文件。&lt;/li&gt;
 &lt;/ul&gt;
@@ -642,7 +642,7 @@ $$&lt;/p&gt;
 &lt;li&gt;Zotero 的附件存放设置需要与 ZotFile 相匹配，保证文献条目和附件的关联。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_preference_dropbox.png&#34; alt=&#34;zotero_preference_dropbox&#34; style=&#34;zoom: 30%;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;latex-引用&#34;&gt;LaTeX 引用&lt;/h3&gt;
+&lt;h2 id=&#34;latex-引用&#34;&gt;LaTeX 引用&lt;/h2&gt;
 &lt;p&gt;使用 zotero-better-bibtex 导出 bib 文件，Citation key format 设置为 &lt;code&gt;[auth:lower][year][shorttitle1]&lt;/code&gt;。当然也可自行设置 Cite Key 的格式，具体规则请参考&lt;a href=&#34;https://retorque.re/zotero-better-bibtex/configuration/&#34;&gt;官方文档&lt;/a&gt;。该插件自动更新导出的 bib 文件功能简直是 LaTeX 使用者的福音。&lt;/p&gt;
 &lt;hr&gt;
 </content>
