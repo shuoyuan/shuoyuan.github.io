@@ -23,7 +23,7 @@
         
             <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
         
-        <lastBuildDate>Wed, 21 Apr 2021 15:53:32 &#43;0800</lastBuildDate>
+        <lastBuildDate>Sat, 24 Apr 2021 16:55:26 &#43;0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="https://iyuanshuo.com/rss.xml" />
         
@@ -110,7 +110,7 @@ $$&lt;/p&gt;
                         
                         
                             
-                                <category domain="https://iyuanshuo.com/research/">research</category>
+                                <category domain="https://iyuanshuo.com/research/">research\</category>
                             
                         
                     
@@ -201,7 +201,7 @@ $$&lt;/p&gt;
                         
                         
                             
-                                <category domain="https://iyuanshuo.com/research/">research</category>
+                                <category domain="https://iyuanshuo.com/research/">research\</category>
                             
                         
                     
@@ -246,69 +246,84 @@ $$&lt;/p&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;二维-fm&#34;&gt;二维-FM&lt;/h2&gt;
 &lt;p&gt;先回顾一下线性回归模型，其建模为：&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div&gt;
+$$
 \begin{aligned}
-\hat y({\rm{x}}) &amp;amp; = {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n} \&lt;br&gt;
-&amp;amp;= {\omega &lt;em&gt;0} + \sum\limits&lt;/em&gt;{i = 1}^n {{\omega _i}{x_i}} 
+\hat{y}(\mathrm{x})
+&amp;=\omega_{0}+\omega_{1} x_{1}+\omega_{2} x_{2}+\cdots+\omega_{n} x_{n} \\
+&amp;=\omega_{0}+\sum_{i=1}^{n} \omega_{i} x_{i}
 \end{aligned} \tag{1}
-$$&lt;/p&gt;
+$$
+&lt;/div&gt;
 &lt;p&gt;从上式可以看出各特征分量$x_i$和$x_j\ (i \ne j )$之间是相互孤立的，因此仅考虑了单个的特征分量而没有考虑特征分量之间的相互关系。&lt;/p&gt;
 &lt;p&gt;在$(1)$的基础上改写为：&lt;/p&gt;
-&lt;p&gt;$$
-\begin{aligned}
-\hat y({\rm{x}}) = {\omega &lt;em&gt;0} + \sum\limits&lt;/em&gt;{i = 1}^n {{\omega &lt;em&gt;i}{x_i}}  + \sum\limits&lt;/em&gt;{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {{\omega _{ij}}{x_i}} {x_j}} 
-\end{aligned} \tag{2}
-$$&lt;/p&gt;
+&lt;div&gt;
+$$
+\hat{y}(\mathrm{x})=\omega_{0}+\sum_{i=1}^{n} \omega_{i} x_{i}+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n} \omega_{i j} x_{i} x_{j} \tag{2}
+$$
+&lt;/div&gt;
 &lt;p&gt;这样也就将任意两个不同的特征向量之间的关系同时考虑进来了。&lt;/p&gt;
 &lt;p&gt;但是，有一个问题是在稀疏数据中这种直接在${x_i} {x_j}$前面配上一个系数$\omega_{ij}$的方式会有很大的缺陷：对于观察样本中未出现过交互的特征分量，不能对相应的参数进行估计&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。一定要注意的是，在高度稀疏数据场景中，由于数据量的不足，样本中出现未交互的特征分量是很普遍的。&lt;/p&gt;
 &lt;p&gt;为了克服这个缺陷，考虑在(2)中的系数$\omega_{ij}$上进行适当的处理以将其换成另外一种形式。针对每个维度的特征分量$x_i$，引入辅助向量：&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div&gt;
+$$
 \begin{aligned}
-{{\rm{v}}&lt;em&gt;i} = {({v&lt;/em&gt;{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},\ \ i = 1,2, \cdots ,n
+{{\rm{v}}_i} = {({v_{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},\ \ i = 1,2, \cdots ,n
 \end{aligned}
-$$&lt;/p&gt;
+$$
+&lt;/div&gt;
 &lt;p&gt;其中$k$为超参数，将(2)中的$\omega_{ij}$改写为：&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div&gt;
+$$
 \begin{aligned}
-{{\hat \omega }&lt;em&gt;{ij}} = {{\rm{v}}&lt;em&gt;i}^T{{\rm{v}}&lt;em&gt;j}: = \sum\limits&lt;/em&gt;{l = 1}^k {{v&lt;/em&gt;{il}}{x&lt;/em&gt;{jl}}} 
+{{\hat \omega }_{ij}} = {{\rm{v}}_i}^T{{\rm{v}}_j}: = \sum\limits_{l = 1}^k {{v_{il}}{x_{jl}}}
 \end{aligned}
-$$&lt;/p&gt;
+$$
+&lt;/div&gt;
 &lt;p&gt;如此，可获得FM的二维模型。&lt;/p&gt;
 &lt;h3 id=&#34;模型&#34;&gt;模型&lt;/h3&gt;
 &lt;p&gt;对于2次特征交叉的FM模型可以表示为&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div&gt;
+$$
 \begin{aligned}
-y(x) = {w_0} + \sum\limits_{i = 1}^n {({w_i}{x_i})}  + \sum\limits_{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {( &amp;lt; {v_i},{v_j} &amp;gt; {x_i}{x_j})} } 
+y(x) = {w_0} + \sum\limits_{i = 1}^n {({w_i}{x_i})}  + \sum\limits_{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {( &lt; {v_i},{v_j} &gt; {x_i}{x_j})} }
 \end{aligned} \tag{3}
-$$&lt;/p&gt;
+$$
+&lt;/div&gt;
 &lt;p&gt;其中模型参数有$w_0$为截距，$w_i$为一维特征权重，$v_i$为每一维度特征的分布式表示，也即$w_0$为整体偏置量，$W$对特征向量的每个分量的强度进行建模，$V$对特征向量中任意两个分量之间的关系进行建模。&lt;/p&gt;
 &lt;p&gt;其中特征交叉权重计算为:&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div&gt;
+$$
 \begin{aligned}
-&amp;lt; {v_i},{v_j} &amp;gt;  = \sum\limits_{f = 1}^k {{v_{i,f}}} {v_{j,f}}
+&lt; {v_i},{v_j} &gt;  = \sum\limits_{f = 1}^k {{v_{i,f}}} {v_{j,f}}
 \end{aligned} \tag{3.1}
-$$&lt;/p&gt;
+$$
+&lt;/div&gt;
 &lt;h3 id=&#34;二维-fm计算复杂度&#34;&gt;二维-FM计算复杂度&lt;/h3&gt;
 &lt;p&gt;如果对式子(1)直接进行计算，那么其复杂度是$O(kn^2)$，但是可以通过简单的数学变换将其转化为$O(kn)$。由于前面两项的计算复杂度都是$O(kn)$，所以只需要对第三项进行处理&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div&gt;
+$$
 \begin{aligned}
-&amp;amp;\sum\limits_{i = 1}^n {\sum\limits_{j = i + 1}^n {\left( { &amp;lt; {v_i},{v_j} &amp;gt; {x_i}{x_j}} \right)} } {\rm{ }} \&lt;br&gt;
-&amp;amp;= \frac{1}{2}\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\left( { &amp;lt; {v_i},{v_j} &amp;gt; {x_i}{x_j}} \right)} }  - \frac{1}{2}\sum\limits_{i = 1}^n  &amp;lt;  {v_i},{v_i} &amp;gt; {x_i}{x_i} \ 
-&amp;amp;= \frac{1}{2}\left( {\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{{j_f}}}{x_i}{x_j}} \right)} } }  - \sum\limits_{i = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{i,f}}{x_i}{x_i}} \right)} } } \right) \&lt;br&gt;
-&amp;amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)\left( {\sum\limits_{j = 1}^n {{v_{j,f}}} {x_j}} \right) - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)} \&lt;br&gt;
-&amp;amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {{{\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)}^2} - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)}
+&amp;\sum\limits_{i = 1}^n {\sum\limits_{j = i + 1}^n {\left( { &lt; {v_i},{v_j} &gt; {x_i}{x_j}} \right)} } {\rm{ }} \\
+&amp;= \frac{1}{2}\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\left( { &lt; {v_i},{v_j} &gt; {x_i}{x_j}} \right)} }  - \frac{1}{2}\sum\limits_{i = 1}^n  &lt;  {v_i},{v_i} &gt; {x_i}{x_i} \\
+&amp;= \frac{1}{2}\left( {\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{{j,f}}}{x_i}{x_j}} \right)} } }  - \sum\limits_{i = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{i,f}}{x_i}{x_i}} \right)} } } \right) \\
+&amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)\left( {\sum\limits_{j = 1}^n {{v_{j,f}}} {x_j}} \right) - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)} \\
+&amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {{{\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)}^2} - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)}
 \end{aligned} \tag{4}
-$$&lt;/p&gt;
+$$
+&lt;/div&gt;
 &lt;p&gt;相当于特征分布式表示中每一维度和特征进行求和平方和平方求和相减。&lt;/p&gt;
 &lt;h3 id=&#34;二维-fm的梯度计算&#34;&gt;二维-FM的梯度计算&lt;/h3&gt;
 &lt;p&gt;采用SGD进行模型计算 :&lt;/p&gt;
-&lt;p&gt;$$
-\frac{\partial }{{\partial \theta }}y(x) = \left{ {\begin{array}{*{20}{l}}
-{1,}&amp;amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\omega &lt;em&gt;0}}\&lt;br&gt;
-{{x_i},}&amp;amp;{{\rm{if }}\ \theta\  {\rm{is}}\ {\omega &lt;em&gt;i}}\&lt;br&gt;
-{{x_i}\sum\limits&lt;/em&gt;{j = 1}^n {{v&lt;/em&gt;{j,f}}} {x_j} - {v_{i,f}}x_i^2,}&amp;amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\nu _{i,f}}}
+&lt;div&gt;
+$$
+\frac{\partial }{{\partial \theta }}y(x) = \left\{ {\begin{array}{*{20}{l}}
+{1,}&amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\omega _0}}\\
+{{x_i},}&amp;{{\rm{if }}\ \theta\  {\rm{is}}\ {\omega _i}}\\
+{{x_i}\sum\limits_{j = 1}^n {{v_{j,f}}} {x_j} - {v_{i,f}}x_i^2,}&amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\nu _{i,f}}}
 \end{array}} \right.{\rm{ }} \tag{5}
-$$&lt;/p&gt;
+$$
+&lt;/div&gt;
 &lt;p&gt;基于随机梯度的方式求解&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com//blog/article/libFM.PNG&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;fm应用&#34;&gt;FM应用&lt;/h2&gt;
@@ -349,7 +364,7 @@ $$&lt;/p&gt;
                         
                         
                             
-                                <category domain="https://iyuanshuo.com/research/">research</category>
+                                <category domain="https://iyuanshuo.com/research/">research\</category>
                             
                         
                     
@@ -389,13 +404,13 @@ $$&lt;/p&gt;
 &lt;p&gt;GBDT把所有树的结论累加起来做最终结论，所以可以想到每棵树的结论并不是年龄本身，而是年龄的一个累加量。GBDT的核心就在于，每一棵树学的是之前所有树结论和的残差，这个残差就是一个加预测值后能得真实值的累加量。比如A的真实年龄是18岁，但第一棵树的预测年龄是12岁，差了6岁，即残差为6岁。那么在第二棵树里我们把A的年龄设为6岁去学习，如果第二棵树真的能把A分到6岁的叶子节点，那累加两棵树的结论就是A的真实年龄；如果第二棵树的结论是5岁，则A仍然存在1岁的残差，第三棵树里A的年龄就变成1岁，继续学。这就是Gradient Boosting在GBDT中的意义&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
 &lt;p&gt;根据上面那个简单的例子，我们知道假设损失函数为平方损失（square loss）时，我们使用残差来进行下一轮的训练，即GBDT算法的每一步在生成决策树时只需要拟合前面的模型的残差，从而使得损失函数最小。那如何使损失函数最小呢？Freidman提出了用损失函数的负梯度来拟合本轮损失的近似值，进而拟合一个CART回归树，这就是GBDT的负梯度拟合。损失函数的负梯度在当前模型的值为：&lt;/p&gt;
 &lt;p&gt;$$
--[\frac{\partial L(y,f(x_i))}{\partial f(x_i)}]&lt;em&gt;{f(x)=f&lt;/em&gt;{m-1}(x)}\tag1
+-[\frac{\partial L(y,f(x_i))}{\partial f(x_i)}]_{f(x)=f_{m-1}(x)} \tag1
 $$&lt;/p&gt;
 &lt;p&gt;Boosting的最大好处在于，每一步的残差计算其实变相地增大了分错样本的权重，而已经分对的样本则都趋向于0。因为对于已经分对的样本，其残差为0，在下一轮中几乎不起作用。&lt;/p&gt;
 &lt;h2 id=&#34;gbdt算法&#34;&gt;GBDT算法&lt;/h2&gt;
 &lt;p&gt;知道了怎么解决损失函数拟合的问题，即GBDT的负梯度拟合之后，需要使用这些负梯度进行训练。假设$r_{mi}$表示第$m$轮的第$i$个样本的损失函数的负梯度：&lt;/p&gt;
 &lt;p&gt;$$
-r_{mi} = -\bigg[\frac{\partial L(y_i, f(x_i)))}{\partial f(x_i)}\bigg]_{f(x) = f_{m-1};; (x)}\tag2
+r_{mi} = -\bigg[\frac{\partial L(y_i, f(x_i)))}{\partial f(x_i)}\bigg]_{f(x) = f_{m-1} (x)}\tag2
 $$&lt;/p&gt;
 &lt;p&gt;利用$(x_i,r_{mi})\quad(i=1,2,..n)$，我们可以拟合第$m$棵CART回归树，其对应的叶节点区域$R_{mj}, j =1,2,..., J$，其中$J$为叶子节点的个数。&lt;/p&gt;
 &lt;p&gt;针对每个叶子节点里的样本，我们求出损失函数最小，也就是拟合叶子节点最好的的输出值$c_{mj}$如下：&lt;/p&gt;
@@ -455,7 +470,7 @@ p_k(x) = exp(f_k(x)) \bigg / \sum\limits_{l=1}^{K} exp(f_l(x))\tag{11}
 $$&lt;/p&gt;
 &lt;p&gt;集合上两式，我们可以计算出第$t$轮的第$i$个样本对应类别$l$的负梯度误差为:&lt;/p&gt;
 &lt;p&gt;$$
-r_{mil} = -\bigg[\frac{\partial L(y_i, f(x_i)))}{\partial f(x_i)}\bigg]_{f_k(x) = f_{l, m-1};; (x)} = y_{il} - p_{l, m-1}(x_i)\tag{12}
+r_{mil} = -\bigg[\frac{\partial L(y_i, f(x_i)))}{\partial f(x_i)}\bigg]_{f_k(x) = f_{l, m-1} (x)} = y_{il} - p_{l, m-1}(x_i)\tag{12}
 $$&lt;/p&gt;
 &lt;p&gt;观察上式可以看出，其实这里的误差就是样本$i$对应类别$l$的真实概率和$m−1$轮预测概率的差值。&lt;/p&gt;
 &lt;p&gt;对于生成的决策树，我们各个叶子节点的最佳残差拟合值为:&lt;/p&gt;
@@ -464,7 +479,7 @@ c_{mjl} = \underbrace{arg; min}_{c_{jl}}\sum\limits_{i=0}^{m}\sum\limits_{k=1}^{
 $$&lt;/p&gt;
 &lt;p&gt;由于上式比较难优化，我们一般使用近似值代替:&lt;/p&gt;
 &lt;p&gt;$$
-c_{mjl} =  \frac{K-1}{K} ; \frac{\sum\limits_{x_i \in R_{mjl}}r_{mil}}{\sum\limits_{x_i \in R_{mil}}|r_{mil}|(1-|r_{mil}|)}\tag{14}
+c_{mjl} =  \frac{K-1}{K} \frac{\sum\limits_{x_i \in R_{mjl}}r_{mil}}{\sum\limits_{x_i \in R_{mil}}|r_{mil}|(1-|r_{mil}|)}\tag{14}
 $$&lt;/p&gt;
 &lt;p&gt;除了负梯度计算和叶子节点的最佳残差拟合的线性搜索，多元GBDT分类和二元GBDT分类以及GBDT回归算法过程相同。&lt;/p&gt;
 &lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
@@ -495,7 +510,7 @@ $$&lt;/p&gt;
                         
                         
                             
-                                <category domain="https://iyuanshuo.com/research/">research</category>
+                                <category domain="https://iyuanshuo.com/research/">research\</category>
                             
                         
                     
@@ -570,7 +585,7 @@ $$&lt;/p&gt;
                         
                         
                             
-                                <category domain="https://iyuanshuo.com/research/">research</category>
+                                <category domain="https://iyuanshuo.com/research/">research\</category>
                             
                         
                     
@@ -650,7 +665,7 @@ $$&lt;/p&gt;
                         
                         
                             
-                                <category domain="https://iyuanshuo.com/research/">research</category>
+                                <category domain="https://iyuanshuo.com/research/">research\</category>
                             
                         
                     

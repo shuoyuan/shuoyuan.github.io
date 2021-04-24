@@ -12,7 +12,7 @@
     
     <meta http-equiv="Cache-Control" content="no-siteapp" />
 
-    <title>categories | Shuo Yuan&#39;s Blog</title>
+    <title>categories_index.md | Shuo Yuan&#39;s Blog</title>
 
     <link rel="stylesheet" href="/css/meme.min.7956f3ebf25f62113c9614274e7cb416d9419dc73e4e7abc55f351bdfd9ecc79.css"/>
 
@@ -56,7 +56,7 @@
         "datePublished": "2017-05-27T15:13:14+00:00",
         "dateModified": "2017-05-27T15:13:14+00:00",
         "url": "https://iyuanshuo.com/categories/",
-        "name": "categories",
+        "name": "categories_index.md",
         "description": "这是 shuoyuan 的生活与技术博客。",
         "image": "https://iyuanshuo.com/icons/apple-touch-icon.png",
         "license": "[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)",
@@ -87,7 +87,7 @@
 
 
 
-<meta property="og:title" content="categories" />
+<meta property="og:title" content="categories_index.md" />
 <meta property="og:description" content="这是 shuoyuan 的生活与技术博客。" />
 <meta property="og:url" content="https://iyuanshuo.com/categories/" />
 <meta property="og:site_name" content="Shuo Yuan&#39;s Blog" />
@@ -372,6 +372,56 @@
         
 
         
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css" integrity="sha256-gPJfuwTULrEAAcI3X4bALVU/2qBU+QY/TpoD3GO+Exw=" crossorigin="anonymous">
+<script>
+    if (typeof renderMathInElement === 'undefined') {
+        var getScript = (options) => {
+            var script = document.createElement('script');
+            script.defer = true;
+            script.crossOrigin = 'anonymous';
+            Object.keys(options).forEach((key) => {
+                script[key] = options[key];
+            });
+            document.body.appendChild(script);
+        };
+        getScript({
+            src: 'https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js',
+            integrity: 'sha256-YTW9cMncW/ZQMhY69KaUxIa2cPTxV87Uh627Gf5ODUw=',
+            onload: () => {
+                getScript({
+                    src: 'https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/mhchem.min.js',
+                    integrity: 'sha256-yzSfYeVsWJ1x+2g8CYHsB/Mn7PcSp8122k5BM4T3Vxw=',
+                    onload: () => {
+                        getScript({
+                            src: 'https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js',
+                            integrity: 'sha256-fxJzNV6hpc8tgW8tF0zVobKa71eTCRGTgxFXt1ZpJNM=',
+                            onload: () => {
+                                renderKaTex();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    } else {
+        renderKaTex();
+    }
+    function renderKaTex() {
+        renderMathInElement(
+            document.body,
+            {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\(", right: "\\)", display: false}
+                ]
+            }
+        );
+    }
+</script>
+
+
 
 
     <script>
