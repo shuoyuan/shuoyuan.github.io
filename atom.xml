@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US">
     <title type="text">Shuo Yuan&#39;s Blog</title>
     <subtitle type="html">这是 shuoyuan 的生活与技术博客。</subtitle>
-    <updated>2021-07-19T20:32:58&#43;08:00</updated>
+    <updated>2021-07-19T21:03:40&#43;08:00</updated>
     <id>https://iyuanshuo.com/</id>
     <link rel="alternate" type="text/html" href="https://iyuanshuo.com/" />
     <link rel="self" type="application/atom&#43;xml" href="https://iyuanshuo.com/atom.xml" />
@@ -127,7 +127,7 @@ $$&lt;/p&gt;
             <title type="text">Wide &amp; Deep Learning 模型介绍</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/wide-deep-learning-2018042112/" />
             <id>https://iyuanshuo.com/research/wide-deep-learning-2018042112/</id>
-            <updated>2021-04-21T14:45:21&#43;08:00</updated>
+            <updated>2021-07-19T20:34:55&#43;08:00</updated>
             <published>2018-04-21T12:30:00&#43;00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -221,7 +221,7 @@ $$&lt;/p&gt;
             <title type="text">Factorization Machines 因式分解机</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/factorization-machine-2018032810/" />
             <id>https://iyuanshuo.com/research/factorization-machine-2018032810/</id>
-            <updated>2021-07-19T20:03:09&#43;08:00</updated>
+            <updated>2021-07-19T21:03:14&#43;08:00</updated>
             <published>2018-03-28T10:01:12&#43;00:00</published>
             <author>
                     <name>Shuo Yuan</name>
@@ -245,11 +245,8 @@ $$&lt;/p&gt;
 &lt;h2 id=&#34;二维-fm&#34;&gt;二维-FM&lt;/h2&gt;
 &lt;p&gt;先回顾一下线性回归模型，其建模为：&lt;/p&gt;
 &lt;p&gt;$$
-\begin{aligned}
-\hat y({\rm{x}}) 
-&amp;amp;= {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n}\&lt;br&gt;
-&amp;amp; = {\omega &lt;em&gt;0} + \sum\limits&lt;/em&gt;{i = 1}^n {{\omega _i}} {x_i}
-\end{aligned} \tag{1}
+\hat y({\rm{x}}) = {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n} = {\omega &lt;em&gt;0} + \sum \limits&lt;/em&gt;{i = 1}^n {{\omega _i}} {x_i}
+\tag{1}
 $$&lt;/p&gt;
 &lt;p&gt;从上式可以看出各特征分量$x_i$和$x_j\ (i \ne j )$之间是相互孤立的，因此仅考虑了单个的特征分量而没有考虑特征分量之间的相互关系。&lt;/p&gt;
 &lt;p&gt;在$(1)$的基础上改写为：&lt;/p&gt;
@@ -273,16 +270,14 @@ $$&lt;/p&gt;
 &lt;h3 id=&#34;模型&#34;&gt;模型&lt;/h3&gt;
 &lt;p&gt;对于2次特征交叉的FM模型可以表示为&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
 &lt;p&gt;$$
-\begin{aligned}
 y(x) = {w_0} + \sum\limits_{i = 1}^n {({w_i}{x_i})}  + \sum\limits_{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {( &amp;lt; {v_i},{v_j} &amp;gt; {x_i}{x_j})} }
-\end{aligned} \tag{5}
+\tag{5}
 $$&lt;/p&gt;
 &lt;p&gt;其中模型参数有$w_0$为截距，$w_i$为一维特征权重，$v_i$为每一维度特征的分布式表示，也即$w_0$为整体偏置量，$W$对特征向量的每个分量的强度进行建模，$V$对特征向量中任意两个分量之间的关系进行建模。&lt;/p&gt;
 &lt;p&gt;其中特征交叉权重计算为:&lt;/p&gt;
-&lt;p&gt;$$
-\begin{aligned}
-&amp;lt; {v_i},{v_j} &amp;gt;  = \sum\limits_{f = 1}^k {{v_{i,f}}} {v_{j,f}}
-\end{aligned} \tag{5.1}
+&lt;p&gt;$$&lt;/p&gt;
+&lt;p&gt;&amp;lt; {v_i},{v_j} &amp;gt;  = \sum\limits_{f = 1}^k {{v_{i,f}}} {v_{j,f}}
+\tag{5.1}
 $$&lt;/p&gt;
 &lt;h3 id=&#34;二维-fm计算复杂度&#34;&gt;二维-FM计算复杂度&lt;/h3&gt;
 &lt;p&gt;如果对式子(1)直接进行计算，那么其复杂度是$O(kn^2)$，但是可以通过简单的数学变换将其转化为$O(kn)$。由于前面两项的计算复杂度都是$O(kn)$，所以只需要对第三项进行处理&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
@@ -308,7 +303,8 @@ $$&lt;/p&gt;
 {{x_i}\sum\limits&lt;/em&gt;{j = 1}^n {{v&lt;/em&gt;{j,f}}} {x_j} - {v_{i,f}}x_i^2,}
 &amp;amp;{{\rm{if}};\theta ;{\rm{is}};{\nu _{i,f}}}
 \end{aligned}
-} \right. \tag{7}
+} \right. 
+\tag{7}
 $$&lt;/p&gt;
 &lt;p&gt;基于随机梯度的方式求解&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180327103527_libFM.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
@@ -524,23 +520,23 @@ $$&lt;/p&gt;
             <title type="text">Zotero 一站式跨平台文献管理和移动端阅读</title>
             <link rel="alternate" type="text/html" href="https://iyuanshuo.com/research/zotero-usage-2018011321/" />
             <id>https://iyuanshuo.com/research/zotero-usage-2018011321/</id>
-            <updated>2021-07-19T20:10:01&#43;08:00</updated>
+            <updated>2021-07-19T20:52:54&#43;08:00</updated>
             <published>2018-01-13T21:00:00&#43;00:00</published>
             <author>
                     <name>Shuo Yuan</name>
                     <uri>https://iyuanshuo.com/</uri>
                     <email>ishawnyuan@gmail.com</email>
                     </author>
-            <rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">updated some pics. 本文之前使用 “Zotero + Zotfile + 云盘” 实现跨平台同步。这种方式在移动端如手机或…</summary>
+            <rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">updated some pics. 作者之前介绍过 “Zotero + Zotfile + 云盘” 来实现跨平台同步。基于这种组合，如果需…</summary>
             
                 <content type="html">&lt;blockquote&gt;
 &lt;p&gt;updated some pics.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;本文之前使用 “&lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2017062813/&#34;&gt;Zotero + Zotfile + 云盘&lt;/a&gt;” 实现跨平台同步。这种方式在移动端如手机或Pad上阅读，可以借助 ZotFile 的 Tablet 功能将需要阅读的文献导出到云盘 Tablet 文件夹，然后在移动端使用 PDF Expert 获取该文件夹并进行文献阅读批注。最后在 PC 端重新拉取这些文献，实现移动端同步。&lt;/p&gt;
-&lt;p&gt;这种方式的附件与文献条目其实是链接关系，在 Zotero 删除文献条目后其链接的附件并不会删除，从而造成存储冗余。其次，在移动端阅读时需要事先在 PC 端导出，损失了自由度。&lt;/p&gt;
+&lt;p&gt;作者之前介绍过 “&lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2017062813/&#34;&gt;Zotero + Zotfile + 云盘&lt;/a&gt;” 来实现跨平台同步。基于这种组合，如果需要在移动端如手机或Pad上阅读，可以借助 ZotFile 的 Tablet 功能将需要阅读的文献导出到云盘 Tablet 文件夹，然后在移动端使用 PDF Expert 获取该文件夹并进行文献阅读和批注。最后在 PC 端重新拉取该文件夹，实现多端同步。&lt;/p&gt;
+&lt;p&gt;在这种方式中，附件与文献条目本质上是链接关系，在 Zotero 删除文献条目后其链接的附件并不会删除，这会产生存储冗余 （强迫症难以接受）。其次，在移动端阅读时需要事先在 PC 端导出，损失了自由度。&lt;/p&gt;
 &lt;p&gt;经过一番对比后，重新回归了“Zotero + WebDAV + PaperShip ” 。相关的软件和插件安装不再赘述，请查看前文&lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2017062813/&#34;&gt;&amp;lt;Zotero 文献管理与多设备同步&amp;gt;&lt;/a&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;zotero--webdav--papership-配置&#34;&gt;Zotero + WebDAV + PaperShip 配置&lt;/h2&gt;
-&lt;p&gt;首先是支持 WebDAV 的云盘选择，比较可惜的是 Onedrive 不支持 WebDAV。另外，国内知名度比较高的有坚果云，国外有 box.com 和 4shared 等，当然自建私有云也是个不错的选择。但是，鉴于坚果云免费用户每月受限的上传和下载流量，极大的限缩了灵活度，在此不推荐使用（会员用户除外）。目前，作者使用的是具有10G免费容量并且没有流量限制的 box.com，虽然官方说19年底已经不维护 WebDAV 方式接入了，但是目前并不影响正常使用。&lt;/p&gt;
+&lt;p&gt;首先是支持 WebDAV 的云盘选择，比较可惜的是 Onedrive 不支持 WebDAV。另外，国内知名度比较高的有坚果云，国外有 box.com 和 4shared 等，当然自建私有云也是个不错的选择。但是，坚果云免费用户每月受限的上传和下载流量，极大的限缩了灵活度，在此不推荐使用（会员用户除外）。目前，作者使用的是具有10G免费容量并且没有流量限制的 box.com，虽然官方说19年底已经不维护 WebDAV 方式接入，但是目前并不影响正常使用。&lt;/p&gt;
 &lt;h3 id=&#34;zotero-配置&#34;&gt;Zotero 配置&lt;/h3&gt;
 &lt;p&gt;这种方式下的 Zotero 配置相对于前文介绍的通过 ZotFile 链接附件同步方式来说更加简单。除了在 Zotero 同步选项卡中需要配置网盘的 WebDAV 信息，其他设置保持原生 Zotero 默认即可正常使用。&lt;/p&gt;
 &lt;ul&gt;
@@ -561,10 +557,10 @@ $$&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327103521.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;papership-配置&#34;&gt;PaperShip 配置&lt;/h3&gt;
-&lt;p&gt;使用这种方式同步比较吸引人的地方是 Zotero 非官方移软件 PaperShip (IOS+IPadOS+MacOS) 支持使用 WebDAV 的同步方式。在移动端配置好 PaperShip 的 WebDAV 之后，可以随时下载需要阅读的文献。值得一提的是，PaperShip 对于 box.com 是重点支持的，在配置选项里与 WebDAV 单独分开。&lt;/p&gt;
+&lt;p&gt;使用这种方式同步比较吸引人的地方是 Zotero 非官方软件 PaperShip (IOS+IPadOS+MacOS) 支持使用 WebDAV 的同步方式。在移动端配置好 PaperShip 的 WebDAV 之后，可以随时下载需要阅读的文献，并且对于内购 PaperShip 批注功能的用户来说，可以进一步实现文件批注同步。值得一提的是，PaperShip 重点支持 box.com，其配置选项与 WebDAV 并列。&lt;/p&gt;
 &lt;p&gt;在 PaperShip 登录 Zotero 之后，进入&lt;code&gt;Setting&lt;/code&gt; --&amp;gt; &lt;code&gt;Zotero File Hosting&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327105918.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;至此，在移动端就可以拥有与 PC 端 Zotero 一般无二的文献阅读体验。虽然对 PDF 的批注不太友好，但是考虑到移动端通常是应急使用影响不大。&lt;/p&gt;
+&lt;p&gt;至此，在移动端就可以拥有与 PC 端 Zotero 一般无二的文献阅读体验。&lt;/p&gt;
 &lt;hr&gt;
 </content>
             
