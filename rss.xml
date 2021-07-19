@@ -10,7 +10,7 @@
         <title>Shuo Yuan&#39;s Blog</title>
         <link>https://iyuanshuo.com/</link>
         <description>这是 shuoyuan 的生活与技术博客。</description>
-        <generator>Hugo 0.82.1 https://gohugo.io/</generator>
+        <generator>Hugo 0.85.0 https://gohugo.io/</generator>
         
             <language>en-US</language>
         
@@ -23,7 +23,7 @@
         
             <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
         
-        <lastBuildDate>Sat, 24 Apr 2021 16:58:52 &#43;0800</lastBuildDate>
+        <lastBuildDate>Mon, 19 Jul 2021 20:32:58 &#43;0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="https://iyuanshuo.com/rss.xml" />
         
@@ -39,43 +39,44 @@
                 <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
                 
                     <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
-&lt;p&gt;对于一个基于 CTR 预估的推荐系统，最重要的是学习到用户点击行为背后隐含的特征组合。在不同的推荐场景中，低阶组合特征或者高阶组合特征可能都会对最终的 CTR 产生影响。&lt;/p&gt;
-&lt;p&gt;Wide &amp;amp; Deep Learning 通过组合使用 cross-product transformation 特征的线性模型和 DNN 模型进行 Joint train 从而实现 memorization 和 generalization 的结合。但是对于 Wide 模型来说还是需要做一些特征交叉来实现 memorization，比如因子分解机 (Factorization Machines, FM) 通过对每一维特征的隐变量内积来提取特征组合从而获得很好的效果。虽然理论上来讲 FM 可以对高阶特征组合进行建模，但实际上因为计算复杂度等原因一般都只用到二阶特征组合。&lt;/p&gt;
-&lt;p&gt;关于 Wide &amp;amp; Deep Learning 请参考博文：&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/&#34;&gt;Wide &amp;amp; Deep Learning模型介绍&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;那么对于高阶的特征组合来说，我们很自然的想法是通过多层的神经网络即 DNN 来处理。&lt;/p&gt;
-&lt;p&gt;对于离散特征的处理，我们使用的是将特征转换成为 Onehot 的形式。但是将 Onehot 类型的特征输入到 DNN 中时会导致网络参数太多而难以训练&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/onehot_for_dnn.png&#34; alt=&#34;onehot_for_dnn&#34; style=&#34;zoom: 67%;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;此时可以借鉴 word2vec 的思路进行 embedding，通过将 Onehot 编码后的向量经过一个 embedding 层输出 Dense Vector。具体的思路是将一个特征 Onehot 编码后会生成多个特征，但是每个特征里面只有一个为 $1$，其他都为 $0$，这些由一个特征生成的多个互斥的特征引用 FFM 思想的话就属于一个 Field。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/onehot_densevector.png&#34; alt=&#34;onehot_densevector&#34; style=&#34;zoom:67%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;对于一个基于 CTR 预估的推荐系统，最重要的是学习到用户点击行为背后隐含的特征组合。在不同的推荐场景中，低阶或者高阶组合特征都可能会对最终的 CTR 产生影响。&lt;/p&gt;
+&lt;p&gt;Wide &amp;amp; Deep Learning 通过组合使用 cross-product transformation 特征的线性模型和 DNN 模型进行 Joint train 从而实现 memorization 和 generalization 的结合。但是对于 Wide 模型来说还是需要做一些特征交叉来实现 memorization，比如因子分解机 (Factorization Machines, FM) 通过对每一维特征隐变量进行内积提取组合特征，进而获得较好的预测效果。虽然理论上 FM 可以对高阶特征组合进行建模，但由于计算复杂度等原因在实践中一般都只用到二阶特征组合。
+关于 Wide &amp;amp; Deep Learning 请参考博文：&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/&#34;&gt;Wide &amp;amp; Deep Learning模型介绍&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;对于高阶的特征组合来说，通过多层的神经网络即 DNN 来处理是一个很自然的想法。
+另一方面，对于离散特征而言，一种常见的处理方法是将特征转换成为 Onehot 的形式。
+然而，将 Onehot 类型的特征输入到 DNN 中会由于网络参数太多而影响训练&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_onehot_for_dnn.png?raw&#34; alt=&#34;onehot_for_dnn&#34;&gt;&lt;/p&gt;
+&lt;p&gt;通过借鉴 word2vec 的思路进行 embedding，将 Onehot 编码后的向量经过一个 embedding 层输出 Dense Vector 是一种比较实用的方法。具体的思路是将一个特征 Onehot 编码后会生成多个特征，但是每个特征里面只有一个为 $1$，其他都为 $0$，这些由一个特征生成的多个互斥的特征在 FFM 方法中属于一个 Field。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_onehot_densevector.png?raw&#34; alt=&#34;onehot_densevector&#34;&gt;&lt;/p&gt;
 &lt;p&gt;如果将 embedding 层的输出再加两层全连接层，让 Dense Vector 进行组合就完成了高阶特征的组合。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/densevector_full.png&#34; alt=&#34;densevector_full&#34; style=&#34;zoom: 50%;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;但是低阶和高阶特征组合隐含地体现在隐藏层中，我们希望把低阶特征组合单独建模，然后融合高阶特征组合。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/how_to_get_low_order.png&#34; alt=&#34;how_to_get_low_order&#34; style=&#34;zoom:50%;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;这意味着我们在学习低阶的特征组合的同时，也需要学习高阶的特征组合，即将 DNN 与 FM 进行一个合理的融合：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/consider_dnn_fm.png&#34; alt=&#34;consider_dnn_fm&#34; style=&#34;zoom: 67%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_densevector_full.png?raw&#34; alt=&#34;densevector_full&#34;&gt;&lt;/p&gt;
+&lt;p&gt;但是低阶和高阶特征组合都深度耦合体现在隐藏层中，因此需要对低阶特征组合单独建模，而后再融合高阶特征组合。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_how_to_get_low_order.png?raw&#34; alt=&#34;how_to_get_low_order&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这意味着在学习低阶的特征组合的同时，也需要学习高阶的特征组合，即将 DNN 与 FM 进行一个合理的融合：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_consider_dnn_fm.png?raw&#34; alt=&#34;consider_dnn_fm&#34;&gt;&lt;/p&gt;
 &lt;p&gt;二者的融合总的来说有两种形式，串行结构与并行结构&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/parallel_dnn_fm.png&#34; alt=&#34;parallel_dnn_fm&#34; style=&#34;zoom: 50%;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/series_dnn_fm.png&#34; alt=&#34;series_dnn_fm&#34; style=&#34;zoom: 50%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_parallel_dnn_fm.png?raw&#34; alt=&#34;parallel_dnn_fm&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_series_dnn_fm.png?raw&#34; alt=&#34;series_dnn_fm&#34;&gt;&lt;/p&gt;
 &lt;p&gt;而 DeepFM，就是并行结构中的典型代表。&lt;/p&gt;
 &lt;h2 id=&#34;deepfm-模型-2&#34;&gt;DeepFm 模型 &lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;模型结构&#34;&gt;模型结构&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/wide_deep_deep_fm.png&#34; alt=&#34;wide_deep_deep_fm&#34; style=&#34;zoom: 40%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_wide_deep_deep_fm.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;DeepFM 包含两部分：神经网络与因子分解机，分别负责提取低阶特征和高阶特征。(PS: 这两部分当然共享同样的输入)。同时，DeepFM 的预测结果为：&lt;/p&gt;
 &lt;p&gt;$$
 \hat y = sigmoid({y_{FM}} + {y_{DNN}})\tag1
 $$&lt;/p&gt;
 &lt;h3 id=&#34;fm-component&#34;&gt;FM Component&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/fm.png&#34; alt=&#34;fm&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;FM (详情可参阅文章&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;)因为引入了隐变量的原因，对于几乎不出现或者很少出现的隐变量，也可以实现很好的学习。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_fm.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;FM (详情可参阅文章&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;)因为引入了隐变量的原因，对于几乎不出现或者很少出现的隐变量，也可以进行很好的学习。&lt;/p&gt;
 &lt;p&gt;FM的输出为：&lt;/p&gt;
 &lt;p&gt;$$
 y(x)=w_{0}+\sum_{i=1}^{n}\left(w_{i} x_{i}\right)+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n}\left(\left\langle v_{i}, v_{j}\right\rangle x_{i} x_{j}\right)\tag{2}
 $$&lt;/p&gt;
 &lt;h3 id=&#34;deep-component&#34;&gt;Deep Component&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/deep.png&#34; alt=&#34;deep&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;深度部分是一个前馈神经网络，与图像或者语音这类输入不同的是图像语音的输入一般是连续而且密集的。然而用于 CTR 的输入一般是极其稀疏的，因此需要重新设计网络结构以适应相应的数据特点，因此在第一层隐含层之前引入一个嵌入层 (embedding layer) 来完成将输入向量压缩到低维稠密向量的过程，其结构如下图所示。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/2018/04/21/embedding_layer.png&#34; alt=&#34;embedding_layer&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;对于 Fig.4 这个网络结构有两个很有意思的 point：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_deep.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;深度部分是一个前馈神经网络，与图像或者语音这类输入不同的是图像语音的输入一般是连续而且密集的。然而，用于 CTR 的输入一般是极其稀疏的，需要重新设计网络结构以适应相应的数据特点。因此，通过在第一层隐藏层之前引入一个嵌入层 (embedding layer) ，从而完成将输入向量压缩到低维稠密向量的过程，其结构如下图所示。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_embedding_layer.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;对于 Fig.4 这个网络结构有两个很有意思的 points：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;虽然输入的 field vector 长度不一，但是它们 embedding 出来的长度是固定的；&lt;/p&gt;
@@ -84,18 +85,18 @@ $$&lt;/p&gt;
 &lt;p&gt;FM 的 latent vector $V$ 向量作为原始特征到 embedding vector 的权重矩阵被放在网络里学习。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;这里的第二点如何理解呢？在假设 $k=5$的前提下，首先对于输入的一条记录，同一个 Field 只有一个位置是1，那么在由输入得到 dense vector 的过程中，输入层只有一个神经元起作用，得到的 dense vector 其实就是输入层到 embedding 层该神经元相连的五条线的权重，即 $v_{i1}$，$v_{i2}$，$v_{i3}$，$v_{i4}$，$v_{i5}$。这五个值组合起来就是在 FM 中所提到的 $v_i$。在 FM 部分和 DNN 部分，这一块是共享权重的，因此对同一个特征来说得到的 $V_i$ 是相同的。&lt;/p&gt;
+&lt;p&gt;这里的第二点如何理解呢？在假设 $k=5$ 的前提下，首先对于输入的一条记录，同一个 Field 只有一个位置是 1，那么在由输入得到 dense vector 的过程中，输入层只有一个神经元起作用，得到的 dense vector 其实就是输入层到 embedding 层该神经元相连的五条线的权重，即 $v_{i1}$，$v_{i2}$，$v_{i3}$，$v_{i4}$，$v_{i5}$。这五个值组合起来就是在 FM 中所提到的 $v_i$。在 FM 部分和 DNN 部分，这一块是共享权重的，因此对同一个特征来说得到的 $V_i$ 是相同的。&lt;/p&gt;
 &lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://ask.hellobi.com/blog/wenwen/11840&#34;&gt;推荐系统遇上深度学习(三)--DeepFM模型理论和实践&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://ask.hellobi.com/blog/wenwen/11840&#34;&gt;推荐系统遇上深度学习(三)--DeepFM模型理论和实践&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1703.04247&#34;&gt;DeepFM: a factorization-machine based neural network for CTR prediction&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1703.04247&#34;&gt;DeepFM: a factorization-machine based neural network for CTR prediction&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://ieeexplore.ieee.org/abstract/document/5694074/&#34;&gt;Factorization machines&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://ieeexplore.ieee.org/abstract/document/5694074/&#34;&gt;Factorization machines&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -143,14 +144,14 @@ $$&lt;/p&gt;
                 
                     <description>&lt;p&gt;Wide &amp;amp; Deep Learning 是由 Google Inc 发表的 paper &amp;lt;Wide &amp;amp; Deep Learning for Recommender Systems&amp;gt; 中提出的一种使用非线性特征的线性模型和一个用来 embedding 特征的深度学习进行联合训练 (joint training) 的方法&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;introduction2&#34;&gt;Introduction&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
-&lt;p&gt;通过将稀疏数据的非线性转化特征引入到广义线性模型被广泛应用于大规模的回归和分类问题。通过广泛的使用交叉特征转化，使得特征交互的记忆性有效并且具有可解释性。然而，这导致应用过程需要做许多的特征工作。相对来说，通过从稀疏数据中学习低纬稠密的 embedding 特征，并应用到深度学习中，只需要少量的特征工程就能对潜在的特征组合具有更好的泛化性。但是当用户项目交互是稀疏和高纬数据的时候，利用了 embeddings 的深度学习则表现得过于笼统 (over-generalize)，推荐的都是些相关性很低的 items。在这篇文章中，提出了一个 wide &amp;amp; deep 联合学习模型，去结合推荐系统的 &lt;strong&gt;memorization&lt;/strong&gt;和 &lt;strong&gt;generalization&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;通过结合使用&lt;strong&gt;非线性特征的线性模型&lt;/strong&gt;和用来 &lt;strong&gt;embedding 特征的深度学习&lt;/strong&gt;，并且使用&lt;strong&gt;联合训练 (joint training)&lt;/strong&gt; 的方法进行优化。主要思想基于交叉特征的线性模型只能从历史出现过的数据中找到非线性 (&lt;strong&gt;显性的非线性&lt;/strong&gt;) ，深度学习可以找到没有出现过的非线性 (&lt;strong&gt;隐性的非线性&lt;/strong&gt;) 。Memorization 就是去把历史数据中显性的非线性找出来，而 generalization 通过找出隐性的非线性提高模型的泛化性。&lt;/p&gt;
+&lt;p&gt;通过将稀疏数据的非线性转化特征引入到广义线性模型被广泛应用于大规模的回归和分类问题。使用交叉特征不仅强化了特征交互的记忆性，同时还提升了可解释性。然而，这增加了应用过程对特征进行操作的工作量。相对来说，通过从稀疏数据中学习低纬稠密的 embedding 特征，并应用到深度学习中，可以基于少量的特征工程实现对潜在的特征组合更好的泛化性。但是当用户项目交互是稀疏且高纬时，利用了 embeddings 的深度学习则表现得过于笼统 (over-generalize)，推荐的都是些相关性很低的 items。在这篇文章中，提出了一个 wide &amp;amp; deep 联合学习模型，去结合推荐系统的 &lt;strong&gt;memorization&lt;/strong&gt;和 &lt;strong&gt;generalization&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;通过结合使用&lt;strong&gt;非线性特征的线性模型&lt;/strong&gt;和用来 &lt;strong&gt;embedding 特征的深度学习&lt;/strong&gt;，并且使用&lt;strong&gt;联合训练 (joint training)&lt;/strong&gt; 的方法进行优化。主要思想基于交叉特征的线性模型只能从历史出现过的数据中找到非线性 (&lt;strong&gt;显性的非线性&lt;/strong&gt;) ，深度学习可以找到没有出现过的非线性 (&lt;strong&gt;隐性的非线性&lt;/strong&gt;) 。Memorization 通俗来讲就是把历史数据中显性的非线性找出来，而 generalization 就是通过找出隐性的非线性提高模型的泛化性。&lt;/p&gt;
 &lt;p&gt;推荐系统可以被看做是一个搜索排序系统，其中输入的 query 是一系列的用户和文本信息，输出是 items 的排序列表。给定一个 query，推荐的任务就是到数据库中去找出相关的 items，然后对这些 items 根据相关对象，如点击或者购买行为，并进行排序。&lt;/p&gt;
 &lt;p&gt;和传统的搜索排序问题一样，在推荐系统中一个挑战就是区域同时达到 memorization 和 generalization。Memorization 可以被大概定义为学习 items 或者 features 之间的相关频率，在历史数据中探索相关性的可行性。Generalizaion 的话则是基于相关性的传递，去探索一些在过去没有出现过的特征组合。基于 memorization 的推荐相对来说具有&lt;strong&gt;局部性&lt;/strong&gt;，是在哪些用户和 items 已经有直接相关联的活动上。相较于 memorization，generalization 尝试去提高推荐 items 的&lt;strong&gt;多元化&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;在工业中，对于大规模的在线推荐和排序系统，像逻辑回归这样的广义线性模型由于实现简单，可扩展性好，可解释性强而被广泛使用。通过喂给它一些 one-hot 编码的稀疏特征，比如二值特征 (user_installed_app=netfix) 表示用户安装了 Netflix。Memorization 则可以通过对稀疏特征做交叉积转换获得，就是求交叉特征。比如 AND 操作  (user_installed_app= netflix, impression_app=pandora) 这两个特征，当用户安装了Netflix并且之后展示在Pandora上，那么得到特征的值为1，其余为0。这个交叉特征展示了特征对之间的相关性和目标 lable 之间的关联。在逻辑回归上实现 generalization 可以通过增加一些粗粒度的特征实现，如 AND(user_installed_category=video, impression_category=music )，但是这些都是需要人工做特征工程实现，工作量极大。此外，cross-product transformation 的一个限制就是他们不能生成从未在训练数据中出现过的 query-item 特征对。&lt;/p&gt;
 &lt;p&gt;而 Embedding-based 的模型，比如因子分解机 (FM) 或深度神经网络，只需要很少的特征工程，通过为每个 query 和 item 特征对 (pair) 学到一个低维的 dense embedding vector，可以泛化到之前未见过的 query-item 特征对。但是如果潜在的 query-item 矩阵是稀疏，高秩的话，为 query 和 items 学习出一个有效的低纬表示往往很困难，比如基于特殊偏好的 users，或者一些很少出现的小众 items。在这种情况下，大多数的 query-item 没有交互，但是稠密的 embedding 还是会对全部的 query-item 对有非零的输出预测，因此能做出一些过泛化和做出一些不太相关的推荐。另一方面，利用交叉积特征 (cross-product features transformations) 的线性模型能用很少的参数记住那些异常规则 (exception_rules) 。&lt;/p&gt;
 &lt;h2 id=&#34;wide--deep-learning3&#34;&gt;Wide &amp;amp; Deep Learning&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327121146.png&#34; alt=&#34;model&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327121146.png?raw&#34; alt=&#34;model&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;the-wide-component-wide-组件&#34;&gt;The Wide Component (Wide 组件)&lt;/h3&gt;
 &lt;p&gt;Wide 组件是一个泛化的线性模型，$y=w^Tx+b$，如 Fig.1 图左所示。$y$ 是预测值，$x = [x_1, x_2, …, x_d]$ 是 $d$ 维特征向量，$w = [w_1, w_2,…, w_d]$ 是模型参数，$b$ 是 bias。特征集包括原始的输入特征和转换后 (cross-product transformation) 的特征。Cross-product transformation 有如下定义：&lt;/p&gt;
 &lt;p&gt;$$
@@ -180,13 +181,13 @@ $$&lt;/p&gt;
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;http://delivery.acm.org/10.1145/2990000/2988454/p7-cheng.pdf?ip=59.64.129.94&amp;amp;id=2988454&amp;amp;acc=OA&amp;amp;key=BF85BBA5741FDC6E%2E66A15327C2E204FC%2E4D4702B0C3E38B35%2E5945DC2EABF3343C&amp;amp;__acm__=1524286862_5eea25e811738c9a07c334624118b607&#34;&gt;Wide &amp;amp; Deep Learning for Recommender Systems&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://delivery.acm.org/10.1145/2990000/2988454/p7-cheng.pdf?ip=59.64.129.94&amp;amp;id=2988454&amp;amp;acc=OA&amp;amp;key=BF85BBA5741FDC6E%2E66A15327C2E204FC%2E4D4702B0C3E38B35%2E5945DC2EABF3343C&amp;amp;__acm__=1524286862_5eea25e811738c9a07c334624118b607&#34;&gt;Wide &amp;amp; Deep Learning for Recommender Systems&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/sxf1061926959/article/details/78440220?readlog&#34;&gt;The Wide and Deep Learning Model (译文+Tensorlfow源码解析) &lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/sxf1061926959/article/details/78440220?readlog&#34;&gt;The Wide and Deep Learning Model (译文+Tensorlfow源码解析) &lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;http://d0evi1.com/widedeep-recsys/&#34;&gt;基于Wide &amp;amp; Deep Learning的推荐系统&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://d0evi1.com/widedeep-recsys/&#34;&gt;基于Wide &amp;amp; Deep Learning的推荐系统&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -233,8 +234,8 @@ $$&lt;/p&gt;
                 <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
                 
                     <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
-&lt;p&gt;在使用线性模型如LR模型时，特征工程是很大一块工作，有时为了产生较好的效果需要人工进行一些特征的二维或者三维交叉。FM（Factorization machines）提供了一种思路可以自动进行特征交叉的同时也能够处理非常稀疏数据，具有线性的时间复杂度。&lt;/p&gt;
-&lt;p&gt;由于FM实现简单效果非常好因此应用范围非常广，在比赛或者大公司都比较常见。&lt;/p&gt;
+&lt;p&gt;在使用线性模型如 LR 模型时，特征工程通常占据了大部分的工作量，有时为了产生较好的效果甚至需要人工进行一些特征的二维或者三维交叉。FM（Factorization machines）提供了一种方法，可以在自动进行特征交叉的同时，也能够处理非常稀疏数据，并且具有线性的时间复杂度。&lt;/p&gt;
+&lt;p&gt;由于 FM 实现简单且效果好，因此应用范围非常广，常见于各种比赛和公司的生产场景。&lt;/p&gt;
 &lt;h2 id=&#34;fm优势&#34;&gt;FM优势&lt;/h2&gt;
 &lt;p&gt;FM能够解决的问题及优点包括&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
 &lt;ul&gt;
@@ -246,86 +247,74 @@ $$&lt;/p&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;二维-fm&#34;&gt;二维-FM&lt;/h2&gt;
 &lt;p&gt;先回顾一下线性回归模型，其建模为：&lt;/p&gt;
-&lt;div&gt;
-$$
+&lt;p&gt;$$
 \begin{aligned}
-\hat{y}(\mathrm{x})
-&amp;=\omega_{0}+\omega_{1} x_{1}+\omega_{2} x_{2}+\cdots+\omega_{n} x_{n} \\
-&amp;=\omega_{0}+\sum_{i=1}^{n} \omega_{i} x_{i}
+\hat y({\rm{x}}) 
+&amp;amp;= {\omega _0} + {\omega _1}{x_1} + {\omega _2}{x_2} +  \cdots  + {\omega _n}{x_n}\&lt;br&gt;
+&amp;amp; = {\omega &lt;em&gt;0} + \sum\limits&lt;/em&gt;{i = 1}^n {{\omega _i}} {x_i}
 \end{aligned} \tag{1}
-$$
-&lt;/div&gt;
+$$&lt;/p&gt;
 &lt;p&gt;从上式可以看出各特征分量$x_i$和$x_j\ (i \ne j )$之间是相互孤立的，因此仅考虑了单个的特征分量而没有考虑特征分量之间的相互关系。&lt;/p&gt;
 &lt;p&gt;在$(1)$的基础上改写为：&lt;/p&gt;
-&lt;div&gt;
-$$
-\hat{y}(\mathrm{x})=\omega_{0}+\sum_{i=1}^{n} \omega_{i} x_{i}+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n} \omega_{i j} x_{i} x_{j} \tag{2}
-$$
-&lt;/div&gt;
+&lt;p&gt;$$
+\hat y({\rm{x}}) = {\omega &lt;em&gt;0} + \sum\limits&lt;/em&gt;{i = 1}^n {{\omega &lt;em&gt;i}} {x_i} + \sum\limits&lt;/em&gt;{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {{\omega _{ij}}} } {x_i}{x_j}
+\tag{2}
+$$&lt;/p&gt;
 &lt;p&gt;这样也就将任意两个不同的特征向量之间的关系同时考虑进来了。&lt;/p&gt;
 &lt;p&gt;但是，有一个问题是在稀疏数据中这种直接在${x_i} {x_j}$前面配上一个系数$\omega_{ij}$的方式会有很大的缺陷：对于观察样本中未出现过交互的特征分量，不能对相应的参数进行估计&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。一定要注意的是，在高度稀疏数据场景中，由于数据量的不足，样本中出现未交互的特征分量是很普遍的。&lt;/p&gt;
 &lt;p&gt;为了克服这个缺陷，考虑在(2)中的系数$\omega_{ij}$上进行适当的处理以将其换成另外一种形式。针对每个维度的特征分量$x_i$，引入辅助向量：&lt;/p&gt;
-&lt;div&gt;
-$$
-\begin{aligned}
-{{\rm{v}}_i} = {({v_{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},\ \ i = 1,2, \cdots ,n
-\end{aligned}
-$$
-&lt;/div&gt;
+&lt;p&gt;$$
+{{\rm{v}}&lt;em&gt;i} = {({v&lt;/em&gt;{i1}},{v_{i2}}, \cdots ,{v_{ik}})^T} \in {R^k},;;i = 1,2, \cdots ,n
+\tag{3}
+$$&lt;/p&gt;
 &lt;p&gt;其中$k$为超参数，将(2)中的$\omega_{ij}$改写为：&lt;/p&gt;
-&lt;div&gt;
-$$
-\begin{aligned}
-{{\hat \omega }_{ij}} = {{\rm{v}}_i}^T{{\rm{v}}_j}: = \sum\limits_{l = 1}^k {{v_{il}}{x_{jl}}}
-\end{aligned}
-$$
-&lt;/div&gt;
+&lt;p&gt;$$
+{\hat \omega &lt;em&gt;{ij}} = {{\rm{v}}&lt;em&gt;i}^T{{\rm{v}}&lt;em&gt;j}: = \sum\limits&lt;/em&gt;{l = 1}^k {{v&lt;/em&gt;{il}}{x&lt;/em&gt;{jl}}}
+\tag{4}
+$$&lt;/p&gt;
 &lt;p&gt;如此，可获得FM的二维模型。&lt;/p&gt;
 &lt;h3 id=&#34;模型&#34;&gt;模型&lt;/h3&gt;
 &lt;p&gt;对于2次特征交叉的FM模型可以表示为&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;div&gt;
-$$
+&lt;p&gt;$$
 \begin{aligned}
-y(x) = {w_0} + \sum\limits_{i = 1}^n {({w_i}{x_i})}  + \sum\limits_{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {( &lt; {v_i},{v_j} &gt; {x_i}{x_j})} }
-\end{aligned} \tag{3}
-$$
-&lt;/div&gt;
+y(x) = {w_0} + \sum\limits_{i = 1}^n {({w_i}{x_i})}  + \sum\limits_{i = 1}^{n - 1} {\sum\limits_{j = i + 1}^n {( &amp;lt; {v_i},{v_j} &amp;gt; {x_i}{x_j})} }
+\end{aligned} \tag{5}
+$$&lt;/p&gt;
 &lt;p&gt;其中模型参数有$w_0$为截距，$w_i$为一维特征权重，$v_i$为每一维度特征的分布式表示，也即$w_0$为整体偏置量，$W$对特征向量的每个分量的强度进行建模，$V$对特征向量中任意两个分量之间的关系进行建模。&lt;/p&gt;
 &lt;p&gt;其中特征交叉权重计算为:&lt;/p&gt;
-&lt;div&gt;
-$$
+&lt;p&gt;$$
 \begin{aligned}
-&lt; {v_i},{v_j} &gt;  = \sum\limits_{f = 1}^k {{v_{i,f}}} {v_{j,f}}
-\end{aligned} \tag{3.1}
-$$
-&lt;/div&gt;
+&amp;lt; {v_i},{v_j} &amp;gt;  = \sum\limits_{f = 1}^k {{v_{i,f}}} {v_{j,f}}
+\end{aligned} \tag{5.1}
+$$&lt;/p&gt;
 &lt;h3 id=&#34;二维-fm计算复杂度&#34;&gt;二维-FM计算复杂度&lt;/h3&gt;
 &lt;p&gt;如果对式子(1)直接进行计算，那么其复杂度是$O(kn^2)$，但是可以通过简单的数学变换将其转化为$O(kn)$。由于前面两项的计算复杂度都是$O(kn)$，所以只需要对第三项进行处理&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;div&gt;
-$$
+&lt;p&gt;$$
 \begin{aligned}
-&amp;\sum\limits_{i = 1}^n {\sum\limits_{j = i + 1}^n {\left( { &lt; {v_i},{v_j} &gt; {x_i}{x_j}} \right)} } {\rm{ }} \\
-&amp;= \frac{1}{2}\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\left( { &lt; {v_i},{v_j} &gt; {x_i}{x_j}} \right)} }  - \frac{1}{2}\sum\limits_{i = 1}^n  &lt;  {v_i},{v_i} &gt; {x_i}{x_i} \\
-&amp;= \frac{1}{2}\left( {\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{{j,f}}}{x_i}{x_j}} \right)} } }  - \sum\limits_{i = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{i,f}}{x_i}{x_i}} \right)} } } \right) \\
-&amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)\left( {\sum\limits_{j = 1}^n {{v_{j,f}}} {x_j}} \right) - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)} \\
-&amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {{{\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)}^2} - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)}
-\end{aligned} \tag{4}
-$$
-&lt;/div&gt;
+&amp;amp;\sum\limits_{i = 1}^n {\sum\limits_{j = i + 1}^n {\left( { &amp;lt; {v_i},{v_j} &amp;gt; {x_i}{x_j}} \right)} } {\rm{ }} \&lt;br&gt;
+&amp;amp;= \frac{1}{2}\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\left( { &amp;lt; {v_i},{v_j} &amp;gt; {x_i}{x_j}} \right)} }  - \frac{1}{2}\sum\limits_{i = 1}^n  &amp;lt;  {v_i},{v_i} &amp;gt; {x_i}{x_i} \&lt;br&gt;
+&amp;amp;= \frac{1}{2}\left( {\sum\limits_{i = 1}^n {\sum\limits_{j = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{{j,f}}}{x_i}{x_j}} \right)} } }  - \sum\limits_{i = 1}^n {\sum\limits_{f = 1}^k {\left( {{v_{i,f}}{v_{i,f}}{x_i}{x_i}} \right)} } } \right) \&lt;br&gt;
+&amp;amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)\left( {\sum\limits_{j = 1}^n {{v_{j,f}}} {x_j}} \right) - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)} \&lt;br&gt;
+&amp;amp;= \frac{1}{2}\sum\limits_{f = 1}^k {\left( {{{\left( {\sum\limits_{i = 1}^n {{v_{i,f}}} {x_i}} \right)}^2} - \sum\limits_{i = 1}^n {v_{i,f}^2} x_i^2} \right)}
+\end{aligned} \tag{6}
+$$&lt;/p&gt;
 &lt;p&gt;相当于特征分布式表示中每一维度和特征进行求和平方和平方求和相减。&lt;/p&gt;
 &lt;h3 id=&#34;二维-fm的梯度计算&#34;&gt;二维-FM的梯度计算&lt;/h3&gt;
 &lt;p&gt;采用SGD进行模型计算 :&lt;/p&gt;
-&lt;div&gt;
-$$
-\frac{\partial }{{\partial \theta }}y(x) = \left\{ {\begin{array}{*{20}{l}}
-{1,}&amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\omega _0}}\\
-{{x_i},}&amp;{{\rm{if }}\ \theta\  {\rm{is}}\ {\omega _i}}\\
-{{x_i}\sum\limits_{j = 1}^n {{v_{j,f}}} {x_j} - {v_{i,f}}x_i^2,}&amp;{{\rm{if }}\ \theta \ {\rm{is}}\ {\nu _{i,f}}}
-\end{array}} \right.{\rm{ }} \tag{5}
-$$
-&lt;/div&gt;
+&lt;p&gt;$$
+\frac{\partial }{{\partial \theta }}y(x) = \left{ {
+\begin{aligned}
+{1,}
+&amp;amp;{{\rm{if}};\theta ;{\rm{is}};{\omega &lt;em&gt;0}}\&lt;br&gt;
+{{x_i},}
+&amp;amp;{{\rm{if}};\theta ;{\rm{is}};{\omega &lt;em&gt;i}}\&lt;br&gt;
+{{x_i}\sum\limits&lt;/em&gt;{j = 1}^n {{v&lt;/em&gt;{j,f}}} {x_j} - {v_{i,f}}x_i^2,}
+&amp;amp;{{\rm{if}};\theta ;{\rm{is}};{\nu _{i,f}}}
+\end{aligned}
+} \right. \tag{7}
+$$&lt;/p&gt;
 &lt;p&gt;基于随机梯度的方式求解&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com//blog/article/libFM.PNG&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180327103527_libFM.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;fm应用&#34;&gt;FM应用&lt;/h2&gt;
 &lt;p&gt;在很多应用中，FM可以取代常用模型并且能够取得不错效果，例如&lt;/p&gt;
 &lt;ul&gt;
@@ -340,16 +329,16 @@ $$
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/fangqingan_java/article/details/50677340&#34;&gt;【每周一文】Factorization Machines&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/fangqingan_java/article/details/50677340&#34;&gt;【每周一文】Factorization Machines&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;http://www.cnblogs.com/pinard/p/6370127.html&#34;&gt;分解机(Factorization Machines)推荐算法原理&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.cnblogs.com/pinard/p/6370127.html&#34;&gt;分解机(Factorization Machines)推荐算法原理&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/beyondjv610/article/details/79301683&#34;&gt;Factorization Machines（因子分解机）&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/beyondjv610/article/details/79301683&#34;&gt;Factorization Machines（因子分解机）&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://dl.acm.org/citation.cfm?id=2168771&#34;&gt;Factorization Machines with libFM. S Rendle&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dl.acm.org/citation.cfm?id=2168771&#34;&gt;Factorization Machines with libFM. S Rendle&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -396,15 +385,15 @@ $$
                 <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
                 
                     <description>&lt;h2 id=&#34;什么是gbdt&#34;&gt;什么是GBDT?&lt;/h2&gt;
-&lt;p&gt;GBDT (Gradient Boosting Decision Tree) 是一种基于boosting集成学习（ensemble method）的算法，但和传统的Adaboost有很大不同。在Adaboost，我们是利用前一轮迭代弱学习器的误差率来更新训练集的权重。GBDT也是迭代并且使用了前向分布算法，但是弱学习器限定了只能使用CART回归树模型，同时迭代思路和Adaboost也有所不同。GBDT选用的弱分类器一般是低方差高偏差，因为Boosting主要关注降低偏差，因此Boosting能基于泛化性能相当弱的学习器构建出很强的集成。GBDT的训练过程如下&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com//blog/article/GBDT.png&#34; alt=&#34;Fig 1. GBDT 的训练过程&#34;&gt;&lt;/p&gt;
+&lt;p&gt;GBDT (Gradient Boosting Decision Tree) 是一种基于boosting集成学习（ensemble method）的算法，但相对于传统的Adaboost又有很大不同。在Adaboost，我们是利用前一轮迭代弱学习器的误差率来更新训练集的权重。尽管GBDT也是迭代并且使用了前向分布算法，但是弱学习器限定了只能使用CART回归树模型，同时迭代思路和Adaboost也有所不同。GBDT选用的弱分类器一般是低方差高偏差，因为Boosting主要关注降低偏差，因此Boosting能基于泛化性能相当弱的学习器构建出很强的集成。GBDT的训练过程如下&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180217123940_GBDT.png?raw&#34; alt=&#34;Fig 1. GBDT 的训练过程&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;boost&#34;&gt;Boost&lt;/h3&gt;
 &lt;p&gt;Boost是一个加法模型，它是由若干个基函数及其权值乘积之和的累加。&lt;/p&gt;
 &lt;h3 id=&#34;gradient-boosting&#34;&gt;Gradient Boosting&lt;/h3&gt;
-&lt;p&gt;GBDT把所有树的结论累加起来做最终结论，所以可以想到每棵树的结论并不是年龄本身，而是年龄的一个累加量。GBDT的核心就在于，每一棵树学的是之前所有树结论和的残差，这个残差就是一个加预测值后能得真实值的累加量。比如A的真实年龄是18岁，但第一棵树的预测年龄是12岁，差了6岁，即残差为6岁。那么在第二棵树里我们把A的年龄设为6岁去学习，如果第二棵树真的能把A分到6岁的叶子节点，那累加两棵树的结论就是A的真实年龄；如果第二棵树的结论是5岁，则A仍然存在1岁的残差，第三棵树里A的年龄就变成1岁，继续学。这就是Gradient Boosting在GBDT中的意义&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;p&gt;GBDT把所有树的结论进行累加，从而获得最终结论，所以每棵树的结论并不是年龄本身，而是年龄的一个累加量。GBDT的核心就在于，每一棵树学习的是之前所有树结论和的残差，这个残差就是一个加预测值后能得真实值的累加量。比如A的真实年龄是18岁，但第一棵树的预测年龄是12岁，差了6岁，即残差为6岁。那么在第二棵树里我们把A的年龄设为6岁去学习，如果第二棵树真的能把A分到6岁的叶子节点，那累加两棵树的结论就是A的真实年龄；如果第二棵树的结论是5岁，则A仍然存在1岁的残差，第三棵树里A的年龄就变成1岁，继续学。这就是Gradient Boosting在GBDT中的意义&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
 &lt;p&gt;根据上面那个简单的例子，我们知道假设损失函数为平方损失（square loss）时，我们使用残差来进行下一轮的训练，即GBDT算法的每一步在生成决策树时只需要拟合前面的模型的残差，从而使得损失函数最小。那如何使损失函数最小呢？Freidman提出了用损失函数的负梯度来拟合本轮损失的近似值，进而拟合一个CART回归树，这就是GBDT的负梯度拟合。损失函数的负梯度在当前模型的值为：&lt;/p&gt;
 &lt;p&gt;$$
--[\frac{\partial L(y,f(x_i))}{\partial f(x_i)}]_{f(x)=f_{m-1}(x)} \tag1
+-[\frac{\partial L(y,f(x_i))}{\partial f(x_i)}]&lt;em&gt;{f(x)=f&lt;/em&gt;{m-1}(x)} \tag1
 $$&lt;/p&gt;
 &lt;p&gt;Boosting的最大好处在于，每一步的残差计算其实变相地增大了分错样本的权重，而已经分对的样本则都趋向于0。因为对于已经分对的样本，其残差为0，在下一轮中几乎不起作用。&lt;/p&gt;
 &lt;h2 id=&#34;gbdt算法&#34;&gt;GBDT算法&lt;/h2&gt;
@@ -428,7 +417,7 @@ $$&lt;/p&gt;
 &lt;p&gt;请结合上面的例子，理解每一轮更新强学习器都需要加上前面所有轮的输出！&lt;/p&gt;
 &lt;h3 id=&#34;gbdt回归算法&#34;&gt;GBDT回归算法&lt;/h3&gt;
 &lt;p&gt;Freidman提出的梯度提升(Gradient Boosting)算法：利用最速下降的近似方法，即利用损失函数的负梯度在当前模型的值，作为回归问题中提升树算法的残差的近似值，拟合一个回归树。算法如下&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com//blog/article/GBDT%20algorithm.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180217123940_GBDT_algorithm.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;算法步骤解释：&lt;/p&gt;
 &lt;p&gt;1、初始化，估计使损失函数极小化的常数值，它是只有一个根节点的树，即$\gamma$是一个常数值；&lt;/p&gt;
 &lt;p&gt;2、对于每轮CART回归树：&lt;/p&gt;
@@ -486,16 +475,16 @@ $$&lt;/p&gt;
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.cnblogs.com/ModifyRong/p/7744987.html&#34;&gt;机器学习算法GBDT&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cnblogs.com/ModifyRong/p/7744987.html&#34;&gt;机器学习算法GBDT&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://mp.weixin.qq.com/s/li2_zhx8D6wia6ZgeH9xiA?&#34;&gt;GBDT之原理、所解决的问题、应用场景&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://mp.weixin.qq.com/s/li2_zhx8D6wia6ZgeH9xiA?&#34;&gt;GBDT之原理、所解决的问题、应用场景&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.google.com/search?q=The%20Elements%20of%20Statistical%20Learning&#34;&gt;The Elements of Statistical Learning&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.google.com/search?q=The%20Elements%20of%20Statistical%20Learning&#34;&gt;The Elements of Statistical Learning&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.cnblogs.com/pinard/p/6140514.html&#34;&gt;梯度提升树 (GBDT) 原理小结&lt;/a&gt; &lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cnblogs.com/pinard/p/6140514.html&#34;&gt;梯度提升树 (GBDT) 原理小结&lt;/a&gt;&amp;#160;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -544,34 +533,34 @@ $$&lt;/p&gt;
                     <description>&lt;blockquote&gt;
 &lt;p&gt;updated some pics.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;本文之前使用的方式是 “&lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2017062813/&#34;&gt;Zotero + Zotfile + 云盘&lt;/a&gt;” 实现跨平台同步。这种方式在移动端如手机或Pad上阅读，可以借助 ZotFile 的 Tablet 功能将需要阅读的文献导出到云盘 Tablet 文件夹，然后在移动端使用 PDF Expert 接入该文件夹进行文献阅读批注。最后在 PC 端将这些文献重新拉取，实现移动端同步。&lt;/p&gt;
-&lt;p&gt;这种方式的附件与文献条目其实是链接关系，在 Zotero 删除文献条目后其链接的附件并不会删除，难以接受。其次，在移动端阅读时需要先在 PC 端导出，损失了自由度。&lt;/p&gt;
-&lt;p&gt;经过一番对比后，重新回归了“Zotero + WebDAV + PaperShip ” ，目前体验比较舒适。相关的软件和插件安装不再赘述，请查看前文&lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2017062813/&#34;&gt;&amp;lt;Zotero 文献管理与多设备同步&amp;gt;&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;本文之前使用 “&lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2017062813/&#34;&gt;Zotero + Zotfile + 云盘&lt;/a&gt;” 实现跨平台同步。这种方式在移动端如手机或Pad上阅读，可以借助 ZotFile 的 Tablet 功能将需要阅读的文献导出到云盘 Tablet 文件夹，然后在移动端使用 PDF Expert 获取该文件夹并进行文献阅读批注。最后在 PC 端重新拉取这些文献，实现移动端同步。&lt;/p&gt;
+&lt;p&gt;这种方式的附件与文献条目其实是链接关系，在 Zotero 删除文献条目后其链接的附件并不会删除，从而造成存储冗余。其次，在移动端阅读时需要事先在 PC 端导出，损失了自由度。&lt;/p&gt;
+&lt;p&gt;经过一番对比后，重新回归了“Zotero + WebDAV + PaperShip ” 。相关的软件和插件安装不再赘述，请查看前文&lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2017062813/&#34;&gt;&amp;lt;Zotero 文献管理与多设备同步&amp;gt;&lt;/a&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;zotero--webdav--papership-配置&#34;&gt;Zotero + WebDAV + PaperShip 配置&lt;/h2&gt;
-&lt;p&gt;首先是支持 WebDAV 的云盘选择，比较可惜的是重度使用的 Onedrive 不支持 WebDAV。国内知名度比较高的有坚果云，国外有 box.com 和 4shared 等，当然自建私有云也是个不错的选择。但是，鉴于坚果云免费用户每月受限的上传和下载流量首先被我 pass，因为有的时候配置新电脑什么的1G或2G的流量并不够用。最后，具有10G免费容量并且没有流量限制的 box.com 比较满足需求，虽然官方说19年底已经不维护 WebDAV 方式接入了，但是目前并不影响正常使用。&lt;/p&gt;
+&lt;p&gt;首先是支持 WebDAV 的云盘选择，比较可惜的是 Onedrive 不支持 WebDAV。另外，国内知名度比较高的有坚果云，国外有 box.com 和 4shared 等，当然自建私有云也是个不错的选择。但是，鉴于坚果云免费用户每月受限的上传和下载流量，极大的限缩了灵活度，在此不推荐使用（会员用户除外）。目前，作者使用的是具有10G免费容量并且没有流量限制的 box.com，虽然官方说19年底已经不维护 WebDAV 方式接入了，但是目前并不影响正常使用。&lt;/p&gt;
 &lt;h3 id=&#34;zotero-配置&#34;&gt;Zotero 配置&lt;/h3&gt;
 &lt;p&gt;这种方式下的 Zotero 配置相对于前文介绍的通过 ZotFile 链接附件同步方式来说更加简单。除了在 Zotero 同步选项卡中需要配置网盘的 WebDAV 信息，其他设置保持原生 Zotero 默认即可正常使用。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;配置 WebDAV，根据不同的网盘配置相应的 URL 和账号密码&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327094908.png&#34; alt=&#34;WebDAV 配置&#34; style=&#34;zoom:30%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327094908.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;此外，对于之前使用 Zotfile 链接附件的用户，需要在 &lt;code&gt;Preference&lt;/code&gt; 中将相对路径改为绝对路径&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327095424.png&#34; alt=&#34;附件存储路径修改&#34; style=&#34;zoom:30%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327095424.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;并且在 Zotfile 的设置中取消自定义附件位置&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327100047.png&#34; alt=&#34;Zotfile 取消自定义附件位置&#34; style=&#34;zoom:40%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327100047.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;如果想将之前通过 Zotfile 链接到云盘的文件恢复到 Zotero 默认的位置以便于 Zotero 将所有文件同步到 WebDAV 云盘中，需要在完成上述步骤之后使用 Zotfile 的附件重命名功能。Zotfile 在重命名附件的过程中会将附件移动到其设定的文件夹，这也是 Zotfile 的强大之处。比如前文中通过 Zotfile 链接附件到网盘就是通过自定义附件位置后，通过重命名将附件移动到网盘文件夹并链接到相应条目。在 Zotfile 的设置中取消自定义附件位置之后，使用 Zotfile 重命名同样会将所有附件移动到 Zotero 默认位置，并链接到相应条目。如此之后，Zotero 就能够同步之前所有的文献和附件。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;在 Zotero 中全选数据库中所有条目后右键选择&lt;code&gt;Manage Attachments&lt;/code&gt;--&amp;gt;&lt;code&gt;Rename Attachments&lt;/code&gt;。当然，重命名规则可以在 Zotfile 配置中修改。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327103521.png&#34; alt=&#34;使用 Zotfile 批量移动附件&#34; style=&#34;zoom:33%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327103521.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;papership-配置&#34;&gt;PaperShip 配置&lt;/h3&gt;
 &lt;p&gt;使用这种方式同步比较吸引人的地方是 Zotero 非官方移软件 PaperShip (IOS+IPadOS+MacOS) 支持使用 WebDAV 的同步方式。在移动端配置好 PaperShip 的 WebDAV 之后，可以随时下载需要阅读的文献。值得一提的是，PaperShip 对于 box.com 是重点支持的，在配置选项里与 WebDAV 单独分开。&lt;/p&gt;
 &lt;p&gt;在 PaperShip 登录 Zotero 之后，进入&lt;code&gt;Setting&lt;/code&gt; --&amp;gt; &lt;code&gt;Zotero File Hosting&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/20200327105918.png&#34; alt=&#34;PaperShip 配置&#34; style=&#34;zoom: 50%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327105918.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;至此，在移动端就可以拥有与 PC 端 Zotero 一般无二的文献阅读体验。虽然对 PDF 的批注不太友好，但是考虑到移动端通常是应急使用影响不大。&lt;/p&gt;
 &lt;hr&gt;
 </description>
@@ -617,9 +606,9 @@ $$&lt;/p&gt;
                 <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
                 
                     <description>&lt;blockquote&gt;
-&lt;p&gt;2018-01 更新说明：本文介绍的方法已被本人弃用，推荐使用 &lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2018011321/&#34;&gt;Zotero + WebDAV + PaperShip&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;2018-01 更新说明：本文介绍的方法已被作者弃用，推荐使用 &lt;a href=&#34;https://iyuanshuo.com/research/zotero-usage-2018011321/&#34;&gt;Zotero + WebDAV + PaperShip&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;Zotero 作为一款开源的文献管理软件，因其为文献获取、整理、引用和导出过程带来的便利而备受科研工作者的关注。凭借其开源特性和较活跃的社区，积累了丰富的 translator 用于浏览器插件对各个数据库网页中文献信息的精准抓取。在主流的浏览器上，其一键式文献保存和附件自动下载简化了研究者文献整理的操作。功能强大的插件也是 Zotero 被选择的重要原因，比如 better-bibtex 支撑的 BibTeX 文献引用导出功能对于 LaTeX 使用者来说是个强有力的辅助。&lt;/p&gt;
+&lt;p&gt;Zotero 作为一款开源的文献管理软件，因其在文献获取、整理、引用和导出过程中带来的便利性，而备受科研工作者的关注。凭借其开源特性和较活跃的社区，积累了丰富的 translator 以实现浏览器插件对众多论文数据库中文献信息的精准抓取。在主流的浏览器上，其一键式文献保存和附件自动下载简化了研究者文献整理流程。此外，较多功能强大的插件进一步增强了 Zotero 文献管理和成果输出的便利度，比如 better-bibtex 支持的 BibTeX 文献引用导出功能对于 LaTeX 使用者来说是个强有力的辅助。&lt;/p&gt;
 &lt;h2 id=&#34;准备元素及系统环境&#34;&gt;准备元素及系统环境&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;macOS Mojave (Windows 系统配置类似)&lt;/li&gt;
@@ -632,25 +621,25 @@ $$&lt;/p&gt;
 &lt;h2 id=&#34;安装-zotero-及其插件&#34;&gt;安装 Zotero 及其插件&lt;/h2&gt;
 &lt;p&gt;从 &lt;a href=&#34;https://www.zotero.org/download/&#34;&gt;Zotero 官网&lt;/a&gt;下载软件，并安装相应的浏览器插件 Zotero Connector (for &lt;a href=&#34;https://chrome.google.com/webstore/detail/zotero-connector/ekhagklcjbdpajgpjgmbionohlpdbjgc?hl=en&#34;&gt;Chrome&lt;/a&gt;)。&lt;/p&gt;
 &lt;p&gt;打开 Zotero 软件，点击菜单栏 &lt;code&gt;Tools&lt;/code&gt; --&amp;gt; &lt;code&gt;Add-ons&lt;/code&gt;，进入 &lt;code&gt;Add-ons Manager&lt;/code&gt;；点击右上角的&lt;strong&gt;齿轮&lt;/strong&gt;图标，点击 &lt;code&gt;Install Add-on From File&lt;/code&gt;，弹出文件浏览器，选中插件安装包 (xpi 文件) 并安装。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_add_on.png&#34; alt=&#34;add_ons&#34; style=&#34;zoom: 50%;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_install_plugin.png&#34; alt=&#34;Install_plugin&#34; style=&#34;zoom: 30%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_add_on.jpg?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_install_plugin.jpg?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;zotero--zotfile--网盘-配置&#34;&gt;Zotero + ZotFile + 网盘 配置&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;进入 &lt;code&gt;Preference&lt;/code&gt;，在 &lt;code&gt;General&lt;/code&gt; 下取消勾选 &lt;code&gt;Automatically take snapshots when creating items from web pages&lt;/code&gt;。此选项用于为每个文献自动抓取网页快照，实际用处不大，反而产生许多琐碎的网页文件。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_general_auto_snapshots.png&#34; alt=&#34;zotero_general_auto_snapshots&#34; style=&#34;zoom: 30%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_general_auto_snapshots.jpg?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;Sync&lt;/code&gt; 选项登陆，勾选 &lt;code&gt;Data Syncing&lt;/code&gt; 下的两个选项。Zotero 官方提供的同步包括&lt;strong&gt;数据同步&lt;/strong&gt;和&lt;strong&gt;文件同步&lt;/strong&gt;。数据部分同步文献基础信息，空间没有限制。文件部分同步 pdf、笔记等附件，免费额度为300MB。借助插件 zotfile 实现网盘（如Onedrive，Dropbox等）同步附件可以有效的突破存储限制。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_sync.png&#34; alt=&#34;zotero_sync&#34; style=&#34;zoom:30%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_sync.jpg?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;使用网盘Dropbox同步 pdf 文件；选项 &lt;code&gt;Tools&lt;/code&gt; 进入 &lt;code&gt;ZotFile Preferences&lt;/code&gt; 配置附件存放位置及整理规则，习惯于按照文献发表年份进行 pdf 文件分类。借助浏览器 Connector 下载的文献附件会被 ZotFile 根据自行设定的重命名规则进行重命名，并存放到网盘特定位置。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_zotfile_dropbox.png&#34; alt=&#34;zotero_zotfile_dropbox&#34; style=&#34;zoom: 33%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_zotfile_dropbox.jpg?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Zotero 的附件存放设置需要与 ZotFile 相匹配，保证文献条目和附件的关联。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;http://images.iyuanshuo.com/zotero_preference_dropbox.png&#34; alt=&#34;zotero_preference_dropbox&#34; style=&#34;zoom: 30%;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_preference_dropbox.jpg?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;latex-引用&#34;&gt;LaTeX 引用&lt;/h2&gt;
 &lt;p&gt;使用 zotero-better-bibtex 导出 bib 文件，Citation key format 设置为 &lt;code&gt;[auth:lower][year][shorttitle1]&lt;/code&gt;。当然也可自行设置 Cite Key 的格式，具体规则请参考&lt;a href=&#34;https://retorque.re/zotero-better-bibtex/configuration/&#34;&gt;官方文档&lt;/a&gt;。该插件自动更新导出的 bib 文件功能简直是 LaTeX 使用者的福音。&lt;/p&gt;
 &lt;hr&gt;
