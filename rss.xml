@@ -23,7 +23,7 @@
         
             <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
         
-        <lastBuildDate>Mon, 19 Jul 2021 21:03:40 &#43;0800</lastBuildDate>
+        <lastBuildDate>Mon, 19 Jul 2021 22:27:01 &#43;0800</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="https://iyuanshuo.com/rss.xml" />
         
@@ -45,37 +45,37 @@
 &lt;p&gt;对于高阶的特征组合来说，通过多层的神经网络即 DNN 来处理是一个很自然的想法。
 另一方面，对于离散特征而言，一种常见的处理方法是将特征转换成为 Onehot 的形式。
 然而，将 Onehot 类型的特征输入到 DNN 中会由于网络参数太多而影响训练&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_onehot_for_dnn.png?raw&#34; alt=&#34;onehot_for_dnn&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_onehot_for_dnn.png&#34; alt=&#34;onehot_for_dnn&#34;&gt;&lt;/p&gt;
 &lt;p&gt;通过借鉴 word2vec 的思路进行 embedding，将 Onehot 编码后的向量经过一个 embedding 层输出 Dense Vector 是一种比较实用的方法。具体的思路是将一个特征 Onehot 编码后会生成多个特征，但是每个特征里面只有一个为 $1$，其他都为 $0$，这些由一个特征生成的多个互斥的特征在 FFM 方法中属于一个 Field。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_onehot_densevector.png?raw&#34; alt=&#34;onehot_densevector&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_onehot_densevector.png&#34; alt=&#34;onehot_densevector&#34;&gt;&lt;/p&gt;
 &lt;p&gt;如果将 embedding 层的输出再加两层全连接层，让 Dense Vector 进行组合就完成了高阶特征的组合。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_densevector_full.png?raw&#34; alt=&#34;densevector_full&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_densevector_full.png&#34; alt=&#34;densevector_full&#34;&gt;&lt;/p&gt;
 &lt;p&gt;但是低阶和高阶特征组合都深度耦合体现在隐藏层中，因此需要对低阶特征组合单独建模，而后再融合高阶特征组合。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_how_to_get_low_order.png?raw&#34; alt=&#34;how_to_get_low_order&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_how_to_get_low_order.png&#34; alt=&#34;how_to_get_low_order&#34;&gt;&lt;/p&gt;
 &lt;p&gt;这意味着在学习低阶的特征组合的同时，也需要学习高阶的特征组合，即将 DNN 与 FM 进行一个合理的融合：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_consider_dnn_fm.png?raw&#34; alt=&#34;consider_dnn_fm&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_consider_dnn_fm.png&#34; alt=&#34;consider_dnn_fm&#34;&gt;&lt;/p&gt;
 &lt;p&gt;二者的融合总的来说有两种形式，串行结构与并行结构&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_parallel_dnn_fm.png?raw&#34; alt=&#34;parallel_dnn_fm&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_series_dnn_fm.png?raw&#34; alt=&#34;series_dnn_fm&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_parallel_dnn_fm.png&#34; alt=&#34;parallel_dnn_fm&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_series_dnn_fm.png&#34; alt=&#34;series_dnn_fm&#34;&gt;&lt;/p&gt;
 &lt;p&gt;而 DeepFM，就是并行结构中的典型代表。&lt;/p&gt;
 &lt;h2 id=&#34;deepfm-模型-2&#34;&gt;DeepFm 模型 &lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;模型结构&#34;&gt;模型结构&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_wide_deep_deep_fm.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_wide_deep_deep_fm.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;DeepFM 包含两部分：神经网络与因子分解机，分别负责提取低阶特征和高阶特征。(PS: 这两部分当然共享同样的输入)。同时，DeepFM 的预测结果为：&lt;/p&gt;
 &lt;p&gt;$$
 \hat y = sigmoid({y_{FM}} + {y_{DNN}})\tag1
 $$&lt;/p&gt;
 &lt;h3 id=&#34;fm-component&#34;&gt;FM Component&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_fm.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_fm.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;FM (详情可参阅文章&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/deep-fm-2018050111/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;)因为引入了隐变量的原因，对于几乎不出现或者很少出现的隐变量，也可以进行很好的学习。&lt;/p&gt;
 &lt;p&gt;FM的输出为：&lt;/p&gt;
 &lt;p&gt;$$
 y(x)=w_{0}+\sum_{i=1}^{n}\left(w_{i} x_{i}\right)+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n}\left(\left\langle v_{i}, v_{j}\right\rangle x_{i} x_{j}\right)\tag{2}
 $$&lt;/p&gt;
 &lt;h3 id=&#34;deep-component&#34;&gt;Deep Component&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_deep.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_deep.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;深度部分是一个前馈神经网络，与图像或者语音这类输入不同的是图像语音的输入一般是连续而且密集的。然而，用于 CTR 的输入一般是极其稀疏的，需要重新设计网络结构以适应相应的数据特点。因此，通过在第一层隐藏层之前引入一个嵌入层 (embedding layer) ，从而完成将输入向量压缩到低维稠密向量的过程，其结构如下图所示。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_embedding_layer.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180421091520_embedding_layer.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;对于 Fig.4 这个网络结构有两个很有意思的 points：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
@@ -151,7 +151,7 @@ $$&lt;/p&gt;
 &lt;p&gt;在工业中，对于大规模的在线推荐和排序系统，像逻辑回归这样的广义线性模型由于实现简单，可扩展性好，可解释性强而被广泛使用。通过喂给它一些 one-hot 编码的稀疏特征，比如二值特征 (user_installed_app=netfix) 表示用户安装了 Netflix。Memorization 则可以通过对稀疏特征做交叉积转换获得，就是求交叉特征。比如 AND 操作  (user_installed_app= netflix, impression_app=pandora) 这两个特征，当用户安装了Netflix并且之后展示在Pandora上，那么得到特征的值为1，其余为0。这个交叉特征展示了特征对之间的相关性和目标 lable 之间的关联。在逻辑回归上实现 generalization 可以通过增加一些粗粒度的特征实现，如 AND(user_installed_category=video, impression_category=music )，但是这些都是需要人工做特征工程实现，工作量极大。此外，cross-product transformation 的一个限制就是他们不能生成从未在训练数据中出现过的 query-item 特征对。&lt;/p&gt;
 &lt;p&gt;而 Embedding-based 的模型，比如因子分解机 (FM) 或深度神经网络，只需要很少的特征工程，通过为每个 query 和 item 特征对 (pair) 学到一个低维的 dense embedding vector，可以泛化到之前未见过的 query-item 特征对。但是如果潜在的 query-item 矩阵是稀疏，高秩的话，为 query 和 items 学习出一个有效的低纬表示往往很困难，比如基于特殊偏好的 users，或者一些很少出现的小众 items。在这种情况下，大多数的 query-item 没有交互，但是稠密的 embedding 还是会对全部的 query-item 对有非零的输出预测，因此能做出一些过泛化和做出一些不太相关的推荐。另一方面，利用交叉积特征 (cross-product features transformations) 的线性模型能用很少的参数记住那些异常规则 (exception_rules) 。&lt;/p&gt;
 &lt;h2 id=&#34;wide--deep-learning3&#34;&gt;Wide &amp;amp; Deep Learning&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/wide-deep-learning-2018042112/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327121146.png?raw&#34; alt=&#34;model&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327121146.png&#34; alt=&#34;model&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;the-wide-component-wide-组件&#34;&gt;The Wide Component (Wide 组件)&lt;/h3&gt;
 &lt;p&gt;Wide 组件是一个泛化的线性模型，$y=w^Tx+b$，如 Fig.1 图左所示。$y$ 是预测值，$x = [x_1, x_2, …, x_d]$ 是 $d$ 维特征向量，$w = [w_1, w_2,…, w_d]$ 是模型参数，$b$ 是 bias。特征集包括原始的输入特征和转换后 (cross-product transformation) 的特征。Cross-product transformation 有如下定义：&lt;/p&gt;
 &lt;p&gt;$$
@@ -310,7 +310,7 @@ $$&lt;/p&gt;
 \tag{7}
 $$&lt;/p&gt;
 &lt;p&gt;基于随机梯度的方式求解&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/factorization-machine-2018032810/#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180327103527_libFM.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180327103527_libFM.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;fm应用&#34;&gt;FM应用&lt;/h2&gt;
 &lt;p&gt;在很多应用中，FM可以取代常用模型并且能够取得不错效果，例如&lt;/p&gt;
 &lt;ul&gt;
@@ -382,7 +382,7 @@ $$&lt;/p&gt;
                 
                     <description>&lt;h2 id=&#34;什么是gbdt&#34;&gt;什么是GBDT?&lt;/h2&gt;
 &lt;p&gt;GBDT (Gradient Boosting Decision Tree) 是一种基于boosting集成学习（ensemble method）的算法，但相对于传统的Adaboost又有很大不同。在Adaboost，我们是利用前一轮迭代弱学习器的误差率来更新训练集的权重。尽管GBDT也是迭代并且使用了前向分布算法，但是弱学习器限定了只能使用CART回归树模型，同时迭代思路和Adaboost也有所不同。GBDT选用的弱分类器一般是低方差高偏差，因为Boosting主要关注降低偏差，因此Boosting能基于泛化性能相当弱的学习器构建出很强的集成。GBDT的训练过程如下&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180217123940_GBDT.png?raw&#34; alt=&#34;Fig 1. GBDT 的训练过程&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180217123940_GBDT.png&#34; alt=&#34;Fig 1. GBDT 的训练过程&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;boost&#34;&gt;Boost&lt;/h3&gt;
 &lt;p&gt;Boost是一个加法模型，它是由若干个基函数及其权值乘积之和的累加。&lt;/p&gt;
 &lt;h3 id=&#34;gradient-boosting&#34;&gt;Gradient Boosting&lt;/h3&gt;
@@ -413,7 +413,7 @@ $$&lt;/p&gt;
 &lt;p&gt;请结合上面的例子，理解每一轮更新强学习器都需要加上前面所有轮的输出！&lt;/p&gt;
 &lt;h3 id=&#34;gbdt回归算法&#34;&gt;GBDT回归算法&lt;/h3&gt;
 &lt;p&gt;Freidman提出的梯度提升(Gradient Boosting)算法：利用最速下降的近似方法，即利用损失函数的负梯度在当前模型的值，作为回归问题中提升树算法的残差的近似值，拟合一个回归树。算法如下&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;https://iyuanshuo.com/research/gbdt-principle-2018031321/#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180217123940_GBDT_algorithm.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180217123940_GBDT_algorithm.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;算法步骤解释：&lt;/p&gt;
 &lt;p&gt;1、初始化，估计使损失函数极小化的常数值，它是只有一个根节点的树，即$\gamma$是一个常数值；&lt;/p&gt;
 &lt;p&gt;2、对于每轮CART回归树：&lt;/p&gt;
@@ -539,24 +539,24 @@ $$&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;配置 WebDAV，根据不同的网盘配置相应的 URL 和账号密码&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327094908.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327094908.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;此外，对于之前使用 Zotfile 链接附件的用户，需要在 &lt;code&gt;Preference&lt;/code&gt; 中将相对路径改为绝对路径&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327095424.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327095424.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;并且在 Zotfile 的设置中取消自定义附件位置&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327100047.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327100047.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;如果想将之前通过 Zotfile 链接到云盘的文件恢复到 Zotero 默认的位置以便于 Zotero 将所有文件同步到 WebDAV 云盘中，需要在完成上述步骤之后使用 Zotfile 的附件重命名功能。Zotfile 在重命名附件的过程中会将附件移动到其设定的文件夹，这也是 Zotfile 的强大之处。比如前文中通过 Zotfile 链接附件到网盘就是通过自定义附件位置后，通过重命名将附件移动到网盘文件夹并链接到相应条目。在 Zotfile 的设置中取消自定义附件位置之后，使用 Zotfile 重命名同样会将所有附件移动到 Zotero 默认位置，并链接到相应条目。如此之后，Zotero 就能够同步之前所有的文献和附件。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;在 Zotero 中全选数据库中所有条目后右键选择&lt;code&gt;Manage Attachments&lt;/code&gt;--&amp;gt;&lt;code&gt;Rename Attachments&lt;/code&gt;。当然，重命名规则可以在 Zotfile 配置中修改。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327103521.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327103521.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;papership-配置&#34;&gt;PaperShip 配置&lt;/h3&gt;
 &lt;p&gt;使用这种方式同步比较吸引人的地方是 Zotero 非官方软件 PaperShip (IOS+IPadOS+MacOS) 支持使用 WebDAV 的同步方式。在移动端配置好 PaperShip 的 WebDAV 之后，可以随时下载需要阅读的文献，并且对于内购 PaperShip 批注功能的用户来说，可以进一步实现文件批注同步。值得一提的是，PaperShip 重点支持 box.com，其配置选项与 WebDAV 并列。&lt;/p&gt;
 &lt;p&gt;在 PaperShip 登录 Zotero 之后，进入&lt;code&gt;Setting&lt;/code&gt; --&amp;gt; &lt;code&gt;Zotero File Hosting&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327105918.png?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20200327105918.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;至此，在移动端就可以拥有与 PC 端 Zotero 一般无二的文献阅读体验。&lt;/p&gt;
 &lt;hr&gt;
 </description>
@@ -617,25 +617,25 @@ $$&lt;/p&gt;
 &lt;h2 id=&#34;安装-zotero-及其插件&#34;&gt;安装 Zotero 及其插件&lt;/h2&gt;
 &lt;p&gt;从 &lt;a href=&#34;https://www.zotero.org/download/&#34;&gt;Zotero 官网&lt;/a&gt;下载软件，并安装相应的浏览器插件 Zotero Connector (for &lt;a href=&#34;https://chrome.google.com/webstore/detail/zotero-connector/ekhagklcjbdpajgpjgmbionohlpdbjgc?hl=en&#34;&gt;Chrome&lt;/a&gt;)。&lt;/p&gt;
 &lt;p&gt;打开 Zotero 软件，点击菜单栏 &lt;code&gt;Tools&lt;/code&gt; --&amp;gt; &lt;code&gt;Add-ons&lt;/code&gt;，进入 &lt;code&gt;Add-ons Manager&lt;/code&gt;；点击右上角的&lt;strong&gt;齿轮&lt;/strong&gt;图标，点击 &lt;code&gt;Install Add-on From File&lt;/code&gt;，弹出文件浏览器，选中插件安装包 (xpi 文件) 并安装。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_add_on.jpg?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_install_plugin.jpg?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_add_on.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_install_plugin.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;zotero--zotfile--网盘-配置&#34;&gt;Zotero + ZotFile + 网盘 配置&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;进入 &lt;code&gt;Preference&lt;/code&gt;，在 &lt;code&gt;General&lt;/code&gt; 下取消勾选 &lt;code&gt;Automatically take snapshots when creating items from web pages&lt;/code&gt;。此选项用于为每个文献自动抓取网页快照，实际用处不大，反而产生许多琐碎的网页文件。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_general_auto_snapshots.jpg?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_general_auto_snapshots.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;Sync&lt;/code&gt; 选项登陆，勾选 &lt;code&gt;Data Syncing&lt;/code&gt; 下的两个选项。Zotero 官方提供的同步包括&lt;strong&gt;数据同步&lt;/strong&gt;和&lt;strong&gt;文件同步&lt;/strong&gt;。数据部分同步文献基础信息，空间没有限制。文件部分同步 pdf、笔记等附件，免费额度为300MB。借助插件 zotfile 实现网盘（如Onedrive，Dropbox等）同步附件可以有效的突破存储限制。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_sync.jpg?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_sync.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;使用网盘Dropbox同步 pdf 文件；选项 &lt;code&gt;Tools&lt;/code&gt; 进入 &lt;code&gt;ZotFile Preferences&lt;/code&gt; 配置附件存放位置及整理规则，习惯于按照文献发表年份进行 pdf 文件分类。借助浏览器 Connector 下载的文献附件会被 ZotFile 根据自行设定的重命名规则进行重命名，并存放到网盘特定位置。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_zotfile_dropbox.jpg?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_zotfile_dropbox.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Zotero 的附件存放设置需要与 ZotFile 相匹配，保证文献条目和附件的关联。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_preference_dropbox.jpg?raw&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.yuanshuo.space/20180113142038_zotero_preference_dropbox.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;latex-引用&#34;&gt;LaTeX 引用&lt;/h2&gt;
 &lt;p&gt;使用 zotero-better-bibtex 导出 bib 文件，Citation key format 设置为 &lt;code&gt;[auth:lower][year][shorttitle1]&lt;/code&gt;。当然也可自行设置 Cite Key 的格式，具体规则请参考&lt;a href=&#34;https://retorque.re/zotero-better-bibtex/configuration/&#34;&gt;官方文档&lt;/a&gt;。该插件自动更新导出的 bib 文件功能简直是 LaTeX 使用者的福音。&lt;/p&gt;
 &lt;hr&gt;
