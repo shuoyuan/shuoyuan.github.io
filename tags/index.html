@@ -3,7 +3,7 @@
     <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
     <meta charset="UTF-8" />
 
-    <meta name="generator" content="Hugo 0.85.0" /><meta name="theme-color" content="#fff" />
+    <meta name="generator" content="Hugo 0.88.1" /><meta name="theme-color" content="#fff" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
@@ -14,11 +14,11 @@
 
     <title>Tags | Shuo Yuan&#39;s Blog</title>
 
-    <link rel="stylesheet" href="/css/meme.min.7956f3ebf25f62113c9614274e7cb416d9419dc73e4e7abc55f351bdfd9ecc79.css"/>
+    <link rel="stylesheet" href="/css/meme.min.463e3aec41e75c359703edf15ecae6f56e96502e61cf6904bdc313c3c3d4b991.css"/>
 
     
     
-        <script src="/js/meme.min.9380fdb1a52d83b319e94f3e72986279b951ea987f7bd63ab6af3130fc1b1dfe.js"></script>
+        <script src="/js/meme.min.8cbe976441b5181abfd3093c9beee209b19cdbb1fa77c48d225a83ba81fa3fb1.js"></script>
 
     
 
@@ -54,7 +54,7 @@
         "@context": "https://schema.org",
         "@type": "WebPage",
         "datePublished": "2017-05-27T15:13:14+00:00",
-        "dateModified": "2021-07-20T10:08:10+08:00",
+        "dateModified": "2021-10-29T10:57:59+08:00",
         "url": "https://iyuanshuo.com/tags/",
         "name": "Tags",
         "description": "这是 shuoyuan 的生活与技术博客。",
@@ -91,7 +91,7 @@
 <meta property="og:description" content="这是 shuoyuan 的生活与技术博客。" />
 <meta property="og:url" content="https://iyuanshuo.com/tags/" />
 <meta property="og:site_name" content="Shuo Yuan&#39;s Blog" />
-<meta property="og:locale" content="en" /><meta property="og:image" content="https://iyuanshuo.com/icons/apple-touch-icon.png" />
+<meta property="og:locale" content="zh" /><meta property="og:image" content="https://iyuanshuo.com/icons/apple-touch-icon.png" />
     <meta property="og:type" content="website" />
 
         <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
@@ -146,7 +146,7 @@
             
         
             
-                <li class="menu-item active"><a href="/tags/"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="icon tags"><path d="M497.941 225.941L286.059 14.059A48 48 0 0 0 252.118 0H48C21.49 0 0 21.49 0 48v204.118a48 48 0 0 0 14.059 33.941l211.882 211.882c18.744 18.745 49.136 18.746 67.882 0l204.118-204.118c18.745-18.745 18.745-49.137 0-67.882zM112 160c-26.51 0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48zm513.941 133.823L421.823 497.941c-18.745 18.745-49.137 18.745-67.882 0l-.36-.36L527.64 323.522c16.999-16.999 26.36-39.6 26.36-63.64s-9.362-46.641-26.36-63.64L331.397 0h48.721a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882z"/></svg><span class="menu-item-name">Tags</span></a>
+                <li class="menu-item"><a href="/tags/"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="icon tags"><path d="M497.941 225.941L286.059 14.059A48 48 0 0 0 252.118 0H48C21.49 0 0 21.49 0 48v204.118a48 48 0 0 0 14.059 33.941l211.882 211.882c18.744 18.745 49.136 18.746 67.882 0l204.118-204.118c18.745-18.745 18.745-49.137 0-67.882zM112 160c-26.51 0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48zm513.941 133.823L421.823 497.941c-18.745 18.745-49.137 18.745-67.882 0l-.36-.36L527.64 323.522c16.999-16.999 26.36-39.6 26.36-63.64s-9.362-46.641-26.36-63.64L331.397 0h48.721a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882z"/></svg><span class="menu-item-name">Tags</span></a>
                 </li>
             
         
@@ -363,7 +363,10 @@
     <script src="https://cdn.jsdelivr.net/npm/medium-zoom@latest/dist/medium-zoom.min.js"></script>
 
 <script>
-    mediumZoom(document.querySelectorAll('div.post-body img'), {
+    let imgNodes = document.querySelectorAll('div.post-body img');
+    imgNodes = Array.from(imgNodes).filter(node => node.parentNode.tagName !== "A");
+
+    mediumZoom(imgNodes, {
         background: 'hsla(var(--color-bg-h), var(--color-bg-s), var(--color-bg-l), 0.95)'
     })
 </script>

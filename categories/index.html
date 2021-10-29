@@ -3,7 +3,7 @@
     <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
     <meta charset="UTF-8" />
 
-    <meta name="generator" content="Hugo 0.85.0" /><meta name="theme-color" content="#fff" />
+    <meta name="generator" content="Hugo 0.88.1" /><meta name="theme-color" content="#fff" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
@@ -14,11 +14,11 @@
 
     <title>categories_index.md | Shuo Yuan&#39;s Blog</title>
 
-    <link rel="stylesheet" href="/css/meme.min.7956f3ebf25f62113c9614274e7cb416d9419dc73e4e7abc55f351bdfd9ecc79.css"/>
+    <link rel="stylesheet" href="/css/meme.min.463e3aec41e75c359703edf15ecae6f56e96502e61cf6904bdc313c3c3d4b991.css"/>
 
     
     
-        <script src="/js/meme.min.9380fdb1a52d83b319e94f3e72986279b951ea987f7bd63ab6af3130fc1b1dfe.js"></script>
+        <script src="/js/meme.min.8cbe976441b5181abfd3093c9beee209b19cdbb1fa77c48d225a83ba81fa3fb1.js"></script>
 
     
 
@@ -91,7 +91,7 @@
 <meta property="og:description" content="这是 shuoyuan 的生活与技术博客。" />
 <meta property="og:url" content="https://iyuanshuo.com/categories/" />
 <meta property="og:site_name" content="Shuo Yuan&#39;s Blog" />
-<meta property="og:locale" content="en" /><meta property="og:image" content="https://iyuanshuo.com/icons/apple-touch-icon.png" />
+<meta property="og:locale" content="zh" /><meta property="og:image" content="https://iyuanshuo.com/icons/apple-touch-icon.png" />
     <meta property="og:type" content="website" />
 
         <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
@@ -459,7 +459,10 @@
     <script src="https://cdn.jsdelivr.net/npm/medium-zoom@latest/dist/medium-zoom.min.js"></script>
 
 <script>
-    mediumZoom(document.querySelectorAll('div.post-body img'), {
+    let imgNodes = document.querySelectorAll('div.post-body img');
+    imgNodes = Array.from(imgNodes).filter(node => node.parentNode.tagName !== "A");
+
+    mediumZoom(imgNodes, {
         background: 'hsla(var(--color-bg-h), var(--color-bg-s), var(--color-bg-l), 0.95)'
     })
 </script>
